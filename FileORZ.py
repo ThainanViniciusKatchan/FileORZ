@@ -4,7 +4,7 @@ import time
 
 # pasta de downloads e extenção de arquivo
 def organize_files():
-    path = "C:\\Users\\Thayn\\Downloads"
+    path = "C:\\Users\\UserName\\Downloads"
     files = os.listdir(path)
     extensions_to_include = {
         'Documentos': ['.pdf', '.doc', '.txt', '.pptx', '.docx', '.xlsx', '.xlsm', '.csv', '.xls', '.dotm', '.ponto', '.dotx', '.htm', '.html', '.doc', '.docx', '.cfg', '.alg'],
