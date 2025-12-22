@@ -1,21 +1,34 @@
 ﻿# -*- coding: utf-8 -*-
 import os
 import time
+import json
+
+# Carregar as extensões do arquivo TypeFile.json
+def load_extensions():
+    script_dir = os.path.dirname(os.path.abspath("config.json"))
+    json_path = os.path.join(script_dir, "config.json")
+    
+    with open(json_path, 'r', encoding='utf-8') as f:
+        data = json.load(f)
+    
+    # Converter para o formato esperado
+    extensions = {}
+    for category, exts in data.items():
+        if category != "Folder":
+            extensions[category.capitalize()] = [ext for ext, enabled in exts.items() if enabled]
+    
+    return extensions
+script_dir = os.path.dirname(os.path.abspath(__file__))
 
 # pasta de downloads e extenção de arquivo
-def organize_files():
-    path = "C:\\Users\\UserName\\Downloads"
+def organize_files(script_dir=script_dir):
+    json_path = os.path.join(script_dir, "config.json")
+    with open(json_path, 'r', encoding='utf-8') as f:
+        data = json.load(f)
+    path = data["Folder"]
+    print(path)
     files = os.listdir(path)
-    extensions_to_include = {
-        'Documentos': ['.pdf', '.doc', '.txt', '.pptx', '.docx', '.xlsx', '.xlsm', '.csv', '.xls', '.dotm', '.ponto', '.dotx', '.htm', '.html', '.doc', '.docx', '.cfg', '.alg'],
-        'Vídeos': ['.mov', '.mp4', '.avi', '.av1', '.mpeg-2', '.avchd', '.aac', '.mkv', '.divx', '.h.264', '.mpeg-1', '.wmv'],
-        'Áudios': ['.mp3', '.wav', '.flac', '.3GP', '.M4A', '.ogg', '.wma', '.m4a', '.webm'],
-        'Compactos': ['.rar', '.zip', '.zpix', '.7z', '.rar5', '.iso', '.gzip', '.7-zip', '.tar'],
-        'Fontes': ['.ttf', '.eot', '.woff', '.woff2',],
-        'Setups': ['.exe', '.msi', '.appx', '.appxbundle', 'msix', '.appxbundle', '.appx', ,'apk'],
-        'Imagens':['.jpg', '.jpeg', '.png', '.bmp', '.tiff', '.gif', '.cr3','.cr2', '.exif', 
-        '.psd', '.eps', '.ai', '.svg', '.webp', '.heic', '.heif', '.raw', 'af'] 
-    }
+    extensions_to_include = load_extensions()
 
     #verificar se o arquivo ja existe
     found_files = {}
