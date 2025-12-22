@@ -62,8 +62,8 @@
     "setups": {
         ".exe": true,
         ".msi": true,
-        ".appx": true,
-        ".appxbundle": true,
+        ".appx": false,
+        ".appxbundle": false,
         ".msix": true,
         ".apk": true
     },
@@ -80,7 +80,7 @@
         ".psd": true,
         ".eps": true,
         ".ai": true,
-        ".svg": true,
+        ".svg": false,
         ".webp": true,
         ".heic": true,
         ".heif": true,

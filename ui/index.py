@@ -2,9 +2,10 @@ import customtkinter
 from customtkinter import filedialog
 import os
 import json
+from config import open_config_window
 
 # Caminho do arquivo de configuração
-SCRIPT_DIR = os.path.dirname(os.path.abspath("config.json"))
+SCRIPT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CONFIG_PATH = os.path.join(SCRIPT_DIR, "config.json")
 
 # Função para carregar a configuração
@@ -26,6 +27,21 @@ root = customtkinter.CTk()
 root.title("FileORZ")
 root.geometry("900x600")
 root.configure(fg_color="#121212")
+
+# Abrir configurações
+btn_config = customtkinter.CTkButton(
+    root, 
+    text="Configurações",
+    command=lambda: open_config_window(root),
+    fg_color="#363636", 
+    border_width=0, 
+    corner_radius=20, 
+    font=("Montserrat", 10, "bold"), 
+    width=150, 
+    hover_color="#0F0F0F"
+)
+btn_config.pack(pady=10, side="right", padx=20)
+    
 
 # Selecionar pasta de downloads
 def select_path():
