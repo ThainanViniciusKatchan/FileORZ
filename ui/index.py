@@ -3,10 +3,13 @@ from customtkinter import filedialog
 import os
 import json
 from config import open_config_window
+from header import header
+from centralizeWindow import centralize_window
 
 # Caminho do arquivo de configuração
 SCRIPT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CONFIG_PATH = os.path.join(SCRIPT_DIR, "config.json")
+
 
 # Função para carregar a configuração
 def load_config():
@@ -25,9 +28,11 @@ def get_current_folder():
 
 root = customtkinter.CTk()
 root.title("FileORZ")
-root.geometry("600x250")
+root.geometry("600x300")
 root.configure(fg_color="#121212")
 root.resizable(False, False)
+header(root)
+centralize_window(root, 600, 300)
 
 # Abrir configurações
 btn_config = customtkinter.CTkButton(
@@ -88,25 +93,27 @@ def start_organizer():
         )
         root.after(2000, success_label.destroy)
         return
-
-    success_label = customtkinter.CTkLabel(
-        root,
-        text="✓ Organização concluída!", pady=5, padx=5,
-        font=("Montserrat", 12, "bold"),
-        text_color="#4aff4a"
-    )
-    root.after(2000, success_label.destroy)
+    else:
+        
+        organize_files()
+        success_label = customtkinter.CTkLabel(
+            root,
+            text="✓ Organização concluída!", pady=5, padx=5,
+            font=("Montserrat", 12, "bold"),
+            text_color="#4aff4a"
+        )
+        root.after(2000, success_label.destroy)
 
 btn_Start_Organizer = customtkinter.CTkButton(
     root, 
     text="🗂️ Iniciar organização", 
     command=start_organizer, 
-    fg_color="green", 
+    fg_color="#194036",
+    hover_color="#1D4D40",
+    corner_radius=20,
     border_width=0, 
-    corner_radius=20, 
     font=("Montserrat", 11, "bold"), 
     width=150, 
-    hover_color="#0F0F0F"
 )
 btn_Start_Organizer.pack(side=customtkinter.BOTTOM, pady=50)
 
@@ -117,12 +124,26 @@ def time_verification(time):
     save_config(config)
     return time
 
-DropDownTimeValue = customtkinter.StringVar(value="5")
+config = load_config()
+get_time_verification = config.get("timeverification", "5")
+ # Valida se o valor é diferente de 5 ou se não existe, se caso ele existir ele pega o valor que foi salvo
+if get_time_verification != "5" or not get_time_verification:
+    DropDownTimeValue = customtkinter.StringVar(value=get_time_verification)
+else: # Se não ele seta o valor padrão que é 5
+    DropDownTimeValue = customtkinter.StringVar(value="5")
 DropDownTime = customtkinter.CTkOptionMenu(
     root,
+    fg_color="#192F42",
+    text_color="#FFFFFF",
+    height=50,
+    width=150,
+    font=("Montserrat", 11, "bold"),
+    dropdown_fg_color="#192F42",
+    dropdown_text_color="#FFFFFF",
     variable=DropDownTimeValue,
     values=["5", "10", "15", "20", "25", "30", "35", "40", "45", "50", "55", "60"],
-    command=time_verification
+    command=time_verification,
+    dynamic_resizing=False,
 )
 
 time_verification = time_verification(DropDownTimeValue.get())
