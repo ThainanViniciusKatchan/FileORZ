@@ -181,7 +181,7 @@ def open_config_window(parent):
         # Mostrar mensagem de sucesso
         success_label = customtkinter.CTkLabel(
             window,
-            text="✓ Configurações salvas com sucesso!",
+            text="✓ Configurações salvas com sucesso!", pady=5, padx=5,
             font=("Montserrat", 12, "bold"),
             text_color="#4aff4a"
         )

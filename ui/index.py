@@ -25,23 +25,24 @@ def get_current_folder():
 
 root = customtkinter.CTk()
 root.title("FileORZ")
-root.geometry("900x600")
+root.geometry("600x250")
 root.configure(fg_color="#121212")
+root.resizable(False, False)
 
 # Abrir configurações
 btn_config = customtkinter.CTkButton(
     root, 
-    text="Configurações",
+    text="⚙️ Configurações",
     command=lambda: open_config_window(root),
     fg_color="#363636", 
     border_width=0, 
     corner_radius=20, 
-    font=("Montserrat", 10, "bold"), 
+    font=("Montserrat", 11, "bold"), 
     width=150, 
     hover_color="#0F0F0F"
 )
 btn_config.pack(pady=10, side="right", padx=20)
-    
+
 
 # Selecionar pasta de downloads
 def select_path():
@@ -62,17 +63,72 @@ def select_path():
 
 btn_Select_Folder = customtkinter.CTkButton(
     root, 
-    text="Selecionar pasta", 
+    text="📂 Selecionar pasta", 
     command=select_path, 
     fg_color="#363636", 
     border_width=0, 
     corner_radius=20, 
-    font=("Montserrat", 10, "bold"), 
+    font=("Montserrat", 11, "bold"), 
     width=150, 
     hover_color="#0F0F0F"
 )
 
 btn_Select_Folder.pack(pady=10, side="left", padx=20)
+
+def start_organizer():
+    config = load_config()
+    folder = config.get("Folder", "")
     
+    if not folder:
+        success_label = customtkinter.CTkLabel(
+            root,
+            text="✓ Nenhuma pasta selecionada!", pady=5, padx=5,
+            font=("Montserrat", 12, "bold"),
+            text_color="#4aff4a"
+        )
+        root.after(2000, success_label.destroy)
+        return
+
+    success_label = customtkinter.CTkLabel(
+        root,
+        text="✓ Organização concluída!", pady=5, padx=5,
+        font=("Montserrat", 12, "bold"),
+        text_color="#4aff4a"
+    )
+    root.after(2000, success_label.destroy)
+
+btn_Start_Organizer = customtkinter.CTkButton(
+    root, 
+    text="🗂️ Iniciar organização", 
+    command=start_organizer, 
+    fg_color="green", 
+    border_width=0, 
+    corner_radius=20, 
+    font=("Montserrat", 11, "bold"), 
+    width=150, 
+    hover_color="#0F0F0F"
+)
+btn_Start_Organizer.pack(side=customtkinter.BOTTOM, pady=50)
+
+def time_verification(time):
+    print(time)
+    config = load_config()
+    config["timeverification"] = time
+    save_config(config)
+    return time
+
+DropDownTimeValue = customtkinter.StringVar(value="5")
+DropDownTime = customtkinter.CTkOptionMenu(
+    root,
+    variable=DropDownTimeValue,
+    values=["5", "10", "15", "20", "25", "30", "35", "40", "45", "50", "55", "60"],
+    command=time_verification
+)
+
+time_verification = time_verification(DropDownTimeValue.get())
+DropDownTime.pack(pady=50,
+side=customtkinter.TOP)
+
+
 root.resizable(False, False)
 root.mainloop()

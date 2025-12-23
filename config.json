@@ -62,8 +62,8 @@
     "setups": {
         ".exe": true,
         ".msi": true,
-        ".appx": false,
-        ".appxbundle": false,
+        ".appx": true,
+        ".appxbundle": true,
         ".msix": true,
         ".apk": true
     },
@@ -80,12 +80,13 @@
         ".psd": true,
         ".eps": true,
         ".ai": true,
-        ".svg": false,
+        ".svg": true,
         ".webp": true,
         ".heic": true,
         ".heif": true,
         ".raw": true,
         ".af": true
     },
-    "Folder": "E:/Teste"
+    "Folder": "E:/Teste",
+    "timeverification": "10"
 }
