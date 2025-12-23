@@ -14,7 +14,7 @@ def load_extensions():
     # Converter para o formato esperado
     extensions = {}
     for category, exts in data.items():
-        if category != "Folder" or category != "timeverification":
+        if category != "Folder" and category != "timeverification" and category != "Startup":
             if type(exts) == str:
                 extensions[category.capitalize()] = [exts]
             else:

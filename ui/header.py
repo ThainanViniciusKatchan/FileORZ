@@ -4,7 +4,6 @@ import os
 import sys
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from utils.model import get_startup, set_startup
-from utils.startupfile import add_to_startup, remove_from_startup
 
 def header(root):
     header_frame = customtkinter.CTkFrame(root, fg_color="#3A70B8", corner_radius=0, height=50)
@@ -32,17 +31,14 @@ def git_button(header_frame):
 
 def startup_button(header_frame):
     startup_var = customtkinter.BooleanVar(value=get_startup())
-    
+
     def on_checkbox_toggle():
         if startup_var.get():
-            success = add_to_startup()
-            if not success:
-                # Se falhar, desmarca o checkbox
-                startup_var.set(False)
-                print("Erro ao adicionar à inicialização")
+            startup_var.set(True)
+            set_startup(True)
+            print("Adicionado à inicialização")
         else:
-            remove_from_startup()
-    
+            set_startup(False)
     btn_Enable_Startup = customtkinter.CTkCheckBox(
         header_frame,
         text="🪟 Iniciar com o windows",
