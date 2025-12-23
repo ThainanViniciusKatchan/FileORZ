@@ -8,7 +8,7 @@ from centralizeWindow import centralize_window
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from FileORZ import organize_files
-from model import load_config, save_config, get_current_folder, get_time_verification
+from model import load_config, save_config, get_current_folder, get_time_verification, set_current_folder, set_time_verification
 
 root = customtkinter.CTk()
 root.title("FileORZ")
@@ -100,18 +100,15 @@ btn_Start_Organizer = customtkinter.CTkButton(
 )
 btn_Start_Organizer.pack(side=customtkinter.BOTTOM, pady=50)
 
-def time_verification(time):
-    config = load_config()
-    config["timeverification"] = time
-    save_config(config)
-    return time
-
 time_value = get_time_verification()
  # Valida se o valor é diferente de 5 ou se não existe, se caso ele existir ele pega o valor que foi salvo
 if time_value != "5" or not time_value:
     DropDownTimeValue = customtkinter.StringVar(value=time_value)
 else: # Se não ele seta o valor padrão que é 5
     DropDownTimeValue = customtkinter.StringVar(value="5")
+
+set_time_verification(time_value)
+
 DropDownTime = customtkinter.CTkOptionMenu(
     root,
     fg_color="#192F42",
@@ -122,12 +119,11 @@ DropDownTime = customtkinter.CTkOptionMenu(
     dropdown_fg_color="#192F42",
     dropdown_text_color="#FFFFFF",
     variable=DropDownTimeValue,
+    command=lambda x: set_time_verification(x),
     values=["5", "10", "15", "20", "25", "30", "35", "40", "45", "50", "55", "60"],
-    command=time_verification,
     dynamic_resizing=False,
 )
-
-time_verification = time_verification(DropDownTimeValue.get())
+time_verification = get_time_verification()
 DropDownTime.pack(pady=50,
 side=customtkinter.TOP)
 

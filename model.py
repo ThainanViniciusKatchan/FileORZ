@@ -21,6 +21,16 @@ def save_config(config):
 def get_current_folder():
     return load_config().get("Folder", "")
 
+def set_current_folder(folder):
+    config = load_config()
+    config["Folder"] = folder
+    save_config(config)
+
 # Carrega o tempo de verificação
 def get_time_verification():
-    return load_config().get("timeverification", "5")    
+    return load_config().get("timeverification", "5")
+
+def set_time_verification(time):
+    config = load_config()
+    config["timeverification"] = time
+    save_config(config)
