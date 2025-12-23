@@ -1,30 +1,14 @@
 import customtkinter
 from customtkinter import filedialog
 import os
-import json
+import sys
 from config import open_config_window
 from header import header
 from centralizeWindow import centralize_window
 
-# Caminho do arquivo de configuração
-SCRIPT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-CONFIG_PATH = os.path.join(SCRIPT_DIR, "config.json")
-
-
-# Função para carregar a configuração
-def load_config():
-    with open(CONFIG_PATH, 'r', encoding='utf-8') as f:
-        return json.load(f)
-
-# Função para salvar a configuração
-def save_config(config):
-    with open(CONFIG_PATH, 'w', encoding='utf-8') as f:
-        json.dump(config, f, indent=4, ensure_ascii=False)
-
-# Carregar pasta atual salva
-def get_current_folder():
-    config = load_config()
-    return config.get("Folder", "")
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from FileORZ import organize_files
+from model import load_config, save_config, get_current_folder, get_time_verification
 
 root = customtkinter.CTk()
 root.title("FileORZ")
@@ -94,7 +78,6 @@ def start_organizer():
         root.after(2000, success_label.destroy)
         return
     else:
-        
         organize_files()
         success_label = customtkinter.CTkLabel(
             root,
@@ -118,17 +101,15 @@ btn_Start_Organizer = customtkinter.CTkButton(
 btn_Start_Organizer.pack(side=customtkinter.BOTTOM, pady=50)
 
 def time_verification(time):
-    print(time)
     config = load_config()
     config["timeverification"] = time
     save_config(config)
     return time
 
-config = load_config()
-get_time_verification = config.get("timeverification", "5")
+time_value = get_time_verification()
  # Valida se o valor é diferente de 5 ou se não existe, se caso ele existir ele pega o valor que foi salvo
-if get_time_verification != "5" or not get_time_verification:
-    DropDownTimeValue = customtkinter.StringVar(value=get_time_verification)
+if time_value != "5" or not time_value:
+    DropDownTimeValue = customtkinter.StringVar(value=time_value)
 else: # Se não ele seta o valor padrão que é 5
     DropDownTimeValue = customtkinter.StringVar(value="5")
 DropDownTime = customtkinter.CTkOptionMenu(

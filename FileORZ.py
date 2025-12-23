@@ -2,14 +2,15 @@
 import time
 import json
 
-# Carregar as extensões do arquivo TypeFile.json
+# Caminho do arquivo de configuração baseado na localização do FileORZ.py
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+CONFIG_PATH = os.path.join(SCRIPT_DIR, "config.json")
+
+# Carregar as extensões do arquivo config.json
 def load_extensions():
-    script_dir = os.path.dirname(os.path.abspath("config.json"))
-    json_path = os.path.join(script_dir, "config.json")
-    
-    with open(json_path, 'r', encoding='utf-8') as f:
+    with open(CONFIG_PATH, 'r', encoding='utf-8') as f:
         data = json.load(f)
-    
+        
     # Converter para o formato esperado
     extensions = {}
     for category, exts in data.items():
@@ -18,19 +19,11 @@ def load_extensions():
                 extensions[category.capitalize()] = [exts]
             else:
                 extensions[category.capitalize()] = [ext for ext, enabled in exts.items() if enabled]
-    
     return extensions
-script_dir = os.path.dirname(os.path.abspath(__file__))
-json_path = os.path.join(script_dir, "config.json")
-
-with open(json_path, 'r', encoding='utf-8') as f:
-    data = json.load(f)
-timeverification = data["timeverification"].isnumeric()
 
 # pasta de downloads e extenção de arquivo
-def organize_files(script_dir=script_dir):
-    json_path = os.path.join(script_dir, "config.json")
-    with open(json_path, 'r', encoding='utf-8') as f:
+def organize_files():
+    with open(CONFIG_PATH, 'r', encoding='utf-8') as f:
         data = json.load(f)
     path = data["Folder"]
     print(path)
@@ -65,6 +58,7 @@ def organize_files(script_dir=script_dir):
                     os.rename(os.path.join(path, file), destination_file)
                     break
 #verificar a pasta a com o tempo determiado pelo usuário
-while True:
-    organize_files()
-    time.sleep(timeverification)
+if __name__ == "__main__":
+    while True:
+        organize_files()
+        time.sleep(timeverification)

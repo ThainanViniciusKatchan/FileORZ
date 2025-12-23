@@ -1,20 +1,9 @@
 import customtkinter
 import os
-import json
+import sys
 
-# Caminho do arquivo de configuração (relativo à pasta pai)
-SCRIPT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-CONFIG_PATH = os.path.join(SCRIPT_DIR, "config.json")
-
-# Função para carregar a configuração
-def load_config():
-    with open(CONFIG_PATH, 'r', encoding='utf-8') as f:
-        return json.load(f)
-
-# Função para salvar a configuração
-def save_config(config):
-    with open(CONFIG_PATH, 'w', encoding='utf-8') as f:
-        json.dump(config, f, indent=4, ensure_ascii=False)
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from model import load_config, save_config
 
 def open_config_window(parent):
     """Abre a janela de configurações como toplevel da janela principal"""
