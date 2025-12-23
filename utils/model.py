@@ -3,7 +3,7 @@ import json
 
 # Caminho do arquivo de configuração
 def script_dir():
-    return os.path.dirname(os.path.abspath(__file__))
+    return os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 def json_path():
     return os.path.join(script_dir(), "config.json")
 
@@ -34,3 +34,12 @@ def set_time_verification(time):
     config = load_config()
     config["timeverification"] = time
     save_config(config)
+
+# Função para habilitar a inicialização do script com o windows
+def set_startup(var):
+    config = load_config()
+    config["Startup"] = var
+    save_config(config)
+    
+def get_startup():
+    return load_config().get("Startup", False)

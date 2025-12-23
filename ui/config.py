@@ -3,7 +3,7 @@ import os
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from model import load_config, save_config
+from utils.model import load_config, save_config
 
 def open_config_window(parent):
     """Abre a janela de configurações como toplevel da janela principal"""
@@ -43,7 +43,7 @@ def open_config_window(parent):
     # Criar seção para cada categoria (exceto "Folder")
     for category, extensions in config.items():
         if category == "Folder":
-            continue  # Pular a pasta, não é categoria
+            continue  # a pasta salva nas configurações
         
         if not isinstance(extensions, dict):
             continue

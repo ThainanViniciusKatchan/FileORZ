@@ -8,7 +8,7 @@ from centralizeWindow import centralize_window
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from FileORZ import organize_files
-from model import load_config, save_config, get_current_folder, get_time_verification, set_current_folder, set_time_verification
+from utils.model import load_config, save_config, get_current_folder, get_time_verification, set_time_verification
 
 root = customtkinter.CTk()
 root.title("FileORZ")
@@ -32,8 +32,7 @@ btn_config = customtkinter.CTkButton(
 )
 btn_config.pack(pady=10, side="right", padx=20)
 
-
-# Selecionar pasta de downloads
+# Selecionar pasta para organizar
 def select_path():
     # Abrir diálogo começando pela pasta atual salva (se existir)
     current_folder = get_current_folder()
@@ -55,7 +54,7 @@ btn_Select_Folder = customtkinter.CTkButton(
     text="📂 Selecionar pasta", 
     command=select_path, 
     fg_color="#363636", 
-    border_width=0, 
+    border_width=0,
     corner_radius=20, 
     font=("Montserrat", 11, "bold"), 
     width=150, 
@@ -64,6 +63,7 @@ btn_Select_Folder = customtkinter.CTkButton(
 
 btn_Select_Folder.pack(pady=10, side="left", padx=20)
 
+# Iniciar a organização
 def start_organizer():
     config = load_config()
     folder = config.get("Folder", "")
@@ -100,6 +100,7 @@ btn_Start_Organizer = customtkinter.CTkButton(
 )
 btn_Start_Organizer.pack(side=customtkinter.BOTTOM, pady=50)
 
+# Configuração do tempo de verificação
 time_value = get_time_verification()
  # Valida se o valor é diferente de 5 ou se não existe, se caso ele existir ele pega o valor que foi salvo
 if time_value != "5" or not time_value:
@@ -109,6 +110,7 @@ else: # Se não ele seta o valor padrão que é 5
 
 set_time_verification(time_value)
 
+# Criação do menu de tempo de verificação
 DropDownTime = customtkinter.CTkOptionMenu(
     root,
     fg_color="#192F42",
@@ -126,7 +128,6 @@ DropDownTime = customtkinter.CTkOptionMenu(
 time_verification = get_time_verification()
 DropDownTime.pack(pady=50,
 side=customtkinter.TOP)
-
 
 root.resizable(False, False)
 root.mainloop()
