@@ -3,6 +3,11 @@ import json
 import sys
 import winreg
 
+import shutil
+
+# Caminho de instalação local
+INSTALL_DIR = os.path.join(os.getenv('LOCALAPPDATA'), 'FileORZ')
+
 # Caminho do arquivo de configuração
 def script_dir():
     return os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -16,8 +21,19 @@ def load_config():
 
 # Função para salvar a configuração
 def save_config(config):
+    # Salva no local original (onde a UI está)
     with open(json_path(), 'w', encoding='utf-8') as f:
         json.dump(config, f, indent=4, ensure_ascii=False)
+    
+    # Se estiver instalado no AppData, sincroniza a config lá também
+    # para que o serviço em background receba as atualizações
+    local_config_path = os.path.join(INSTALL_DIR, "config.json")
+    if os.path.exists(INSTALL_DIR) and is_startup_enabled():
+        try:
+            with open(local_config_path, 'w', encoding='utf-8') as f:
+                json.dump(config, f, indent=4, ensure_ascii=False)
+        except Exception as e:
+            print(f"Erro ao sincronizar config: {e}")
 
 # Carregar pasta atual salva
 def get_current_folder():
@@ -68,22 +84,47 @@ def is_startup_enabled():
         return False
 
 def toggle_startup(enable):
-    """Ativa ou desativa a inicialização automática."""
+    """Ativa ou desativa a inicialização automática, movendo arquivos para AppData."""
     key_path = r"Software\Microsoft\Windows\CurrentVersion\Run"
     app_name = "FileORZ"
-    app_path = get_app_path()
+    
+    # Caminhos de destino
+    target_exe = os.path.join(INSTALL_DIR, "FileORZ.exe")
+    target_config = os.path.join(INSTALL_DIR, "config.json")
 
     try:
         key = winreg.OpenKey(winreg.HKEY_CURRENT_USER, key_path, 0, winreg.KEY_ALL_ACCESS)
+        
         if enable:
-            winreg.SetValueEx(key, app_name, 0, winreg.REG_SZ, app_path)
-            print(f"Registro adicionado: {app_path}")
+            # 1. Criar pasta se não existir
+            if not os.path.exists(INSTALL_DIR):
+                os.makedirs(INSTALL_DIR)
+            
+            # 2. Copiar Executável
+            current_app_path = get_app_path()
+            # Só copiamos se não estivermos rodando do próprio destino
+            if os.path.abspath(current_app_path) != os.path.abspath(target_exe):
+                shutil.copy2(current_app_path, target_exe)
+            
+            # 3. Copiar Config
+            current_config = json_path()
+            shutil.copy2(current_config, target_config)
+
+            # 4. Registrar no Windows apontando para o arquivo no AppData
+            winreg.SetValueEx(key, app_name, 0, winreg.REG_SZ, target_exe)
+            print(f"Instalado e registrado em: {target_exe}")
+            
         else:
+            # Remover do registro
             try:
                 winreg.DeleteValue(key, app_name)
                 print("Registro removido.")
             except FileNotFoundError:
-                pass # Já não existia
+                pass 
+            
+            # Opcional: Não removemos os arquivos físicos para não perder configs, 
+            # ou poderíamos remover. Por segurança mantemos os arquivos lá.
+
         winreg.CloseKey(key)
     except Exception as e:
-        print(f"Erro ao alterar registro: {e}")
+        print(f"Erro ao alterar registro/arquivos: {e}")
