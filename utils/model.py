@@ -7,6 +7,7 @@ import shutil
 
 # Caminho de instalação local
 INSTALL_DIR = os.path.join(os.getenv('LOCALAPPDATA'), 'FileORZ')
+NoInstallDir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "dist")
 
 # Caminho do arquivo de configuração
 def script_dir():
@@ -28,13 +29,19 @@ def save_config(config):
     # Se estiver instalado no AppData, sincroniza a config lá também
     # para que o serviço em background receba as atualizações
     local_config_path = os.path.join(INSTALL_DIR, "config.json")
-    if os.path.exists(INSTALL_DIR) and is_startup_enabled():
+    local_config_path_no_install = os.path.join(NoInstallDir, "config.json")
+    if os.path.exists(INSTALL_DIR) and get_startup() == True:
         try:
             with open(local_config_path, 'w', encoding='utf-8') as f:
                 json.dump(config, f, indent=4, ensure_ascii=False)
         except Exception as e:
             print(f"Erro ao sincronizar config: {e}")
-
+    if os.path.exists(NoInstallDir):
+        try:
+            with open(local_config_path_no_install, 'w', encoding='utf-8') as f:
+                json.dump(config, f, indent=4, ensure_ascii=False)
+        except Exception as e:
+            print(f"Erro ao sincronizar config: {e}")
 # Carregar pasta atual salva
 def get_current_folder():
     return load_config().get("Folder", "")
