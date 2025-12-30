@@ -79,7 +79,8 @@ def is_startup_enabled():
         key = winreg.OpenKey(winreg.HKEY_CURRENT_USER, r"Software\Microsoft\Windows\CurrentVersion\Run", 0, winreg.KEY_READ)
         value, _ = winreg.QueryValueEx(key, "FileORZ")
         winreg.CloseKey(key)
-        return value == get_app_path()
+        target_exe = os.path.join(INSTALL_DIR, "FileORZ.exe")
+        return os.path.normpath(value) == os.path.normpath(target_exe)
     except FileNotFoundError:
         return False
 
