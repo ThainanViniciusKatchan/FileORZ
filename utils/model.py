@@ -79,7 +79,7 @@ def is_startup_enabled():
         key = winreg.OpenKey(winreg.HKEY_CURRENT_USER, r"Software\Microsoft\Windows\CurrentVersion\Run", 0, winreg.KEY_READ)
         value, _ = winreg.QueryValueEx(key, "FileORZ")
         winreg.CloseKey(key)
-        target_exe = os.path.join(INSTALL_DIR, "FileORZ.exe")
+        target_exe = os.path.join(INSTALL_DIR, ".\\dist\\FileORZ.exe")
         return os.path.normpath(value) == os.path.normpath(target_exe)
     except FileNotFoundError:
         return False
@@ -102,10 +102,19 @@ def toggle_startup(enable):
                 os.makedirs(INSTALL_DIR)
             
             # 2. Copiar Executável
-            current_app_path = get_app_path()
+            if getattr(sys, 'frozen', False):
+                # Se rodando do executável
+                source_exe = sys.executable
+            else:
+                # Se rodando do script, pegar da pasta dist
+                source_exe = os.path.join(script_dir(), "dist", "FileORZ.exe")
+                if not os.path.exists(source_exe):
+                    print(f"Erro: Executável não encontrado em {source_exe}")
+                    return
+
             # Só copiamos se não estivermos rodando do próprio destino
-            if os.path.abspath(current_app_path) != os.path.abspath(target_exe):
-                shutil.copy2(current_app_path, target_exe)
+            if os.path.normpath(source_exe) != os.path.normpath(target_exe):
+                shutil.copy2(source_exe, target_exe)
             
             # 3. Copiar Config
             current_config = json_path()
@@ -123,8 +132,13 @@ def toggle_startup(enable):
             except FileNotFoundError:
                 pass 
             
-            # Opcional: Não removemos os arquivos físicos para não perder configs, 
-            # ou poderíamos remover. Por segurança mantemos os arquivos lá.
+            # Remover arquivos e pasta do AppData
+            if os.path.exists(INSTALL_DIR):
+                try:
+                    shutil.rmtree(INSTALL_DIR)
+                    print(f"Pasta removida: {INSTALL_DIR}")
+                except Exception as e:
+                    print(f"Erro ao remover pasta: {e}")
 
         winreg.CloseKey(key)
     except Exception as e:
