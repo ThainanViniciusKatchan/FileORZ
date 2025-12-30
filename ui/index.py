@@ -7,8 +7,8 @@ from header import header
 from centralizeWindow import centralize_window
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from FileORZ import organize_files
 from utils.model import load_config, save_config, get_current_folder, get_time_verification, set_time_verification
+from utils.StartTask import start_task
 
 root = customtkinter.CTk()
 root.title("FileORZ")
@@ -78,7 +78,7 @@ def start_organizer():
         root.after(2000, success_label.destroy)
         return
     else:
-        organize_files()
+        start_task()
         success_label = customtkinter.CTkLabel(
             root,
             text="✓ Organização concluída!", pady=5, padx=5,
