@@ -13,7 +13,7 @@ NoInstallDir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__fi
 def script_dir():
     return os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 def json_path():
-    return os.path.join(script_dir(), "config.json")
+    return os.path.join(script_dir(), "dist\\config.json")
 
 # Função para carregar a configuração
 def load_config():
@@ -29,7 +29,7 @@ def save_config(config):
     # Se estiver instalado no AppData, sincroniza a config lá também
     # para que o serviço em background receba as atualizações
     local_config_path = os.path.join(INSTALL_DIR, "config.json")
-    local_config_path_no_install = os.path.join(NoInstallDir, "config.json")
+    local_config_path_no_install = os.path.join(NoInstallDir, "dist\\config.json")
     if os.path.exists(INSTALL_DIR) and get_startup() == True:
         try:
             with open(local_config_path, 'w', encoding='utf-8') as f:
