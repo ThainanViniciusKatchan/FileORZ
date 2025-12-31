@@ -10,8 +10,19 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from utils.model import load_config, save_config, get_current_folder, get_time_verification, set_time_verification
 from utils.StartTask import start_task
 
+# Caminho do ícone
+icon_dir = os.path.join(os.path.dirname(__file__), "icon")
+icon_path = os.path.join(icon_dir, "IconApp.ico")
+
 root = customtkinter.CTk()
 root.title("FileORZ")
+
+# Tentar definir ícone
+try:
+    if os.path.exists(icon_path):
+        root.iconbitmap(icon_path)
+except Exception:
+    pass  # Ignora se não conseguir carregar o ícone
 root.geometry("600x300")
 root.configure(fg_color="#121212")
 root.resizable(False, False)
