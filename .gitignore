@@ -1,2 +1,8 @@
 .venv
 __pycache__
+build_ui
+build
+.gitignore
+FileORZ-UI.spec
+FileORZ.spec
+Vemv
