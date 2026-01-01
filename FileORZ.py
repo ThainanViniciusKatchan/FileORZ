@@ -2,8 +2,14 @@
 import time
 import json
 
+import sys
+
 # Caminho do arquivo de configuração baseado na localização do FileORZ.py
-SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+if getattr(sys, 'frozen', False):
+    SCRIPT_DIR = os.path.dirname(sys.executable)
+else:
+    SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+
 CONFIG_PATH = os.path.join(SCRIPT_DIR, "config.json")
 
 # Carregar as extensões do arquivo config.json
@@ -14,7 +20,7 @@ def load_extensions():
     # Converter para o formato esperado
     extensions = {}
     for category, exts in data.items():
-        if category != "Folder" or category != "timeverification":
+        if category != "Folder" and category != "timeverification" and category != "Startup":
             if type(exts) == str:
                 extensions[category.capitalize()] = [exts]
             else:
@@ -61,4 +67,13 @@ def organize_files():
 if __name__ == "__main__":
     while True:
         organize_files()
-        time.sleep(timeverification)
+        
+        # Ler o tempo de verificação a cada ciclo para permitir atualizações em tempo real
+        try:
+            with open(CONFIG_PATH, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+            time_verification = int(data.get("timeverification", 30))
+        except:
+            time_verification = 30
+            
+        time.sleep(time_verification)

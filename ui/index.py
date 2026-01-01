@@ -7,171 +7,138 @@ from header import header
 from centralizeWindow import centralize_window
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from FileORZ import organize_files
-from model import load_config, save_config, get_current_folder, get_time_verification, set_current_folder, set_time_verification
+from utils.model import load_config, save_config, get_current_folder, get_time_verification, set_time_verification
+from utils.StartTask import start_task
 
-# Configuração global de aparência
-customtkinter.set_appearance_mode("Dark")
-customtkinter.set_default_color_theme("blue")
+# Caminho do ícone
+icon_dir = os.path.join(os.path.dirname(__file__), "icon")
+icon_path = os.path.join(icon_dir, "IconApp.ico")
 
 root = customtkinter.CTk()
 root.title("FileORZ")
-# Aumentando um pouco a altura para acomodar o novo layout confortavelmente
-root.geometry("700x500")
-root.configure(fg_color="#0f172a") # Slate 900
+
+# Tentar definir ícone
+try:
+    if os.path.exists(icon_path):
+        root.iconbitmap(icon_path)
+except Exception:
+    pass  # Ignora se não conseguir carregar o ícone
+root.geometry("600x300")
+root.configure(fg_color="#121212")
 root.resizable(False, False)
-
-# Header
 header(root)
-centralize_window(root, 700, 500)
+centralize_window(root, 600, 300)
 
-# Main Container
-main_frame = customtkinter.CTkFrame(root, fg_color="transparent")
-main_frame.pack(fill="both", expand=True, padx=40, pady=20)
-
-# --- Seção de Status / Informação ---
-info_frame = customtkinter.CTkFrame(main_frame, fg_color="#1e293b", corner_radius=15, border_width=1, border_color="#334155")
-info_frame.pack(fill="x", pady=(0, 20))
-
-info_label = customtkinter.CTkLabel(
-    info_frame, 
-    text="PASTA ATUAL", 
-    font=customtkinter.CTkFont(family="Roboto", size=11, weight="bold"),
-    text_color="#94a3b8" # Slate 400
-)
-info_label.pack(pady=(15, 0), anchor="center")
-
-current_folder_var = customtkinter.StringVar(value="Nenhuma pasta selecionada")
-path_label = customtkinter.CTkLabel(
-    info_frame, 
-    textvariable=current_folder_var,
-    font=customtkinter.CTkFont(family="Roboto", size=14),
-    text_color="#e2e8f0", # Slate 200
-    wraplength=600
-)
-path_label.pack(pady=(5, 15), padx=20, anchor="center")
-
-def update_folder_display():
-    folder = get_current_folder()
-    if folder and os.path.exists(folder):
-        current_folder_var.set(folder)
-    else:
-        current_folder_var.set("Nenhuma pasta selecionada")
-
-update_folder_display()
-
-# --- Seção de Ações Principais ---
-actions_frame = customtkinter.CTkFrame(main_frame, fg_color="transparent")
-actions_frame.pack(fill="both", expand=True)
-actions_frame.grid_columnconfigure(0, weight=1)
-actions_frame.grid_columnconfigure(1, weight=1)
-
-# Botão Selecionar Pasta
-def select_path():
-    current = get_current_folder()
-    initial = current if os.path.exists(current) else os.getcwd()
-    selected = filedialog.askdirectory(title="Selecione a pasta para organizar", initialdir=initial)
-    
-    if selected:
-        config = load_config()
-        config["Folder"] = selected
-        save_config(config)
-        update_folder_display()
-        # Feedback visual sutil (pode ser implementado aqui)
-
-btn_select = customtkinter.CTkButton(
-    actions_frame,
-    text="Selecionar Pasta",
-    command=select_path,
-    fg_color="#3b82f6", # Blue 500
-    hover_color="#2563eb", # Blue 600
-    text_color="white",
-    font=customtkinter.CTkFont(family="Roboto", size=14, weight="bold"),
-    height=50,
-    corner_radius=10,
-    width=280
-)
-btn_select.grid(row=0, column=0, padx=(0, 10), pady=10, sticky="ew")
-
-# Botão Configurações
+# Abrir configurações
 btn_config = customtkinter.CTkButton(
-    actions_frame,
-    text="Configurações",
+    root, 
+    text="⚙️ Configurações",
     command=lambda: open_config_window(root),
-    fg_color="#334155", # Slate 700
-    hover_color="#475569", # Slate 600
-    text_color="white",
-    font=customtkinter.CTkFont(family="Roboto", size=14, weight="bold"),
-    height=50,
-    corner_radius=10,
-    width=280
+    fg_color="#363636", 
+    border_width=0, 
+    corner_radius=20, 
+    font=("Montserrat", 11, "bold"), 
+    width=150, 
+    hover_color="#0F0F0F"
 )
-btn_config.grid(row=0, column=1, padx=(10, 0), pady=10, sticky="ew")
+btn_config.pack(pady=10, side="right", padx=20)
 
-# Botão Iniciar Organização (Grande destaque)
+# Selecionar pasta para organizar
+def select_path():
+    # Abrir diálogo começando pela pasta atual salva (se existir)
+    current_folder = get_current_folder()
+    initial_dir = current_folder if os.path.exists(current_folder) else os.getcwd()
+    
+    selected_folder = filedialog.askdirectory(title="Selecione a pasta", initialdir=initial_dir)
+
+    if selected_folder:
+        # Carregar config atual, atualizar pasta e salvar
+        config = load_config()
+        config["Folder"] = selected_folder
+        save_config(config)
+        print(f'Pasta salva com sucesso: {selected_folder}')
+    else:
+        print('Nenhuma pasta selecionada')
+
+btn_Select_Folder = customtkinter.CTkButton(
+    root, 
+    text="📂 Selecionar pasta", 
+    command=select_path, 
+    fg_color="#363636", 
+    border_width=0,
+    corner_radius=20, 
+    font=("Montserrat", 11, "bold"), 
+    width=150, 
+    hover_color="#0F0F0F"
+)
+
+btn_Select_Folder.pack(pady=10, side="left", padx=20)
+
+# Iniciar a organização
 def start_organizer():
-    folder = get_current_folder()
+    config = load_config()
+    folder = config.get("Folder", "")
+    
     if not folder:
-        # Erro visual na label
-        current_folder_var.set("❌ Selecione uma pasta primeiro!")
-        root.after(2000, update_folder_display)
+        success_label = customtkinter.CTkLabel(
+            root,
+            text="✓ Nenhuma pasta selecionada!", pady=5, padx=5,
+            font=("Montserrat", 12, "bold"),
+            text_color="#4aff4a"
+        )
+        root.after(2000, success_label.destroy)
         return
-        
-    try:
-        organize_files()
-        # Sucesso visual
-        original_text = btn_start.cget("text")
-        btn_start.configure(text="✓ Organizado com Sucesso!", fg_color="#10b981", hover_color="#059669")
-        root.after(2000, lambda: btn_start.configure(text=original_text, fg_color="#3b82f6", hover_color="#2563eb"))
-    except Exception as e:
-        print(f"Erro: {e}")
+    else:
+        start_task()
+        success_label = customtkinter.CTkLabel(
+            root,
+            text="✓ Organização concluída!", pady=5, padx=5,
+            font=("Montserrat", 12, "bold"),
+            text_color="#4aff4a"
+        )
+        root.after(2000, success_label.destroy)
 
-btn_start = customtkinter.CTkButton(
-    actions_frame,
-    text="Organizar Arquivos Agora",
-    command=start_organizer,
-    fg_color="#3b82f6", # Blue 500
-    hover_color="#2563eb", # Blue 600
-    text_color="white",
-    font=customtkinter.CTkFont(family="Roboto", size=16, weight="bold"),
-    height=60,
-    corner_radius=12
+btn_Start_Organizer = customtkinter.CTkButton(
+    root, 
+    text="🗂️ Iniciar organização", 
+    command=start_organizer, 
+    fg_color="#194036",
+    hover_color="#1D4D40",
+    corner_radius=20,
+    border_width=0, 
+    font=("Montserrat", 11, "bold"), 
+    width=150, 
 )
-btn_start.grid(row=1, column=0, columnspan=2, pady=(20, 10), sticky="ew")
+btn_Start_Organizer.pack(side=customtkinter.BOTTOM, pady=50)
 
-# --- Footer: Configuração de Tempo ---
-footer_frame = customtkinter.CTkFrame(root, fg_color="#0f172a", height=60, corner_radius=0)
-footer_frame.pack(fill="x", side="bottom")
-
-time_label = customtkinter.CTkLabel(
-    footer_frame,
-    text="Verificação Automática (Segundos):",
-    font=customtkinter.CTkFont(family="Roboto", size=12),
-    text_color="#94a3b8"
-)
-time_label.pack(side="left", padx=(40, 10), pady=20)
-
+# Configuração do tempo de verificação
 time_value = get_time_verification()
-current_time = "5" if (not time_value or time_value == "5") else time_value
-set_time_verification(current_time) # Garantir valor válido
+ # Valida se o valor é diferente de 5 ou se não existe, se caso ele existir ele pega o valor que foi salvo
+if time_value != "5" or not time_value:
+    DropDownTimeValue = customtkinter.StringVar(value=time_value)
+else: # Se não ele seta o valor padrão que é 5
+    DropDownTimeValue = customtkinter.StringVar(value="5")
 
-time_var = customtkinter.StringVar(value=current_time)
+set_time_verification(time_value)
 
-def on_time_change(choice):
-    set_time_verification(choice)
-
-time_menu = customtkinter.CTkOptionMenu(
-    footer_frame,
-    values=[str(i) for i in range(5, 65, 5)],
-    variable=time_var,
-    command=on_time_change,
-    fg_color="#1e293b",
-    button_color="#334155",
-    button_hover_color="#475569",
-    text_color="white",
-    width=80,
-    corner_radius=8
+# Criação do menu de tempo de verificação
+DropDownTime = customtkinter.CTkOptionMenu(
+    root,
+    fg_color="#192F42",
+    text_color="#FFFFFF",
+    height=50,
+    width=150,
+    font=("Montserrat", 11, "bold"),
+    dropdown_fg_color="#192F42",
+    dropdown_text_color="#FFFFFF",
+    variable=DropDownTimeValue,
+    command=lambda x: set_time_verification(x),
+    values=["5", "10", "15", "20", "25", "30", "35", "40", "45", "50", "55", "60"],
+    dynamic_resizing=False,
 )
-time_menu.pack(side="left", pady=20)
+time_verification = get_time_verification()
+DropDownTime.pack(pady=50,
+side=customtkinter.TOP)
 
+root.resizable(False, False)
 root.mainloop()

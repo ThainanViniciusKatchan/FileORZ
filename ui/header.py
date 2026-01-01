@@ -1,46 +1,57 @@
 import customtkinter
 import webbrowser
+import os 
+import sys
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from utils.model import get_startup, set_startup, is_startup_enabled, toggle_startup as toggle_startup_registry
 
 def header(root):
-    # Usando Slate 800 para o header para diferenciar levemente do fundo principal (Slate 900)
-    header_frame = customtkinter.CTkFrame(root, fg_color="#1e293b", corner_radius=0, height=60)
+    header_frame = customtkinter.CTkFrame(root, fg_color="#3A70B8", corner_radius=0, height=50)
     header_frame.pack(fill="x", side="top")
-    
-    # Grid layout para melhor controle
-    header_frame.grid_columnconfigure(0, weight=1)
-    header_frame.grid_columnconfigure(1, weight=0)
-
-    # Logo/Título com fonte moderna
-    header_label = customtkinter.CTkLabel(
-        header_frame, 
-        text="FileORZ",
-        font=customtkinter.CTkFont(family="Roboto", size=24, weight="bold"),
-        text_color="#f1f5f9" # Slate 100
-    )
-    header_label.pack(side="left", padx=25, pady=15)
-    
-    # Botão Github modernizado
     git = git_button(header_frame)
-    git.pack(side="right", padx=25, pady=15)
+    startup_switch = startup_button(header_frame)
+    startup_switch.pack(pady=10, padx=20, side="right", anchor="center")
+    git.pack(pady=10, padx=20, side="right", anchor="center")
+    header_label = customtkinter.CTkLabel(header_frame, text="FileORZ",
+    font=customtkinter.CTkFont(size=20, weight="bold", slant="italic", underline=True))
+    header_label.pack(pady=10, padx=20, side="left", anchor="center")
     
     return header_frame
 
 def git_button(header_frame):
-    git_button = customtkinter.CTkButton(
-        header_frame, 
-        text="GitHub",
-        font=customtkinter.CTkFont(family="Roboto", size=13, weight="bold"),
-        fg_color="#334155", # Slate 700
-        text_color="#f8fafc", # Slate 50
-        border_width=0, 
-        corner_radius=8,
-        height=32,
-        width=100,
-        hover_color="#475569" # Slate 600
-    )
-    
-    # Adicionando ícone se possível ou mantendo texto limpo
-    # Por enquanto texto limpo com hover effect melhor
-    
+    git_button = customtkinter.CTkButton(header_frame, text="🐈 GitHub",
+    font=customtkinter.CTkFont(size=12, weight="bold"),
+    fg_color="#363636", 
+    border_width=0, 
+    corner_radius=20,
+    height=25,
+    hover_color="#0F0F0F")
     git_button.bind("<Button-1>", lambda event: webbrowser.open("https://github.com/ThainanViniciusKatchan/FileORZ"))
     return git_button
+
+
+def startup_button(header_frame):
+
+    startup_var = customtkinter.BooleanVar(value=get_startup())
+
+    def on_toggle():
+        is_enabled = startup_var.get()
+        # Atualiza o config.json
+        set_startup(is_enabled)
+        # Cria ou remove o registro do Windows
+        toggle_startup_registry(is_enabled)
+
+    startup_switch = customtkinter.CTkSwitch(
+        header_frame, 
+        text="🪟 Iniciar com o Windows",
+        command=on_toggle,
+        variable=startup_var,
+        font=("Montserrat", 12, "bold"),
+        fg_color="#363636",
+        progress_color="#4a9eff"
+    )
+
+    return startup_switch   
+
+    
+    

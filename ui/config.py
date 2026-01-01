@@ -3,21 +3,18 @@ import os
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from model import load_config, save_config
+from utils.model import load_config, save_config
 
 def open_config_window(parent):
     """Abre a janela de configurações como toplevel da janela principal"""
     
-    # Criar janela toplevel e registrar como secundária
+    # Criar janela toplevel
     window = customtkinter.CTkToplevel(parent)
     window.title("Configurações")
     window.geometry("800x600")
-    window.configure(fg_color="#0f172a") # Slate 900
+    window.configure(fg_color="#121212")
     window.resizable(False, False)
-    
-    # É importante garantir que a janela fique no topo
-    window.transient(parent) 
-    window.grab_set() 
+    window.grab_set()  # Modal - bloqueia interação com janela principal
     
     # Carregar configuração atual
     config = load_config()
@@ -25,41 +22,28 @@ def open_config_window(parent):
     # Dicionário para armazenar as variáveis das checkboxes de extensão
     extension_vars = {}
     
-    # --- HEADER ---
-    header_frame = customtkinter.CTkFrame(window, fg_color="#1e293b", height=60, corner_radius=0)
-    header_frame.pack(fill="x", side="top")
-    
-    title_label = customtkinter.CTkLabel(
-        header_frame, 
-        text="Gerenciar Extensões",
-        font=customtkinter.CTkFont(family="Roboto", size=18, weight="bold"),
-        text_color="#f1f5f9"
-    )
-    title_label.pack(pady=15)
-    
-    # --- FOOTER (Criado antes do conteúdo para garantir espaço) ---
-    # Área de Ação (Footer Fixo)
-    footer_frame = customtkinter.CTkFrame(window, fg_color="#0f172a", height=80, corner_radius=0)
-    footer_frame.pack(fill="x", side="bottom")
-    
-    # Linha separadora do footer (Pack por último no bottom para ficar "em cima" do footer)
-    sep = customtkinter.CTkFrame(window, height=1, fg_color="#334155")
-    sep.pack(fill="x", side="bottom", pady=0)
-    
-    # --- CONTEÚDO (Scroll) ---
     # Frame com scroll para as categorias
     scroll_frame = customtkinter.CTkScrollableFrame(
         window, 
         width=760, 
-        height=450,
-        fg_color="transparent" # Transparente para usar o fundo da janela
+        height=480,
+        fg_color="#1a1a1a"
     )
-    scroll_frame.pack(pady=20, padx=20, fill="both", expand=True)
+    scroll_frame.pack(pady=10, padx=10, fill="both", expand=True)
+    
+    # Título principal
+    title_label = customtkinter.CTkLabel(
+        scroll_frame, 
+        text="Configurar Extensões por Categoria",
+        font=("Montserrat", 18, "bold"),
+        text_color="white"
+    )
+    title_label.pack(pady=(10, 20))
     
     # Criar seção para cada categoria (exceto "Folder")
     for category, extensions in config.items():
-        if category == "Folder" or category == "timeverification":
-            continue
+        if category == "Folder":
+            continue  # a pasta salva nas configurações
         
         if not isinstance(extensions, dict):
             continue
@@ -67,54 +51,37 @@ def open_config_window(parent):
         # Inicializar dicionário para esta categoria
         extension_vars[category] = {}
         
-        # Frame da categoria (Card visual)
-        cat_frame = customtkinter.CTkFrame(
-            scroll_frame, 
-            fg_color="#1e293b", # Slate 800 
-            corner_radius=12,
-            border_width=1,
-            border_color="#334155" # Slate 700
-        )
-        cat_frame.pack(pady=10, padx=5, fill="x")
+        # Frame da categoria
+        cat_frame = customtkinter.CTkFrame(scroll_frame, fg_color="#252525", corner_radius=10)
+        cat_frame.pack(pady=8, padx=10, fill="x")
         
-        # Cabeçalho interno da categoria
-        header_inner = customtkinter.CTkFrame(cat_frame, fg_color="transparent")
-        header_inner.pack(fill="x", padx=20, pady=(15, 10))
+        # Cabeçalho da categoria
+        header_frame = customtkinter.CTkFrame(cat_frame, fg_color="transparent")
+        header_frame.pack(fill="x", padx=15, pady=(10, 5))
         
         # Nome da categoria
-        bg_icon = customtkinter.CTkLabel(
-            header_inner, 
-            text="📁", 
-            font=customtkinter.CTkFont(size=20)
-        )
-        bg_icon.pack(side="left", padx=(0, 10))
-        
         cat_label = customtkinter.CTkLabel(
-            header_inner,
-            text=category.upper(),
-            font=customtkinter.CTkFont(family="Roboto", size=14, weight="bold"),
-            text_color="#3b82f6" # Blue
+            header_frame,
+            text=f"📁 {category.upper()}",
+            font=("Montserrat", 14, "bold"),
+            text_color="#4a9eff"
         )
         cat_label.pack(side="left")
         
-        # Contador
-        enabled_count = sum(1 for v in extensions.values() if v == True)
-        total_count = len(extensions.values())
+        # Contador de extensões selecionadas
+        enabled_count = sum(1 for v in extensions.values() if v)
+        total_count = len(extensions)
         count_label = customtkinter.CTkLabel(
-            header_inner,
-            text=f"{enabled_count} de {total_count} ativos",
-            font=customtkinter.CTkFont(family="Roboto", size=11),
-            text_color="#94a3b8" # Slate 400
+            header_frame,
+            text=f"({enabled_count}/{total_count} selecionadas)",
+            font=("Montserrat", 10),
+            text_color="#888888"
         )
         count_label.pack(side="right")
         
-        # Barra separadora
-        separator = customtkinter.CTkFrame(cat_frame, height=2, fg_color="#334155")
-        separator.pack(fill="x", padx=20, pady=(0, 15))
-        
-        # Frame para os botões de controle
-        control_frame = customtkinter.CTkFrame(cat_frame, fg_color="transparent")
-        control_frame.pack(fill="x", padx=20, pady=(0, 10))
+        # Botões "Selecionar Todos" e "Desmarcar Todos"
+        btn_frame = customtkinter.CTkFrame(cat_frame, fg_color="transparent")
+        btn_frame.pack(fill="x", padx=15, pady=5)
         
         def select_all(cat=category):
             for ext_var in extension_vars[cat].values():
@@ -124,52 +91,72 @@ def open_config_window(parent):
             for ext_var in extension_vars[cat].values():
                 ext_var.set(False)
         
-        btn_sel_all = customtkinter.CTkButton(
-            control_frame, text="Marcar Tudo", command=select_all,
-            font=customtkinter.CTkFont(size=10), height=24, width=80,
-            fg_color="#334155", hover_color="#475569"
+        btn_select_all = customtkinter.CTkButton(
+            btn_frame,
+            text="Selecionar Todos",
+            command=select_all,
+            fg_color="#2d5a2d",
+            hover_color="#3d7a3d",
+            font=("Montserrat", 9),
+            width=100,
+            height=25,
+            corner_radius=5
         )
-        btn_sel_all.pack(side="left", padx=(0, 10))
+        btn_select_all.pack(side="left", padx=(0, 5))
         
-        btn_desel_all = customtkinter.CTkButton(
-            control_frame, text="Desmarcar Tudo", command=deselect_all,
-            font=customtkinter.CTkFont(size=10), height=24, width=100,
-            fg_color="#334155", hover_color="#475569"
+        btn_deselect_all = customtkinter.CTkButton(
+            btn_frame,
+            text="Desmarcar Todos",
+            command=deselect_all,
+            fg_color="#5a2d2d",
+            hover_color="#7a3d3d",
+            font=("Montserrat", 9),
+            width=100,
+            height=25,
+            corner_radius=5
         )
-        btn_desel_all.pack(side="left")
+        btn_deselect_all.pack(side="left")
         
-        # Frame GRID para as extensões
-        ext_frame = customtkinter.CTkFrame(cat_frame, fg_color="transparent")
-        ext_frame.pack(fill="x", padx=20, pady=(5, 20))
+        # Frame para as extensões (grid)
+        ext_frame = customtkinter.CTkFrame(cat_frame, fg_color="#1e1e1e", corner_radius=8)
+        ext_frame.pack(fill="x", padx=15, pady=(5, 15))
         
+        # Criar checkboxes para cada extensão em grid
         row = 0
         col = 0
-        max_cols = 4  # Menos colunas para mais espaço
+        max_cols = 5  # 5 colunas de extensões
         
         for ext, enabled in extensions.items():
+            # Criar variável para a checkbox
             var = customtkinter.BooleanVar(value=enabled)
             extension_vars[category][ext] = var
             
+            # Checkbox da extensão
             checkbox = customtkinter.CTkCheckBox(
                 ext_frame,
                 text=ext,
                 variable=var,
-                font=customtkinter.CTkFont(family="Roboto", size=12),
-                fg_color="#3b82f6",
-                hover_color="#2563eb",
-                border_color="#94a3b8",
-                text_color="#e2e8f0",
-                width=100
+                font=("Consolas", 11),
+                fg_color="#4a9eff",
+                hover_color="#3a8eef",
+                border_color="#4a9eff",
+                text_color="white",
+                width=120
             )
-            checkbox.grid(row=row, column=col, padx=10, pady=8, sticky="w")
+            checkbox.grid(row=row, column=col, padx=8, pady=5, sticky="w")
             
             col += 1
             if col >= max_cols:
                 col = 0
                 row += 1
+        
+        # Padding extra se a última linha não estiver completa
+        if col > 0:
+            for empty_col in range(col, max_cols):
+                spacer = customtkinter.CTkLabel(ext_frame, text="", width=120)
+                spacer.grid(row=row, column=empty_col)
     
-    # --- FUNÇÕES DO FOOTER ---
-    
+    # Função para salvar alterações
     def save_changes():
         config = load_config()
         
@@ -180,21 +167,26 @@ def open_config_window(parent):
         
         save_config(config)
         
-        # Feedback visual no botão
-        original_text = save_button.cget("text")
-        save_button.configure(text="✓ Salvo!", fg_color="#10b981", hover_color="#059669")
-        window.after(1500, lambda: save_button.configure(text=original_text, fg_color="#3b82f6", hover_color="#2563eb"))
-
-    # Botão Salvar (Adicionado ao footer frame existente)
+        # Mostrar mensagem de sucesso
+        success_label = customtkinter.CTkLabel(
+            window,
+            text="✓ Configurações salvas com sucesso!", pady=5, padx=5,
+            font=("Montserrat", 12, "bold"),
+            text_color="#4aff4a"
+        )
+        success_label.pack(pady=5)
+        window.after(2000, success_label.destroy)  # Remove após 2 segundos
+    
+    # Botão Salvar
     save_button = customtkinter.CTkButton(
-        footer_frame,
-        text="Salvar Alterações",
+        window,
+        text="💾 Salvar Configurações",
         command=save_changes,
-        fg_color="#3b82f6",
-        hover_color="#2563eb",
-        font=customtkinter.CTkFont(family="Roboto", size=14, weight="bold"),
+        fg_color="#4a9eff",
+        hover_color="#3a8eef",
+        font=("Montserrat", 13, "bold"),
+        width=250,
         height=45,
-        width=200,
-        corner_radius=8
+        corner_radius=10
     )
-    save_button.pack(pady=20)
+    save_button.pack(pady=15)
