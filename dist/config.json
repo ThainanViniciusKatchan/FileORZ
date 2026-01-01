@@ -88,6 +88,6 @@
         ".af": true
     },
     "Folder": "E:/Teste",
-    "timeverification": "15",
-    "Startup": true
+    "timeverification": "10",
+    "Startup": false
 }
