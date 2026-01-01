@@ -8,23 +8,23 @@ import shutil
 # Caminho de instalação local
 INSTALL_DIR = os.path.join(os.getenv('LOCALAPPDATA'), 'FileORZ')
 
-# Detecta o diretório base (diferente quando empacotado vs desenvolvimento)
+# Detecta o diretório base (compilado e desenvolvimento)
 def script_dir():
     if getattr(sys, 'frozen', False):
-        # Empacotado pelo PyInstaller - usar diretório do executável
+        # Compilado
         return os.path.dirname(sys.executable)
     else:
-        # Desenvolvimento - usar diretório do script
+        # Desenvolvimento
         return os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 NoInstallDir = os.path.join(script_dir(), "dist")
 
 def json_path():
     if getattr(sys, 'frozen', False):
-        # Quando empacotado, config.json está no mesmo diretório do executável
-        return os.path.join(script_dir(), "config.json")
+        # Compilado
+        return os.path.join(script_dir(), "dist", "config.json")
     else:
-        # Em desenvolvimento
+        # Desenvolvimento
         return os.path.join(script_dir(), "dist", "config.json")
 
 # Função para carregar a configuração

@@ -7,7 +7,7 @@ import time
 OUTPUT_DIR = "FileORZ"
 
 def limpar_builds_anteriores():
-    """Limpa todas as pastas de build anteriores"""
+    # Limpa todas as pastas de build anteriores
     print("\n🧹 Limpando builds anteriores...")
     
     pastas = ['build', 'build_ui', 'build_orz', OUTPUT_DIR, '__pycache__']
@@ -30,21 +30,21 @@ def limpar_builds_anteriores():
                 pass
 
 def criar_pasta_build():
-    """Cria a estrutura de pastas para as builds"""
+    # Cria a estrutura de pastas para a build
     print("\n📁 Criando estrutura de pastas...")
     os.makedirs(OUTPUT_DIR, exist_ok=True)
     os.makedirs(os.path.join(OUTPUT_DIR, "dist"), exist_ok=True)
     print(f"  ✓ Estrutura {OUTPUT_DIR}/ e {OUTPUT_DIR}/dist/ criada")
 
 def compilar_organizador():
-    """Compila o script organizador FileORZ.py"""
+    # Compila o arquivo FileORZ.py
     print("\n📦 Compilando o organizador (FileORZ.py)...")
     
     dist_path = os.path.join(OUTPUT_DIR, "dist")
     
     comando = [
         'pyinstaller',
-        '--onedir', 
+        '--onefile', 
         '--noconsole',
         '--name=FileORZ',
         '--icon=ui/icon/IconApp.ico',
@@ -72,9 +72,9 @@ def compilar_ui():
     
     comando = [
         'pyinstaller',
-        '--onedir', 
+        '--onefile', 
         '--windowed',
-        '--name=FileORZ-UI',
+        '--name=FL_ORZ',
         '--icon=ui/icon/IconApp.ico',
         '--add-data=ui:ui',
         '--add-data=utils:utils',
@@ -94,7 +94,7 @@ def compilar_ui():
     result = subprocess.run(comando, capture_output=True, text=True)
     
     if result.returncode == 0:
-        print(f"  ✅ UI compilada em {OUTPUT_DIR}/FileORZ-UI.exe")
+        print(f"  ✅ UI compilada em {OUTPUT_DIR}/FL_ORZ.exe")
     else:
         print(f"  ❌ Erro ao compilar UI")
         print(result.stderr[-500:] if len(result.stderr) > 500 else result.stderr)
@@ -107,26 +107,18 @@ def copiar_config():
     print("\n📋 Copiando config.json...")
     
     config_origem = os.path.join('dist', 'config.json')
-    # Com --onedir, a UI fica em FileORZ/FileORZ-UI/
-    config_destino_ui = os.path.join(OUTPUT_DIR, 'FileORZ-UI', 'config.json')
-    # O organizador também precisa do config em FileORZ/dist/FileORZ/
-    config_destino_orz = os.path.join(OUTPUT_DIR, 'dist', 'FileORZ', 'config.json')
+    # O organizador também precisa do config em FileORZ/dist/
+    config_destino_orz = os.path.join(OUTPUT_DIR, 'dist', 'config.json')
     
     if os.path.exists(config_origem):
-        # Copiar para pasta da UI
-        if os.path.exists(os.path.dirname(config_destino_ui)):
-            shutil.copy(config_origem, config_destino_ui)
-            print(f"  ✅ config.json copiado para {OUTPUT_DIR}/FileORZ-UI/")
-        
         # Copiar para pasta do organizador
-        if os.path.exists(os.path.dirname(config_destino_orz)):
-            shutil.copy(config_origem, config_destino_orz)
-            print(f"  ✅ config.json copiado para {OUTPUT_DIR}/dist/FileORZ/")
+        shutil.copy(config_origem, config_destino_orz)
+        print(f"  ✅ config.json copiado para {OUTPUT_DIR}/dist/")
     else:
         print(f"  ⚠️ config.json não encontrado em {config_origem}")
 
 def limpar_temporarios():
-    """Limpa arquivos temporários do PyInstaller"""
+    # Limpa arquivos temporários do PyInstaller
     print("\n🧹 Limpando arquivos temporários...")
     
     pastas = ['build_ui', 'build_orz']
@@ -180,7 +172,7 @@ if __name__ == "__main__":
     print("=" * 50)
     print(f"\n📁 Estrutura criada:")
     print(f"   {OUTPUT_DIR}/")
-    print(f"   ├── FileORZ-UI.exe     (UI Principal)")
+    print(f"   ├── FL_ORZ.exe     (UI Principal)")
     print(f"   └── dist/")
     print(f"       ├── FileORZ.exe    (Organizador)")
     print(f"       └── config.json    (Configurações)")
