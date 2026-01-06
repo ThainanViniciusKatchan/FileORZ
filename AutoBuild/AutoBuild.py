@@ -1,176 +1,196 @@
 import os
+import sys
 import subprocess
 import shutil
-import time
 
 # Pasta de saída para as builds
 OUTPUT_DIR = "FileORZ"
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 def limpar_builds_anteriores():
-    # Limpa todas as pastas de build anteriores
-    print("\n🧹 Limpando builds anteriores...")
+    print("\nLimpando builds anteriores...")
     
-    pastas = ['build', 'build_ui', 'build_orz', OUTPUT_DIR, '__pycache__']
+    DeletarDados = ['build', OUTPUT_DIR, '__pycache__', 'index.build', 'index.dist', 
+              'FileORZ.build', 'FileORZ.dist', 'FL_ORZ.build', 'FL_ORZ.dist']
     
-    for pasta in pastas:
-        if os.path.exists(pasta):
+    for Dados in DeletarDados:
+        pasta_path = os.path.join(BASE_DIR, Dados)
+        if os.path.exists(pasta_path):
             try:
-                shutil.rmtree(pasta)
-                print(f"  ✓ Pasta {pasta} removida")
+                shutil.rmtree(pasta_path)
+                print(f"  ✓ Pasta {Dados} removida")
             except Exception as e:
-                print(f"  ⚠️ Erro ao remover {pasta}: {e}")
+                print(f"  ⚠️ Erro ao remover {Dados}: {e}")
     
-    # Remover arquivos .spec
-    for arquivo in os.listdir('.'):
-        if arquivo.endswith('.spec'):
+    # Remover arquivos .cmd gerados pelo Nuitka
+    for arquivo in os.listdir(BASE_DIR):
+        if arquivo.endswith('.cmd') or arquivo.endswith('.pyi'):
             try:
-                os.remove(arquivo)
+                os.remove(os.path.join(BASE_DIR, arquivo))
                 print(f"  ✓ Arquivo {arquivo} removido")
             except:
                 pass
 
 def criar_pasta_build():
-    # Cria a estrutura de pastas para a build
-    print("\n📁 Criando estrutura de pastas...")
-    os.makedirs(OUTPUT_DIR, exist_ok=True)
-    os.makedirs(os.path.join(OUTPUT_DIR, "dist"), exist_ok=True)
-    print(f"  ✓ Estrutura {OUTPUT_DIR}/ e {OUTPUT_DIR}/dist/ criada")
+    print("\nCriando estrutura de pastas...")
+    output_path = os.path.join(BASE_DIR, OUTPUT_DIR)
+    dist_path = os.path.join(output_path, "dist")
+    os.makedirs(output_path, exist_ok=True)
+    os.makedirs(dist_path, exist_ok=True)
+    print(f"\nEstrutura {OUTPUT_DIR}/ e {OUTPUT_DIR}/dist/ criada")
 
 def compilar_organizador():
-    # Compila o arquivo FileORZ.py
-    print("\n📦 Compilando o organizador (FileORZ.py)...")
+    print("\nCompilando o organizador (FileORZ.py) com Nuitka...")
+    
+    os.chdir(BASE_DIR)
     
     dist_path = os.path.join(OUTPUT_DIR, "dist")
     
     comando = [
-        'pyinstaller',
-        '--onefile', 
-        '--noconsole',
-        '--name=FileORZ',
-        '--icon=ui/icon/IconApp.ico',
-        f'--distpath={dist_path}',
-        '--workpath=build_orz',
-        '--clean',
-        '--noconfirm',
+        sys.executable, '-m', 'nuitka',
+        '--standalone',                          
+        '--windows-console-mode=disable',        
+        f'--output-dir={dist_path}',
+        '--output-filename=FileORZ.exe',         
+        f'--windows-icon-from-ico=ui/icon/IconApp.ico',
+        '--assume-yes-for-downloads',            
         'FileORZ.py'
     ]
     
-    result = subprocess.run(comando, capture_output=True, text=True)
+    print(f"Executando: {' '.join(comando)}")
+    
+    result = subprocess.run(comando, capture_output=False, text=True)
     
     if result.returncode == 0:
-        print(f"  ✅ Organizador compilado em {OUTPUT_DIR}/dist/FileORZ.exe")
+        print(f"\nOrganizador compilado com sucesso")
+        return True
     else:
-        print(f"  ❌ Erro ao compilar organizador")
-        print(result.stderr[-500:] if len(result.stderr) > 500 else result.stderr)
+        print(f"Erro ao compilar organizador")
         return False
-    
-    return True
 
 def compilar_ui():
-    """Compila a UI principal (index.py com todos os módulos incluídos)"""
-    print("\n📦 Compilando a UI (index.py)...")
+    print("\nCompilando a UI (index.py) com Nuitka...")
+    
+    os.chdir(BASE_DIR)
     
     comando = [
-        'pyinstaller',
-        '--onefile', 
-        '--windowed',
-        '--name=FL_ORZ',
-        '--icon=ui/icon/IconApp.ico',
-        '--add-data=ui:ui',
-        '--add-data=utils:utils',
-        '--collect-all=customtkinter',
-        '--hidden-import=darkdetect',
-        '--hidden-import=PIL',
-        '--hidden-import=PIL._tkinter_finder',
-        '--hidden-import=utils.model',
-        '--hidden-import=utils.StartTask',
-        f'--distpath={OUTPUT_DIR}',
-        '--workpath=build_ui',
-        '--clean',
-        '--noconfirm',
+        sys.executable, '-m', 'nuitka',
+        '--standalone',                          
+        '--windows-console-mode=disable',       
+        f'--output-dir={OUTPUT_DIR}',            
+        '--output-filename=FL_ORZ.exe',          
+        f'--windows-icon-from-ico=ui/icon/IconApp.ico',  
+        '--enable-plugin=tk-inter',              
+        '--include-package=customtkinter',       
+        '--include-package=PIL',                 
+        '--include-package=darkdetect',          
+        '--include-package=utils',               
+        '--include-data-dir=ui=ui',              
+        '--assume-yes-for-downloads',
         'ui/index.py'
     ]
     
-    result = subprocess.run(comando, capture_output=True, text=True)
+    print(f"Executando: {' '.join(comando)}")
+    
+    result = subprocess.run(comando, capture_output=False, text=True)
     
     if result.returncode == 0:
-        print(f"  ✅ UI compilada em {OUTPUT_DIR}/FL_ORZ.exe")
+        print(f"\nUI compilada com sucesso")
+        return True
     else:
-        print(f"  ❌ Erro ao compilar UI")
-        print(result.stderr[-500:] if len(result.stderr) > 500 else result.stderr)
+        print(f"Erro ao compilar UI")
         return False
-    
-    return True
 
-def copiar_config():
-    """Copia o config.json para a pasta do executável da UI"""
-    print("\n📋 Copiando config.json...")
+def reorganizar_estrutura():
+    print("\nReorganizando estrutura de arquivos...")
     
-    config_origem = os.path.join('dist', 'config.json')
-    # O organizador também precisa do config em FileORZ/dist/
-    config_destino_orz = os.path.join(OUTPUT_DIR, 'dist', 'config.json')
+    output_path = os.path.join(BASE_DIR, OUTPUT_DIR)
+    
+    index_dist = os.path.join(output_path, "index.dist")
+    if os.path.exists(index_dist):
+        print(f"  Movendo arquivos de index.dist/ para {OUTPUT_DIR}/")
+        for item in os.listdir(index_dist):
+            origem = os.path.join(index_dist, item)
+            destino = os.path.join(output_path, item)
+            if os.path.exists(destino):
+                if os.path.isdir(destino):
+                    shutil.rmtree(destino)
+                else:
+                    os.remove(destino)
+            shutil.move(origem, destino)
+        shutil.rmtree(index_dist)
+        print(f"  ✓ FL_ORZ.exe movido para {OUTPUT_DIR}/")
+    
+    fileorz_dist = os.path.join(output_path, "dist", "FileORZ.dist")
+    dist_final = os.path.join(output_path, "dist")
+    if os.path.exists(fileorz_dist):
+        print(f"  Movendo arquivos de dist/FileORZ.dist/ para {OUTPUT_DIR}/dist/")
+        for item in os.listdir(fileorz_dist):
+            origem = os.path.join(fileorz_dist, item)
+            destino = os.path.join(dist_final, item)
+            if os.path.exists(destino):
+                if os.path.isdir(destino):
+                    shutil.rmtree(destino)
+                else:
+                    os.remove(destino)
+            shutil.move(origem, destino)
+        shutil.rmtree(fileorz_dist)
+        print(f"  ✓ FileORZ.exe movido para {OUTPUT_DIR}/dist/")
+
+def copiar_arquivos():
+    print("\nCopiando config.json...")
+    
+    config_origem = os.path.join(BASE_DIR, 'dist', 'config.json')
+    config_destino = os.path.join(BASE_DIR, OUTPUT_DIR, 'dist', 'config.json')
     
     if os.path.exists(config_origem):
-        # Copiar para pasta do organizador
-        shutil.copy(config_origem, config_destino_orz)
-        print(f"  ✅ config.json copiado para {OUTPUT_DIR}/dist/")
+        os.makedirs(os.path.dirname(config_destino), exist_ok=True)
+        shutil.copy(config_origem, config_destino)
+        print(f"  ✓ config.json copiado para {OUTPUT_DIR}/dist/")
     else:
         print(f"  ⚠️ config.json não encontrado em {config_origem}")
 
 def limpar_temporarios():
-    # Limpa arquivos temporários do PyInstaller
-    print("\n🧹 Limpando arquivos temporários...")
+    print("\nLimpando arquivos temporários...")
     
-    pastas = ['build_ui', 'build_orz']
+    os.chdir(BASE_DIR)
+
+    pastas_temp = ['index.build', 'index.dist', 'index.onefile-build',
+                   'FileORZ.build', 'FileORZ.dist', 'FileORZ.onefile-build']
     
-    for pasta in pastas:
-        if os.path.exists(pasta):
+    for pasta in pastas_temp:
+        pasta_path = os.path.join(BASE_DIR, pasta)
+        if os.path.exists(pasta_path):
             try:
-                shutil.rmtree(pasta)
-                print(f"  ✓ Pasta {pasta} removida")
-            except:
-                pass
-    
-    # Remover arquivos .spec gerados
-    for arquivo in os.listdir('.'):
-        if arquivo.endswith('.spec'):
-            try:
-                os.remove(arquivo)
-                print(f"  ✓ Arquivo {arquivo} removido")
-            except:
-                pass
+                shutil.rmtree(pasta_path)
+                print(f"Pasta {pasta} removida")
+            except Exception as e:
+                print(f"Erro ao remover {pasta}: {e}")
 
 if __name__ == "__main__":
-    print("=" * 50)
-    print("🔧 AutoBuild - FileORZ")
+    print("\n" + "=" * 50)
+    print("AutoBuild - FileORZ (Nuitka)")
     print("=" * 50)
     
-    # 1. Limpar builds anteriores
     limpar_builds_anteriores()
-    
-    # 2. Criar estrutura de pastas
     criar_pasta_build()
     
-    # 3. Compilar organizador (FileORZ.py → FileORZ/dist/)
     if not compilar_organizador():
-        print("\n❌ Falha na compilação do organizador!")
+        print("\nFalha na compilação do organizador!")
         exit(1)
     
-    # 4. Compilar UI (index.py → FileORZ/)
     if not compilar_ui():
-        print("\n❌ Falha na compilação da UI!")
+        print("\nFalha na compilação da UI!")
         exit(1)
     
-    # 5. Copiar config.json para FileORZ/dist/
-    copiar_config()
-    
-    # 6. Limpar temporários
+    reorganizar_estrutura()
+    copiar_arquivos()
     limpar_temporarios()
     
     print("\n" + "=" * 50)
-    print("✅ Compilação concluída com sucesso!")
+    print("\nCompilação concluída com sucesso!")
     print("=" * 50)
-    print(f"\n📁 Estrutura criada:")
+    print(f"\nEstrutura criada:")
     print(f"   {OUTPUT_DIR}/")
     print(f"   ├── FL_ORZ.exe     (UI Principal)")
     print(f"   └── dist/")
