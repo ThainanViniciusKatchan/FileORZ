@@ -153,7 +153,7 @@ time_icon.pack(side="left")
 
 time_title = customtkinter.CTkLabel(
     time_header,
-    text="Intervalo de Verificação",
+    text="Intervalo de Verificação (Segundos)",
     font=customtkinter.CTkFont(family="Segoe UI", size=14, weight="bold"),
     text_color=COLORS["text_primary"]
 )
@@ -270,7 +270,7 @@ btn_Start_Organizer.pack(side="right")
 
 footer = customtkinter.CTkLabel(
     root,
-    text="v1.0  •  Organize seus arquivos automaticamente",
+    text="v1.3 • Organize seus arquivos automaticamente",
     font=customtkinter.CTkFont(family="Segoe UI", size=10),
     text_color=COLORS["text_muted"]
 )
