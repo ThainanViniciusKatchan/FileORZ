@@ -157,6 +157,18 @@ def copiar_arquivos():
     else:
         print(f"  ⚠️ config.json não encontrado em {config_origem}")
 
+    print("\nCopiando changelog...")
+    changelog_origem = os.path.join(BASE_DIR, 'changelog')
+    changelog_destino = os.path.join(BASE_DIR, OUTPUT_DIR, 'changelog')
+    
+    if os.path.exists(changelog_origem):
+        if os.path.exists(changelog_destino):
+            shutil.rmtree(changelog_destino)
+        shutil.copytree(changelog_origem, changelog_destino)
+        print(f"Pasta changelog copiada para {OUTPUT_DIR}/")
+    else:
+        print(f"Pasta changelog não encontrada em {changelog_origem}")
+
 def limpar_temporarios():
     print("\nLimpando arquivos temporários...")
     
@@ -205,4 +217,6 @@ if __name__ == "__main__":
     print(f"   └── dist/")
     print(f"       ├── FileORZ.exe    (Organizador)")
     print(f"       └── config.json    (Configurações)")
+    print(f"   └── changelog/")
+    print(f"       └── changelog.md   (Histórico de Versões)")
     print("=" * 50)

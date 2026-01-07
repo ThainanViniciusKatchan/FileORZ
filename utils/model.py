@@ -17,7 +17,7 @@ def script_dir():
         # Desenvolvimento
         return os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-NoInstallDir = os.path.join(script_dir(), "dist")
+NoInstallDir = os.path.join(script_dir())
 
 def json_path():
     if getattr(sys, 'frozen', False):
