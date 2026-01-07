@@ -5,6 +5,7 @@ import sys
 from config import open_config_window
 from header import header
 from centralizeWindow import centralize_window
+import ctypes
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from utils.model import load_config, save_config, get_current_folder, get_time_verification, set_time_verification
@@ -28,20 +29,20 @@ COLORS = {
     "dropdown_bg": "#1A1A2E",
 }
 
+ORZ = 'FL.ORZ.V1.3'
+ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(ORZ)
+
 # Caminho do ícone
-icon_dir = os.path.join(os.path.dirname(__file__), "icon")
-icon_path = os.path.join(icon_dir, "IconApp.ico")
+if getattr(sys, 'frozen', False):
+    application_path = os.path.dirname(sys.executable)
+    icon_path = os.path.join(application_path, "ui", "icon", "IconApp.ico")
+else:
+    application_path = os.path.dirname(__file__)
+    icon_path = os.path.join(application_path, "icon", "IconApp.ico")
 
 root = customtkinter.CTk()
-root.title("FileORZ")
-
-# Tentar definir ícone
-try:
-    if os.path.exists(icon_path):
-        root.iconbitmap(icon_path)
-except Exception:
-    pass  # Ignora se não conseguir carregar o ícone
-
+root.title("File ORZ")
+root.iconbitmap(default=icon_path)
 root.geometry("700x420")
 root.configure(fg_color=COLORS["bg_primary"])
 root.resizable(False, False)
@@ -193,7 +194,7 @@ DropDownTime.pack(side="right")
 # Descrição
 time_desc = customtkinter.CTkLabel(
     time_inner,
-    text="Tempo em minutos entre cada verificação automática de novos arquivos",
+    text="Tempo em segundos entre cada verificação automática de novos arquivos",
     font=customtkinter.CTkFont(family="Segoe UI", size=11),
     text_color=COLORS["text_secondary"],
     anchor="w"
@@ -218,12 +219,11 @@ btn_config = customtkinter.CTkButton(
 )
 btn_config.pack(side="left")
 
-# Label de feedback (será criado dinamicamente)
+# Label de feedback
 feedback_label = None
 
 # Iniciar a organização
 def start_organizer():
-    """Inicia o processo de organização de arquivos"""
     global feedback_label
     
     config = load_config()
@@ -236,7 +236,7 @@ def start_organizer():
     if not folder:
         feedback_label = customtkinter.CTkLabel(
             main_container,
-            text="⚠️  Selecione uma pasta primeiro!",
+            text="Selecione uma pasta primeiro!",
             font=customtkinter.CTkFont(family="Segoe UI", size=12, weight="bold"),
             text_color="#FFB347"
         )
@@ -247,14 +247,14 @@ def start_organizer():
         start_task()
         feedback_label = customtkinter.CTkLabel(
             main_container,
-            text="✓  Organização concluída com sucesso!",
-            font=customtkinter.CTkFont(family="Segoe UI", size=12, weight="bold"),
+            text="Organização concluída com sucesso!",
+            font=customtkinter.CTkFont(family="Segoe UI", size=15, weight="bold"),
             text_color=COLORS["accent_success"]
         )
         feedback_label.pack(pady=(15, 0))
         root.after(3000, lambda: feedback_label.destroy() if feedback_label.winfo_exists() else None)
 
-# Botão principal de ação (centro-direita)
+# Botão para iniciar a organização
 btn_Start_Organizer = customtkinter.CTkButton(
     actions_frame, 
     text="🚀  Iniciar Organização",

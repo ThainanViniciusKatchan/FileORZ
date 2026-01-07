@@ -2,6 +2,7 @@ import customtkinter
 import webbrowser
 import os 
 import sys
+import changelog
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from utils.model import get_startup, set_startup, is_startup_enabled, toggle_startup as toggle_startup_registry
 
@@ -18,6 +19,23 @@ COLORS = {
     "switch_progress": "#9D4EDD",
     "switch_bg": "#2D2D44",
 }
+
+def changelog_button(parent):
+    btn = customtkinter.CTkButton(
+        parent, 
+        text="Changelog",
+        font=customtkinter.CTkFont(family="Segoe UI", size=12, weight="bold"),
+        fg_color=COLORS["button_bg"], 
+        border_width=1,
+        border_color=COLORS["button_border"],
+        corner_radius=8,
+        height=32,
+        width=90,
+        hover_color=COLORS["button_hover"],
+        text_color=COLORS["text_primary"]
+    )
+    btn.bind("<Button-1>", lambda event: changelog.open_changelog())
+    return btn
 
 def header(root):
     header_frame = customtkinter.CTkFrame(
@@ -69,6 +87,10 @@ def header(root):
     # Botão GitHub
     git = git_button(controls_frame)
     git.pack(side="left")
+
+    # Botão Changelog
+    changelog = changelog_button(controls_frame)
+    changelog.pack(side="left", padx=(15, 0))
     
     return header_frame
 
@@ -88,7 +110,6 @@ def git_button(parent):
     )
     btn.bind("<Button-1>", lambda event: webbrowser.open("https://github.com/ThainanViniciusKatchan/FileORZ"))
     return btn
-
 
 def startup_button(parent):
     startup_var = customtkinter.BooleanVar(value=get_startup())

@@ -10,7 +10,7 @@ if getattr(sys, 'frozen', False):
 else:
     SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 
-CONFIG_PATH = os.path.join(SCRIPT_DIR, "config.json")
+CONFIG_PATH = os.path.join(SCRIPT_DIR, "dist", "config.json")
 
 # Carregar as extensões do arquivo config.json
 def load_extensions():

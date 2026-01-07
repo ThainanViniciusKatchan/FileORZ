@@ -3,16 +3,15 @@ import os
 import sys
 from utils.model import load_config
 
-INSTALL_DIR = os.path.join(os.getenv('LOCALAPPDATA'), 'FileORZ')
 def start_task():
+    SCRIPT_DIR = os.path.join(os.getcwd(), "dist", "FileORZ.exe")
+    INSTALL_DIR = os.path.join(os.getenv('LOCALAPPDATA'), 'FileORZ')
     config = load_config()
     Startup = config.get("Startup", False)
+    print("Caminho do arquivo: ", SCRIPT_DIR, 
+    "\nCaminho do instalador: ", INSTALL_DIR)
     if Startup == False:
-        subprocess.Popen([os.path.join(os.path.dirname(__file__), ".\\dist\\FileORZ.exe")])
+        subprocess.Popen(f'{SCRIPT_DIR}', shell=True)
     else:
-        subprocess.Popen([os.path.join(INSTALL_DIR, "FileORZ.exe")])
-    
-
-
-        
+        subprocess.Popen(f'{os.path.join(INSTALL_DIR, "FileORZ.exe")}', shell=True)
         
