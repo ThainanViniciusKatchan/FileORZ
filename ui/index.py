@@ -10,6 +10,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from utils.model import load_config, save_config, get_current_folder, get_time_verification, set_time_verification
 from utils.StartTask import start_task
 
+# Padrão de cores
 COLORS = {
     "bg_primary": "#0D0D0D",
     "bg_secondary": "#1A1A2E",
