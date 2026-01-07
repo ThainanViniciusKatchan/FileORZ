@@ -4,12 +4,14 @@ import subprocess
 import shutil
 
 # Pasta de saída para as builds
+# exit folder to build
 OUTPUT_DIR = "FileORZ"
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+# clean before build
 def limpar_builds_anteriores():
     print("\nLimpando builds anteriores...")
-    
+
     DeletarDados = ['build', OUTPUT_DIR, '__pycache__', 'index.build', 'index.dist', 
               'FileORZ.build', 'FileORZ.dist', 'FL_ORZ.build', 'FL_ORZ.dist']
     
@@ -31,6 +33,7 @@ def limpar_builds_anteriores():
             except:
                 pass
 
+# create build folder
 def criar_pasta_build():
     print("\nCriando estrutura de pastas...")
     output_path = os.path.join(BASE_DIR, OUTPUT_DIR)
@@ -39,6 +42,7 @@ def criar_pasta_build():
     os.makedirs(dist_path, exist_ok=True)
     print(f"\nEstrutura {OUTPUT_DIR}/ e {OUTPUT_DIR}/dist/ criada")
 
+# compile organizer (FileORZ.py)
 def compilar_organizador():
     print("\nCompilando o organizador (FileORZ.py) com Nuitka...")
     
@@ -68,6 +72,7 @@ def compilar_organizador():
         print(f"Erro ao compilar organizador")
         return False
 
+# compile ui all files in ./ui/
 def compilar_ui():
     print("\nCompilando a UI (index.py) com Nuitka...")
     
@@ -101,6 +106,7 @@ def compilar_ui():
         print(f"Erro ao compilar UI")
         return False
 
+# reorganize structure of files
 def reorganizar_estrutura():
     print("\nReorganizando estrutura de arquivos...")
     
@@ -137,6 +143,7 @@ def reorganizar_estrutura():
         shutil.rmtree(fileorz_dist)
         print(f"  ✓ FileORZ.exe movido para {OUTPUT_DIR}/dist/")
 
+# copy config.json to ./dist/
 def copiar_arquivos():
     print("\nCopiando config.json...")
     
@@ -167,6 +174,7 @@ def limpar_temporarios():
             except Exception as e:
                 print(f"Erro ao remover {pasta}: {e}")
 
+# main
 if __name__ == "__main__":
     print("\n" + "=" * 50)
     print("AutoBuild - FileORZ (Nuitka)")
@@ -187,6 +195,7 @@ if __name__ == "__main__":
     copiar_arquivos()
     limpar_temporarios()
     
+    # Structure of files after build
     print("\n" + "=" * 50)
     print("\nCompilação concluída com sucesso!")
     print("=" * 50)

@@ -5,9 +5,6 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from utils.model import get_startup, set_startup, is_startup_enabled, toggle_startup as toggle_startup_registry
 
-# ═══════════════════════════════════════════════════════════════════════════════
-# DESIGN SYSTEM - Cores Premium
-# ═══════════════════════════════════════════════════════════════════════════════
 COLORS = {
     "header_gradient_start": "#667eea",
     "header_gradient_end": "#764ba2",
@@ -23,9 +20,6 @@ COLORS = {
 }
 
 def header(root):
-    """Cria o header moderno com gradiente e controles estilizados"""
-    
-    # Frame principal do header com cor sólida elegante
     header_frame = customtkinter.CTkFrame(
         root, 
         fg_color=COLORS["header_bg"], 
@@ -33,17 +27,14 @@ def header(root):
         height=60
     )
     header_frame.pack(fill="x", side="top")
-    header_frame.pack_propagate(False)  # Mantém altura fixa
+    header_frame.pack_propagate(False) 
     
-    # Container interno para padding
     inner_container = customtkinter.CTkFrame(header_frame, fg_color="transparent")
     inner_container.pack(fill="both", expand=True, padx=20, pady=10)
     
-    # ── Logo e Título ──────────────────────────────────────────────────────────
     logo_frame = customtkinter.CTkFrame(inner_container, fg_color="transparent")
     logo_frame.pack(side="left", anchor="center")
     
-    # Ícone decorativo
     icon_label = customtkinter.CTkLabel(
         logo_frame,
         text="🗂️",
@@ -69,11 +60,9 @@ def header(root):
     )
     subtitle_label.pack(side="left", padx=(10, 0))
     
-    # ── Controles do lado direito ──────────────────────────────────────────────
     controls_frame = customtkinter.CTkFrame(inner_container, fg_color="transparent")
     controls_frame.pack(side="right", anchor="center")
     
-    # Switch de iniciar com Windows
     startup_switch = startup_button(controls_frame)
     startup_switch.pack(side="left", padx=(0, 15))
     
@@ -84,7 +73,6 @@ def header(root):
     return header_frame
 
 def git_button(parent):
-    """Botão do GitHub com estilo glass moderno"""
     btn = customtkinter.CTkButton(
         parent, 
         text="GitHub",
@@ -103,15 +91,11 @@ def git_button(parent):
 
 
 def startup_button(parent):
-    """Switch de startup com estilo moderno"""
-    
     startup_var = customtkinter.BooleanVar(value=get_startup())
 
     def on_toggle():
         is_enabled = startup_var.get()
-        # Atualiza o config.json
         set_startup(is_enabled)
-        # Cria ou remove o registro do Windows
         toggle_startup_registry(is_enabled)
 
     startup_switch = customtkinter.CTkSwitch(

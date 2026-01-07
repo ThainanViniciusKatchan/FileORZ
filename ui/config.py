@@ -6,7 +6,6 @@ from centralizeWindow import centralize_window
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from utils.model import load_config, save_config
 
-
 COLORS = {
     "bg_primary": "#0D0D0D",
     "bg_secondary": "#1A1A2E",
@@ -27,32 +26,25 @@ COLORS = {
 }
 
 def open_config_window(parent):
-    """Abre a janela de configurações como toplevel da janela principal"""
-    
-    # Caminho do ícone
     icon_dir = os.path.join(os.path.dirname(__file__), "icon")
     icon_path = os.path.join(icon_dir, "IconApp.ico")
     
-    # Criar janela toplevel
     window = customtkinter.CTkToplevel(parent)
     window.title("Configurações - FileORZ")
     window.geometry("900x650")
     window.configure(fg_color=COLORS["bg_primary"])
     window.resizable(False, False)
-    window.grab_set()  # Modal - bloqueia interação com janela principal
-    centralize_window(window, 900, 650)
+    window.grab_set()
+    centralize_window(window, 900, 650) # Função para centralizar a janela ao abrir
     
-    # Tentar definir ícone
     try:
         if os.path.exists(icon_path):
             window.after(200, lambda: window.iconbitmap(icon_path))
     except Exception:
         pass
     
-    # Carregar configuração atual
     config = load_config()
     
-    # Dicionário para armazenar as variáveis das checkboxes de extensão
     extension_vars = {}
     
     header_frame = customtkinter.CTkFrame(window, fg_color="#1E1E3F", corner_radius=0, height=60)
@@ -95,18 +87,15 @@ def open_config_window(parent):
     )
     scroll_frame.pack(pady=15, padx=15, fill="both", expand=True)
     
-    # Criar seção para cada categoria (exceto "Folder")
     for category, extensions in config.items():
         if category == "Folder":
-            continue  # a pasta salva nas configurações
+            continue 
         
         if not isinstance(extensions, dict):
             continue
         
-        # Inicializar dicionário para esta categoria
         extension_vars[category] = {}
         
-        # Card da Categoria
         cat_frame = customtkinter.CTkFrame(
             scroll_frame, 
             fg_color=COLORS["bg_secondary"], 
@@ -199,7 +188,7 @@ def open_config_window(parent):
         # Criar checkboxes para cada extensão em grid
         row = 0
         col = 0
-        max_cols = 6  # 6 colunas de extensões
+        max_cols = 6
         
         for ext, enabled in extensions.items():
             # Criar variável para a checkbox
@@ -233,7 +222,7 @@ def open_config_window(parent):
                 spacer = customtkinter.CTkLabel(ext_frame, text="", width=120)
                 spacer.grid(row=row, column=empty_col)
     
-    # RODAPÉ COM BOTÃO SALVAR
+    # BOTÃO SALVAR
     footer_frame = customtkinter.CTkFrame(window, fg_color=COLORS["bg_secondary"], height=70)
     footer_frame.pack(fill="x", side="bottom")
     footer_frame.pack_propagate(False)
@@ -245,8 +234,8 @@ def open_config_window(parent):
     feedback_container = customtkinter.CTkFrame(footer_inner, fg_color="transparent")
     feedback_container.pack(side="left", fill="y")
     
+    # Função para salvar as alterações
     def save_changes():
-        """Salva as alterações de configuração"""
         config = load_config()
         
         for category, exts in extension_vars.items():
@@ -256,7 +245,7 @@ def open_config_window(parent):
         
         save_config(config)
         
-        # Mostrar mensagem de sucesso
+        # Mostra mensagem de sucesso
         success_label = customtkinter.CTkLabel(
             feedback_container,
             text="✓  Configurações salvas com sucesso!",
