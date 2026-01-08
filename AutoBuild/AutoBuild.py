@@ -3,10 +3,24 @@ import sys
 import subprocess
 import shutil
 
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from utils.model import *
+from time import sleep
+
 # Pasta de saída para as builds
 # exit folder to build
 OUTPUT_DIR = "FileORZ"
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+def alterar_Config():
+    print("\nAlterando config.json...")
+    
+    config = load_config()
+    config["timeverification"] = "5"
+    config['Startup'] = False
+    config['Folder'] = 'pasta de organização'
+    save_config(config)
+    print("\nConfig.json alterado com sucesso")
 
 # clean before build
 def limpar_builds_anteriores():
@@ -189,9 +203,11 @@ def limpar_temporarios():
 # main
 if __name__ == "__main__":
     print("\n" + "=" * 50)
-    print("AutoBuild - FileORZ (Nuitka)")
+    print("Compilando FileORZ")
     print("=" * 50)
-    
+    sleep(2)
+
+    alterar_Config()
     limpar_builds_anteriores()
     criar_pasta_build()
     

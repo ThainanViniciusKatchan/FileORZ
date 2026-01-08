@@ -32,13 +32,12 @@ COLORS = {
 ORZ = 'FL.ORZ.V1.3'
 ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(ORZ)
 
-# Caminho do ícone
 if getattr(sys, 'frozen', False):
     application_path = os.path.dirname(sys.executable)
-    icon_path = os.path.join(application_path, "ui", "icon", "IconApp.ico")
+    icon_path = os.path.join("ui", "icon", "IconApp.ico")
 else:
-    application_path = os.path.dirname(__file__)
-    icon_path = os.path.join(application_path, "icon", "IconApp.ico")
+    application_path = os.path.dirname(os.path.abspath(__file__))
+    icon_path = os.path.join("ui", "icon", "IconApp.ico")
 
 root = customtkinter.CTk()
 root.title("File ORZ")
@@ -49,7 +48,6 @@ root.resizable(False, False)
 
 # Header
 header(root)
-
 # Centralizar janela na tela
 centralize_window(root, 700, 420)
 

@@ -1,17 +1,36 @@
-import subprocess
 import os
-import sys
+import ctypes
+import psutil
+import customtkinter as ctk
+from tkinter import messagebox
 from utils.model import load_config
 
+def check_if_running(TaskName):
+    for proc in psutil.process_iter(['name']):
+        if proc.info['name'] == TaskName:
+            return True
+    return False
+
 def start_task():
-    SCRIPT_DIR = os.path.join(os.getcwd(), "dist", "FileORZ.exe")
-    INSTALL_DIR = os.path.join(os.getenv('LOCALAPPDATA'), 'FileORZ')
     config = load_config()
     Startup = config.get("Startup", False)
-    print("Caminho do arquivo: ", SCRIPT_DIR, 
-    "\nCaminho do instalador: ", INSTALL_DIR)
-    if Startup == False:
-        subprocess.Popen(f'{SCRIPT_DIR}', shell=True)
+
+    STATUS = check_if_running("FileORZ.exe")
+
+    if STATUS == False and Startup == False:
+       SCRIPT_DIR = os.path.join(os.getcwd(), "dist", "FileORZ.exe")
     else:
-        subprocess.Popen(f'{os.path.join(INSTALL_DIR, "FileORZ.exe")}', shell=True)
-        
+        SCRIPT_DIR = os.path.join(os.getenv('LOCALAPPDATA'), 'FileORZ')
+
+    if STATUS == False:
+        if os.path.exists(SCRIPT_DIR):
+            ctypes.windll.shell32.ShellExecuteW(
+                None,
+                'open',
+                SCRIPT_DIR,
+            None,
+            None,
+            1
+            )
+    else:
+        messagebox.showinfo("Erro", "FileORZ.exe ja esta em execução")

@@ -47,21 +47,20 @@ def organize_files():
                 if not os.path.exists(new_folder):
                     os.makedirs(new_folder)
 
-                # Mudar nome do arquivo para evitar erro
+                # Mudar nome do arquivo para evitar conflitos
+                source_file = os.path.join(path, file)
                 destination_file = os.path.join(new_folder, file)
                 counter = 1
+                
+                # Encontrar um nome disponível
                 while os.path.exists(destination_file):
                     new_filename = f"{filename}_{counter}{file_extension}"
                     destination_file = os.path.join(new_folder, new_filename)
                     counter += 1
 
-                    os.rename(os.path.join(path, file), destination_file)
-
-                if filename in found_files:
-                    os.remove(os.path.join(path, file))
-                else:
-                    found_files[filename] = True
-                    os.rename(os.path.join(path, file), destination_file)
+                # Mover o arquivo apenas uma vez com o nome correto
+                if os.path.exists(source_file):
+                    os.rename(source_file, destination_file)
                     break
 #verificar a pasta a com o tempo determiado pelo usuário
 if __name__ == "__main__":
