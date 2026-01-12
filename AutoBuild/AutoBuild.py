@@ -3,6 +3,7 @@ import sys
 import subprocess
 import shutil
 
+# add path to utils
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from utils.model import *
 from time import sleep
@@ -12,6 +13,7 @@ from time import sleep
 OUTPUT_DIR = "FileORZ"
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+# alter config.json
 def alterar_Config():
     print("\nAlterando config.json...")
     
@@ -38,7 +40,8 @@ def limpar_builds_anteriores():
             except Exception as e:
                 print(f"  ⚠️ Erro ao remover {Dados}: {e}")
     
-    # Remover arquivos .cmd gerados pelo Nuitka
+    # Remover arquivos .cmd gerados na build
+    # remove files .cmd generated in build
     for arquivo in os.listdir(BASE_DIR):
         if arquivo.endswith('.cmd') or arquivo.endswith('.pyi'):
             try:
@@ -183,6 +186,7 @@ def copiar_arquivos():
     else:
         print(f"Pasta changelog não encontrada em {changelog_origem}")
 
+# clean temporary files
 def limpar_temporarios():
     print("\nLimpando arquivos temporários...")
     
@@ -229,10 +233,10 @@ if __name__ == "__main__":
     print("=" * 50)
     print(f"\nEstrutura criada:")
     print(f"   {OUTPUT_DIR}/")
-    print(f"   ├── FL_ORZ.exe     (UI Principal)")
+    print(f"   ├── FL_ORZ.exe")
     print(f"   └── dist/")
-    print(f"       ├── FileORZ.exe    (Organizador)")
-    print(f"       └── config.json    (Configurações)")
+    print(f"       ├── FileORZ.exe")
+    print(f"       └── config.json")
     print(f"   └── changelog/")
-    print(f"       └── changelog.md   (Histórico de Versões)")
+    print(f"       └── changelog.md")
     print("=" * 50)

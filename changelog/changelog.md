@@ -8,6 +8,7 @@ Português-BR
     - Configuração de intervalo de tempo de verificação
     - Configuração de pasta para organização
     - Configuração de quais formatos serão organizados
+    - idêntifica arquivos duplicados e renomeia para evitar conflitos
 
 ### Bugs conhecidos
 - Ao iniciar o aplicativo ele pode fechar sozinho instantaneamente
@@ -20,9 +21,7 @@ Português-BR
 - Adicionar a opção de personalizar os formatos que serão organizados (Adicionando os formatos necessários manualmente)
 - Compilar o aplicativo para Linux
 
-<br>
-<hr style="height: 3px; background-color:#787878; border: none; opacity: 0.2;">
-<br>
+====================================================================================
 
 Inglês-US
 
@@ -32,6 +31,7 @@ Inglês-US
     - Verification interval configuration
     - Folder configuration for organization
     - Configuration of which formats will be organized
+    - Identifies duplicate files and renames them to avoid conflicts
 
 ### Known bugs
 - When starting the application it can close instantaneously

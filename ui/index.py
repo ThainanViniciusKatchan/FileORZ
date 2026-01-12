@@ -231,12 +231,12 @@ def start_organizer():
     if feedback_label is not None:
         feedback_label.destroy()
     
-    if not folder:
+    if not folder or folder == "pasta de organização":
         feedback_label = customtkinter.CTkLabel(
             main_container,
             text="Selecione uma pasta primeiro!",
-            font=customtkinter.CTkFont(family="Segoe UI", size=12, weight="bold"),
-            text_color="#FFB347"
+            font=customtkinter.CTkFont(family="Segoe UI", size=13, weight="bold"),
+            text_color="red"
         )
         feedback_label.pack(pady=(15, 0))
         root.after(3000, lambda: feedback_label.destroy() if feedback_label.winfo_exists() else None)
@@ -246,7 +246,7 @@ def start_organizer():
         feedback_label = customtkinter.CTkLabel(
             main_container,
             text="Organização concluída com sucesso!",
-            font=customtkinter.CTkFont(family="Segoe UI", size=15, weight="bold"),
+            font=customtkinter.CTkFont(family="Segoe UI", size=13, weight="bold"),
             text_color=COLORS["accent_success"]
         )
         feedback_label.pack(pady=(15, 0))
