@@ -1,16 +1,12 @@
 ﻿import os
 import time
 import json
-
 import sys
 
-# Caminho do arquivo de configuração baseado na localização do FileORZ.py
-if getattr(sys, 'frozen', False):
-    SCRIPT_DIR = os.path.dirname(sys.executable)
-else:
-    SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from utils.model import json_path
 
-CONFIG_PATH = os.path.join(SCRIPT_DIR, "dist", "config.json")
+CONFIG_PATH = json_path()
 
 # Carregar as extensões do arquivo config.json
 def load_extensions():

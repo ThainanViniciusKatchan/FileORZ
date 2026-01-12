@@ -29,7 +29,7 @@ COLORS = {
     "dropdown_bg": "#1A1A2E",
 }
 
-ORZ = 'FL.ORZ.V1.3'
+ORZ = 'FLORZ'
 ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(ORZ)
 
 if getattr(sys, 'frozen', False):

@@ -2,39 +2,44 @@ import os
 import json
 import sys
 import winreg
-
 import shutil
 
 # Caminho de instalação local
 INSTALL_DIR = os.path.join(os.getenv('LOCALAPPDATA'), 'FileORZ')
 
-# Detecta o diretório base (compilado e desenvolvimento)
-def script_dir():
+def script_dir(): # Procura o caminho do atual script
     if getattr(sys, 'frozen', False):
         # Compilado
-        return os.path.dirname(sys.executable)
+        BASE_DIR = os.path.dirname(sys.executable)
+        print("BASE_DIR Comp: " + BASE_DIR)
     else:
         # Desenvolvimento
-        return os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        print("BASE_DIR Dev: " + BASE_DIR)
+    return BASE_DIR
 
-NoInstallDir = os.path.join(script_dir())
+NoInstallDir = os.path.join(script_dir()) # Recebe o caminho do atual do script 
 
-def json_path():
-    if getattr(sys, 'frozen', False):
-        # Compilado
-        return os.path.join(script_dir(), "dist", "config.json")
-    else:
-        # Desenvolvimento
-        return os.path.join(script_dir(), "dist", "config.json")
+def json_path(): # Realiza uma pesquisa para enctontrar o arquivo config.json independente do local
+    search_path = [NoInstallDir, INSTALL_DIR, script_dir(), script_dir() + "\\dist"]
 
-# Função para carregar a configuração
-def load_config():
+    for path in search_path:
+        path = os.path.join(path, "config.json")
+        if os.path.exists(path):
+            print("config.json encontrado em: " + path)
+            return os.path.abspath(path)
+
+    raise FileNotFoundError(
+        "config.json não encontrado em nenhuma das pastas de busca."
+        "Verifique se o arquivo está presente em uma das seguintes pastas:"
+        f"\n{search_path}"
+    )       
+
+def load_config(): # Função que carrega as configurações
     with open(json_path(), 'r', encoding='utf-8') as f:
         return json.load(f)
 
-# Função para salvar a configuração
-def save_config(config):
-    # Salva no local original (onde a UI está)
+def save_config(config): # Função que salva as configurações
     with open(json_path(), 'w', encoding='utf-8') as f:
         json.dump(config, f, indent=4, ensure_ascii=False)
     

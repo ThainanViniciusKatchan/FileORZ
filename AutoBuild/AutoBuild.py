@@ -73,8 +73,9 @@ def compilar_organizador():
         '--windows-console-mode=disable',
         f'--output-dir={dist_path}',
         '--output-filename=FileORZ.exe',         
-        f'--windows-icon-from-ico=../ui/icon/IconApp.ico',
-        '--assume-yes-for-downloads',            
+        f'--windows-icon-from-ico=ui/icon/IconApp.ico',
+        '--assume-yes-for-downloads',
+        '--force-dll-dependency-cache-update',
         'FileORZ.py'
     ]
     
@@ -109,6 +110,7 @@ def compilar_ui():
         '--include-package=utils',               
         '--include-data-dir=ui=ui',              
         '--assume-yes-for-downloads',
+        '--force-dll-dependency-cache-update',
         'ui/index.py'
     ]
     
