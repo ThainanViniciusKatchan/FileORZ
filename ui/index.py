@@ -9,7 +9,7 @@ import ctypes
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from utils.model import load_config, save_config, get_current_folder, get_time_verification, set_time_verification
-from utils.StartTask import start_task
+from utils.StartTask import start_task, check_if_running
 
 # Padrão de cores
 COLORS = {
@@ -230,7 +230,9 @@ def start_organizer():
     # Remove label anterior se existir
     if feedback_label is not None:
         feedback_label.destroy()
-    
+
+    STATUS = check_if_running("FileORZ.exe")
+
     if not folder or folder == "pasta de organização":
         feedback_label = customtkinter.CTkLabel(
             main_container,
@@ -252,6 +254,16 @@ def start_organizer():
             feedback_label.pack(pady=(15, 0))
             root.after(3000, lambda: feedback_label.destroy() if feedback_label.winfo_exists() else None)
 
+    if STATUS:
+        feedback_label = customtkinter.CTkLabel(
+            main_container,
+            text="Erro ao iniciar o organizador!",
+            font=customtkinter.CTkFont(family="Segoe UI", size=13, weight="bold"),
+            text_color="red"
+        )
+        feedback_label.pack(pady=(15, 0))
+        root.after(3000, lambda: feedback_label.destroy() if feedback_label.winfo_exists() else None)
+
 # Botão para iniciar a organização
 btn_Start_Organizer = customtkinter.CTkButton(
     actions_frame, 
@@ -269,7 +281,7 @@ btn_Start_Organizer.pack(side="right")
 
 footer = customtkinter.CTkLabel(
     root,
-    text="v1.3 • Organize seus arquivos automaticamente",
+    text="File ORZ - Organize seus arquivos",
     font=customtkinter.CTkFont(family="Segoe UI", size=10),
     text_color=COLORS["text_muted"]
 )

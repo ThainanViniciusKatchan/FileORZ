@@ -70,10 +70,10 @@ def compilar_organizador():
     comando = [
         sys.executable, '-m', 'nuitka',
         '--standalone',                          
-        '--windows-console-mode=disable',        
+        '--windows-console-mode=disable',
         f'--output-dir={dist_path}',
         '--output-filename=FileORZ.exe',         
-        f'--windows-icon-from-ico=ui/icon/IconApp.ico',
+        f'--windows-icon-from-ico=../ui/icon/IconApp.ico',
         '--assume-yes-for-downloads',            
         'FileORZ.py'
     ]
