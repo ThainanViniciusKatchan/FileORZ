@@ -32,5 +32,7 @@ def start_task():
             None,
             1
             )
+            return True
     else:
         messagebox.showinfo("Erro", "FileORZ.exe ja esta em execução")
+        return False

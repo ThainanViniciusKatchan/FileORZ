@@ -242,15 +242,15 @@ def start_organizer():
         root.after(3000, lambda: feedback_label.destroy() if feedback_label.winfo_exists() else None)
         return
     else:
-        start_task()
-        feedback_label = customtkinter.CTkLabel(
-            main_container,
-            text="Organização concluída com sucesso!",
-            font=customtkinter.CTkFont(family="Segoe UI", size=13, weight="bold"),
-            text_color=COLORS["accent_success"]
-        )
-        feedback_label.pack(pady=(15, 0))
-        root.after(3000, lambda: feedback_label.destroy() if feedback_label.winfo_exists() else None)
+        if start_task():
+            feedback_label = customtkinter.CTkLabel(
+                main_container,
+                text="Organização concluída com sucesso!",
+                font=customtkinter.CTkFont(family="Segoe UI", size=13, weight="bold"),
+                text_color="green"
+            )
+            feedback_label.pack(pady=(15, 0))
+            root.after(3000, lambda: feedback_label.destroy() if feedback_label.winfo_exists() else None)
 
 # Botão para iniciar a organização
 btn_Start_Organizer = customtkinter.CTkButton(
