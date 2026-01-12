@@ -13,7 +13,6 @@ Português-BR
 ### Bugs conhecidos
 - Ao iniciar o aplicativo ele pode fechar sozinho instantaneamente
 - Ao desativar a inicialização do aplicativo ele pode exibir uma mensagem de erro
-- Caso você não selecione a pasta de organização ele pode inicar o script e dar erro por conta de não ter pasta selecionada
 
 ### Melhorias futuras
 - Adicionar a opção de selecionar multiplas pastas para organização
@@ -36,7 +35,6 @@ Inglês-US
 ### Known bugs
 - When starting the application it can close instantaneously
 - When disabling the application startup it can display an error message
-- If you do not select the organization folder it can start the script and give an error because there is no folder selected
 
 ### Future improvements
 - Add the option to select multiple folders for organization
