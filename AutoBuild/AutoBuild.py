@@ -234,7 +234,7 @@ if __name__ == "__main__":
     print("\nCompilação concluída com sucesso!")
     print("=" * 50)
     print(f"\nEstrutura criada:")
-    print(f"   {OUTPUT_DIR}/")
+    print(f"   FileORZ/")
     print(f"   ├── FL_ORZ.exe")
     print(f"   └── dist/")
     print(f"       ├── FileORZ.exe")
