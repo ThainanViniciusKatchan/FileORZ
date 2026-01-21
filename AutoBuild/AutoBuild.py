@@ -36,9 +36,9 @@ def limpar_builds_anteriores():
         if os.path.exists(pasta_path):
             try:
                 shutil.rmtree(pasta_path)
-                print(f"  ✓ Pasta {Dados} removida")
+                print(f"  [OK] Pasta {Dados} removida")
             except Exception as e:
-                print(f"  ⚠️ Erro ao remover {Dados}: {e}")
+                print(f"  [ERRO] Erro ao remover {Dados}: {e}")
     
     # Remover arquivos .cmd gerados na build
     # remove files .cmd generated in build
@@ -46,7 +46,7 @@ def limpar_builds_anteriores():
         if arquivo.endswith('.cmd') or arquivo.endswith('.pyi'):
             try:
                 os.remove(os.path.join(BASE_DIR, arquivo))
-                print(f"  ✓ Arquivo {arquivo} removido")
+                print(f"  [OK] Arquivo {arquivo} removido")
             except:
                 pass
 
@@ -144,7 +144,7 @@ def reorganizar_estrutura():
                     os.remove(destino)
             shutil.move(origem, destino)
         shutil.rmtree(index_dist)
-        print(f"  ✓ FL_ORZ.exe movido para {OUTPUT_DIR}/")
+        print(f"  [OK] FL_ORZ.exe movido para {OUTPUT_DIR}/")
     
     fileorz_dist = os.path.join(output_path, "dist", "FileORZ.dist")
     dist_final = os.path.join(output_path, "dist")
@@ -160,7 +160,7 @@ def reorganizar_estrutura():
                     os.remove(destino)
             shutil.move(origem, destino)
         shutil.rmtree(fileorz_dist)
-        print(f"  ✓ FileORZ.exe movido para {OUTPUT_DIR}/dist/")
+        print(f"  [OK] FileORZ.exe movido para {OUTPUT_DIR}/dist/")
 
 # copy config.json to ./dist/
 def copiar_arquivos():
@@ -172,9 +172,9 @@ def copiar_arquivos():
     if os.path.exists(config_origem):
         os.makedirs(os.path.dirname(config_destino), exist_ok=True)
         shutil.copy(config_origem, config_destino)
-        print(f"  ✓ config.json copiado para {OUTPUT_DIR}/dist/")
+        print(f"  [OK] config.json copiado para {OUTPUT_DIR}/dist/")
     else:
-        print(f"  ⚠️ config.json não encontrado em {config_origem}")
+        print(f"  [AVISO] config.json não encontrado em {config_origem}")
 
     print("\nCopiando changelog...")
     changelog_origem = os.path.join(BASE_DIR, 'changelog')
