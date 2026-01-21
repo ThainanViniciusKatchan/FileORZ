@@ -153,7 +153,7 @@ time_icon.pack(side="left")
 
 time_title = customtkinter.CTkLabel(
     time_header,
-    text="Intervalo de Verificação (Segundos)",
+    text="Intervalo de Verificação (Minutos)",
     font=customtkinter.CTkFont(family="Segoe UI", size=14, weight="bold"),
     text_color=COLORS["text_primary"]
 )
@@ -161,10 +161,10 @@ time_title.pack(side="left", padx=(8, 0))
 
 # Configuração do tempo de verificação
 time_value = get_time_verification()
-if time_value != "5" or not time_value:
+if time_value != "1" or not time_value:
     DropDownTimeValue = customtkinter.StringVar(value=time_value)
 else:
-    DropDownTimeValue = customtkinter.StringVar(value="5")
+    DropDownTimeValue = customtkinter.StringVar(value="1")
 
 set_time_verification(time_value)
 
@@ -183,7 +183,7 @@ DropDownTime = customtkinter.CTkOptionMenu(
     dropdown_hover_color=COLORS["accent_hover"],
     variable=DropDownTimeValue,
     command=lambda x: set_time_verification(x),
-    values=["5", "10", "15", "20", "25", "30", "35", "40", "45", "50", "55", "60"],
+    values=["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
     dynamic_resizing=False,
     corner_radius=8
 )
@@ -192,7 +192,7 @@ DropDownTime.pack(side="right")
 # Descrição
 time_desc = customtkinter.CTkLabel(
     time_inner,
-    text="Tempo em segundos entre cada verificação automática de novos arquivos",
+    text="Tempo em minutos entre cada verificação automática de novos arquivos",
     font=customtkinter.CTkFont(family="Segoe UI", size=11),
     text_color=COLORS["text_secondary"],
     anchor="w"

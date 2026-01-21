@@ -67,8 +67,8 @@ if __name__ == "__main__":
         try:
             with open(CONFIG_PATH, 'r', encoding='utf-8') as f:
                 data = json.load(f)
-            time_verification = int(data.get("timeverification", 30))
+            time_verification = int(data.get("timeverification", 1))
         except:
-            time_verification = 30
+            time_verification = 1
             
-        time.sleep(time_verification)
+        time.sleep(time_verification * 60)
