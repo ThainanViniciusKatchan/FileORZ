@@ -1,0 +1,82 @@
+name: Build e Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version_type:
+        description: 'Tipo de alteração de versão'
+        required: true
+        default: 'patch'
+        type: choice
+        options:
+        - patch
+        - minor
+        - major
+        - none
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-release:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout do código
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0 # Importante para histórico de git se necessário
+
+    - name: Configurar Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.12' 
+
+    - name: Instalar dependências
+      run: |
+        python -m pip install --upgrade pip
+        pip install nuitka zstandard
+        if (Test-Path requirements.txt) { pip install -r requirements.txt }
+        # Instalar dependências explícitas se não estiverem no requirements.txt
+        pip install customtkinter darkdetect Pillow
+
+    - name: Configurar Git
+      run: |
+        git config user.name "GitHub Actions Bot"
+        git config user.email "actions@github.com"
+
+    - name: Atualizar Versão
+      id: version
+      run: |
+        $new_version = python .github/scripts/update_version.py ${{ inputs.version_type }}
+        echo "NEW_VERSION=$new_version" >> $env:GITHUB_ENV
+        echo "Nova versão: $new_version"
+
+    - name: Commit e Tag da Nova Versão
+      if: ${{ inputs.version_type != 'none' }}
+      run: |
+        git add utils/version.py
+        git commit -m "chore: bump version to v$env:NEW_VERSION"
+        git tag "v$env:NEW_VERSION"
+        git push origin HEAD:main --tags
+
+    - name: Compilar Projeto (AutoBuild)
+      run: |
+        python AutoBuild/AutoBuild.py
+
+    - name: Compactar Artefatos
+      run: |
+        $release_zip = "FileORZ-v$env:NEW_VERSION.zip"
+        Compress-Archive -Path "FileORZ\*" -DestinationPath $release_zip
+        echo "RELEASE_ZIP=$release_zip" >> $env:GITHUB_ENV
+
+    - name: Criar Release no GitHub
+      uses: softprops/action-gh-release@v1
+      with:
+        tag_name: v${{ env.NEW_VERSION }}
+        name: Release v${{ env.NEW_VERSION }}
+        draft: false
+        prerelease: false
+        files: ${{ env.RELEASE_ZIP }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
