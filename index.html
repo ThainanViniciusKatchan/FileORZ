@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FileORZ - Organize seu Caos</title>
+
+    <!-- Fonte Roboto -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="assets/js/tailwind-config.js"></script>
+
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <!-- CSS Customizado -->
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+
+<body class="bg-gray-50 text-gray-900 dark:bg-gray-900 dark:text-white transition-colors duration-300">
+
+    <!-- Header Fixo -->
+    <header class="fixed top-0 right-0 p-6 z-50 mix-blend-difference text-white">
+        <button id="theme-toggle"
+            class="p-3 rounded-full border-2 border-white/20 hover:bg-white/10 transition-all backdrop-blur-sm"
+            aria-label="Alternar Tema">
+            <i class="ph ph-sun text-2xl hidden dark:block"></i>
+            <i class="ph ph-moon text-2xl block dark:hidden"></i>
+        </button>
+    </header>
+
+    <!-- SEÇÃO 1: HERO -->
+    <!-- Adicionamos um ID para capturar o movimento do mouse apenas aqui -->
+    <section id="hero"
+        class="relative w-full h-screen flex flex-col items-center justify-center overflow-hidden bg-grid-pattern">
+
+        <!-- Container dos Ícones -->
+        <div id="icon-universe" class="absolute inset-0 w-full h-full pointer-events-none"></div>
+
+        <!-- Conteúdo Principal -->
+        <div class="relative z-30 flex flex-col items-center pointer-events-none">
+
+            <h1 class="pointer-events-auto select-none text-7xl md:text-9xl font-black tracking-widest bg-clip-text text-transparent bg-gradient-to-br from-gray-900 to-gray-600 dark:from-white dark:to-gray-400 mb-8 fade-in-up"
+                style="animation-delay: 0.2s;">
+                FileORZ
+            </h1>
+
+            <div class="pointer-events-auto flex flex-col md:flex-row gap-6 fade-in-up" style="animation-delay: 0.4s;">
+                <a href="https://github.com/ThainanViniciusKatchan/FileORZ/releases/download/v0.1.5/FileORZ-v0.1.5.zip">
+                    <button id="download-btn" onclick="triggerDownloadAnimation()"
+                        class="group px-10 py-4 bg-violet-600 hover:bg-violet-700 text-white font-bold text-xl rounded-xl border-b-[6px] border-violet-900 active:border-b-0 active:translate-y-1 transition-all shadow-2xl shadow-violet-500/20 flex items-center justify-center gap-3">
+                        <i class="ph-bold ph-download-simple"></i>
+                        Baixar FileORZ
+                    </button>
+                </a>
+                <button onclick="document.getElementById('how-it-works').scrollIntoView({behavior: 'smooth'})"
+                    class="px-10 py-4 bg-transparent border-2 border-gray-300 dark:border-gray-700 hover:border-violet-500 text-gray-600 dark:text-gray-300 hover:text-violet-500 dark:hover:text-violet-400 font-bold text-xl rounded-xl transition-all flex items-center justify-center gap-2 backdrop-blur-sm bg-white/5 dark:bg-black/20">
+                    Como funciona
+                </button>
+            </div>
+
+        </div>
+
+        <!-- Seta Scroll -->
+        <div id="scroll-indicator" class="absolute bottom-8 animate-bounce-slow cursor-pointer z-30 fade-in-up"
+            style="animation-delay: 1s;"
+            onclick="document.getElementById('how-it-works').scrollIntoView({behavior: 'smooth'})">
+            <div class="flex flex-col items-center text-gray-400 hover:text-violet-500 transition-colors">
+                <span class="text-sm font-medium mb-2 tracking-widest uppercase">Descubra Mais</span>
+                <i class="ph-bold ph-caret-down text-3xl"></i>
+            </div>
+        </div>
+    </section>
+
+
+
+    <!-- SEÇÃO 3: COMO USAR -->
+    <section id="how-it-works"
+        class="py-24 px-6 relative bg-gray-50 dark:bg-gray-950 z-40 border-t border-gray-200 dark:border-gray-800">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-20 reveal">
+                <h2 class="text-4xl md:text-5xl font-black mb-6 text-gray-800 dark:text-white">
+                    Como usar
+                </h2>
+                <p class="text-xl text-gray-500 dark:text-gray-400 max-w-2xl mx-auto">
+                    Simples, rápido e eficiente. Sem configurações complexas.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Passo 1 -->
+                <div
+                    class="reveal p-6 rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 relative overflow-hidden group hover:border-violet-500 dark:hover:border-violet-500 transition-all">
+                    <div
+                        class="absolute -right-4 -top-4 text-9xl font-black text-gray-100 dark:text-gray-800 opacity-50 group-hover:text-violet-50 dark:group-hover:text-violet-900/20 transition-colors z-0 select-none">
+                        1</div>
+                    <div class="relative z-10">
+                        <div
+                            class="w-12 h-12 bg-violet-100 dark:bg-violet-900/30 rounded-xl flex items-center justify-center text-violet-600 dark:text-violet-400 mb-4">
+                            <i class="ph-bold ph-download-simple text-2xl"></i>
+                        </div>
+                        <h3 class="text-lg font-bold mb-2">Instalação Simples</h3>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">
+                            Baixe o organizador, extraia o arquivo .zip na pasta de sua preferência e execute o <span
+                                class="font-mono bg-gray-100 dark:bg-gray-800 px-1 rounded">FL_ORZ.exe</span>.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Passo 2 -->
+                <div class="reveal p-6 rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 relative overflow-hidden group hover:border-violet-500 dark:hover:border-violet-500 transition-all"
+                    style="transition-delay: 100ms;">
+                    <div
+                        class="absolute -right-4 -top-4 text-9xl font-black text-gray-100 dark:text-gray-800 opacity-50 group-hover:text-violet-50 dark:group-hover:text-violet-900/20 transition-colors z-0 select-none">
+                        2</div>
+                    <div class="relative z-10">
+                        <div
+                            class="w-12 h-12 bg-violet-100 dark:bg-violet-900/30 rounded-xl flex items-center justify-center text-violet-600 dark:text-violet-400 mb-4">
+                            <i class="ph-bold ph-gear text-2xl"></i>
+                        </div>
+                        <h3 class="text-lg font-bold mb-2">Configuração Inicial</h3>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">
+                            Selecione a pasta que deseja organizar e ajuste o tempo de intervalo entre cada verificação
+                            automática.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Passo 3 -->
+                <div class="reveal p-6 rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 relative overflow-hidden group hover:border-violet-500 dark:hover:border-violet-500 transition-all"
+                    style="transition-delay: 200ms;">
+                    <div
+                        class="absolute -right-4 -top-4 text-9xl font-black text-gray-100 dark:text-gray-800 opacity-50 group-hover:text-violet-50 dark:group-hover:text-violet-900/20 transition-colors z-0 select-none">
+                        3</div>
+                    <div class="relative z-10">
+                        <div
+                            class="w-12 h-12 bg-violet-100 dark:bg-violet-900/30 rounded-xl flex items-center justify-center text-violet-600 dark:text-violet-400 mb-4">
+                            <i class="ph-bold ph-sliders text-2xl"></i>
+                        </div>
+                        <h3 class="text-lg font-bold mb-2">Personalização</h3>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">
+                            Configure as extensões que deseja organizar e, se desejar, ative a opção para iniciar junto
+                            com o sistema.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Passo 4 -->
+                <div class="reveal p-6 rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 relative overflow-hidden group hover:border-violet-500 dark:hover:border-violet-500 transition-all"
+                    style="transition-delay: 300ms;">
+                    <div
+                        class="absolute -right-4 -top-4 text-9xl font-black text-gray-100 dark:text-gray-800 opacity-50 group-hover:text-violet-50 dark:group-hover:text-violet-900/20 transition-colors z-0 select-none">
+                        4</div>
+                    <div class="relative z-10">
+                        <div
+                            class="w-12 h-12 bg-violet-100 dark:bg-violet-900/30 rounded-xl flex items-center justify-center text-violet-600 dark:text-violet-400 mb-4">
+                            <i class="ph-bold ph-play text-2xl"></i>
+                        </div>
+                        <h3 class="text-lg font-bold mb-2">Organize</h3>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">
+                            Inicie a organização e deixe o FileORZ cuidar do resto. Sua área de trabalho sempre limpa.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-white dark:bg-gray-950 border-t border-gray-200 dark:border-gray-800 py-12">
+        <div class="max-w-6xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="text-center md:text-left">
+                <h4 class="font-black text-2xl mb-1 text-gray-900 dark:text-white">FileORZ</h4>
+                <p class="text-sm text-gray-500">Organização simplificada.</p>
+            </div>
+
+            <div class="text-center">
+                <p class="text-sm text-gray-500 dark:text-gray-400 mb-2">Desenvolvido por</p>
+                <p class="font-bold text-lg text-violet-600"><a href="https://github.com/ThainanViniciusKatchan"
+                        target="_blank" rel="noopener noreferrer"> Thainan Vinicius Katchan </a> </p>
+            </div>
+
+            <a href="https://github.com/ThainanViniciusKatchan/FileORZ" target="_blank" rel="noopener noreferrer"
+                class="group flex items-center gap-3 px-6 py-3 rounded-full bg-gray-100 dark:bg-gray-900 text-gray-700 dark:text-gray-300 hover:bg-violet-600 hover:text-white transition-all">
+                <i class="ph-fill ph-github-logo text-xl"></i>
+                <span class="font-medium">GitHub</span>
+            </a>
+        </div>
+    </footer>
+
+    <!-- Lógica JavaScript -->
+    <script src="assets/js/main.js"></script>
+</body>
+
+</html>

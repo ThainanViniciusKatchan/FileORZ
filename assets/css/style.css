@@ -1,0 +1,51 @@
+.icon-wrapper {
+    position: absolute;
+    z-index: 10;
+    pointer-events: none;
+}
+
+.floating-icon {
+    display: block;
+    font-size: 2.5rem;
+
+    filter: grayscale(100%) blur(4px);
+    opacity: 0.1;
+    color: #9CA3AF;
+
+    transition: all 0.2s ease-out;
+}
+
+.floating-icon.active {
+    filter: grayscale(0%) blur(0);
+    opacity: 1;
+    z-index: 20;
+}
+
+.fade-in-up {
+    animation: fadeInUp 1s ease-out forwards;
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+@keyframes fadeInUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.reveal {
+    opacity: 0;
+    transform: translateY(50px);
+    transition: all 1s ease-out;
+}
+
+.reveal.active {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.bg-grid-pattern {
+    background-image: radial-gradient(circle, rgba(124, 58, 237, 0.1) 1px, transparent 1px);
+    background-size: 30px 30px;
+}
