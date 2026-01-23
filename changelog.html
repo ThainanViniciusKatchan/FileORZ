@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FileORZ - Changelog</title>
+
+    <!-- Fonte Roboto -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="assets/js/tailwind-config.js"></script>
+
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <!-- CSS Customizado -->
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+
+<body
+    class="bg-gray-50 text-gray-900 dark:bg-gray-900 dark:text-white transition-colors duration-300 p-8 max-w-4xl mx-auto">
+
+    <header class="fixed top-0 right-0 p-6 z-50 mix-blend-difference text-white">
+        <button id="theme-toggle"
+            class="p-3 rounded-full border-2 border-white/20 hover:bg-white/10 transition-all backdrop-blur-sm"
+            aria-label="Alternar Tema">
+            <i class="ph ph-sun text-2xl hidden dark:block"></i>
+            <i class="ph ph-moon text-2xl block dark:hidden"></i>
+        </button>
+    </header>
+
+    <nav class="fixed top-0 left-0 p-6  z-50 mix-blend-difference text-white">
+        <ul style="display: flex; justify-content: space-between; margin-bottom: 2rem; gap: 36.8rem;">
+            <li style="font-size: 1.2rem; font-weight: bold; 
+            border: 0.5px solid white; color: white; padding: 10px; border-radius: 16px;"><a
+                    href="index.html">Início</a>
+            </li>
+    </nav>
+
+
+    <div class="mb-8" style="text-align: center;">
+        <h1 style="font-size: 2rem; font-weight: bold;">Changelog v0.1.5</h1>
+        <hr style="margin: 1rem 0;">
+        <p style="font-size: 0.8rem; opacity: 0.75;">Português-BR</p>
+    </div>
+
+    <h3 id="bugs-corrigidos" style="font-size: 1.5rem; font-weight: bold; margin-top: 2rem; margin-bottom: 1rem;">
+        mudanças, melhorias e Bugs corrigidos</h3>
+    <ul style="list-style-type: disc; padding-left: 1rem; margin-top: 1rem; margin-bottom: 2rem;"
+        class="list-disc pl-5 space-y-2">
+        <li>Corrigido o bug de inicialização do aplicativo com o windows</li>
+        <li>Mudança no tempo de verificação do aplicativo de segundos para minutos</li>
+    </ul>
+
+    <h3 id="bugs-conhecidos" style="font-size: 1.5rem; font-weight: bold; margin-top: 2rem; margin-bottom: 1rem;">Bugs
+        conhecidos</h3>
+    <ul style="list-style-type: disc; padding-left: 1rem; margin-top: 1rem; margin-bottom: 2rem;"
+        class="list-disc pl-5 space-y-2">
+        <li>Ao iniciar o aplicativo ele pode fechar sozinho instantaneamente</li>
+        <li>Ao desativar a inicialização do aplicativo ele pode exibir uma mensagem de erro</li>
+    </ul>
+
+    <h3 id="melhorias-futuras" class="text-2xl font-semibold mt-8 mb-4">Melhorias futuras</h3>
+    <ul class="list-disc pl-5 space-y-2">
+        <li>Adicionar a opção de selecionar multiplas pastas para organização</li>
+        <li>Adicionar a opção de personalizar o nome das pastas da organização</li>
+        <li>Adicionar a opção de personalizar os formatos que serão organizados (Adicionando os formatos necessários
+            manualmente)</li>
+        <li>Compilar o aplicativo para Linux</li>
+    </ul>
+
+    <div class="my-10 border-t border-gray-300 dark:border-gray-700"></div>
+
+    <div class="mb-8">
+        <p class="text-sm opacity-75" style="text-align: center;">Inglês-US</p>
+    </div>
+
+    <h3 id="changes-improvements-and-bug-fixes" class="text-2xl font-semibold mt-8 mb-4">Changes, improvements and Bug
+        fixes</h3>
+    <ul class="list-disc pl-5 space-y-2">
+        <li>Fixed application startup bug with Windows</li>
+        <li>Changed application check time from seconds to minutes</li>
+    </ul>
+
+    <h3 id="known-bugs" class="text-2xl font-semibold mt-8 mb-4">Known bugs</h3>
+    <ul class="list-disc pl-5 space-y-2">
+        <li>When starting the application it can close instantaneously</li>
+        <li>When disabling the application startup it can display an error message</li>
+    </ul>
+
+    <h3 id="future-improvements" class="text-2xl font-semibold mt-8 mb-4">Future improvements</h3>
+    <ul class="list-disc pl-5 space-y-2">
+        <li>Add the option to select multiple folders for organization</li>
+        <li>Add the option to customize the organization folder names</li>
+        <li>Add the option to customize the formats that will be organized (Adding the formats manually)</li>
+        <li>Compile the application for Linux</li>
+    </ul>
+    <script src="assets/js/main.js"></script>
+</body>
+
+</html>
