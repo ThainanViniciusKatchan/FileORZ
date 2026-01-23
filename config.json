@@ -90,7 +90,7 @@
         ".raw": true,
         ".af": true
     },
-    "timeverification": "5",
-    "Startup": false,
-    "Folder": "pasta de organização"
+    "timeverification": "1",
+    "Startup": true,
+    "Folder": "C:/Users/Thainan/Downloads"
 }

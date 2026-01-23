@@ -20,7 +20,7 @@ def start_task():
     if STATUS == False and Startup == False:
        SCRIPT_DIR = os.path.join(os.getcwd(), "dist", "FileORZ.exe")
     else:
-        SCRIPT_DIR = os.path.join(os.getenv('LOCALAPPDATA'), 'FileORZ')
+        SCRIPT_DIR = os.path.join(os.getenv('LOCALAPPDATA'), 'FileORZ', 'FileORZ.exe')
 
     if STATUS == False:
         if os.path.exists(SCRIPT_DIR):
