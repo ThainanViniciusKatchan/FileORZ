@@ -1,4 +1,29 @@
 {
+    "Desenvolvimento": {
+        ".htm": true,
+        ".html": true,
+        ".cfg": true,
+        ".alg": true,
+        ".md": true,
+        ".ftl": true,
+        ".json": true,
+        ".py": true,
+        ".bat": true,
+        ".cmd": true,
+        ".ps1": true,
+        ".sh": true,
+        ".ini": true,
+        ".js": true,
+        ".ts": true,
+        ".css": true,
+        ".java": true,
+        ".cpp": true,
+        ".cs": true,
+        ".php": true,
+        ".c": true,
+        ".net": true,
+        ".pyd": true
+    },
     "documentos": {
         ".pdf": true,
         ".doc": true,
@@ -11,13 +36,7 @@
         ".xls": true,
         ".dotm": true,
         ".ponto": true,
-        ".dotx": true,
-        ".htm": true,
-        ".html": true,
-        ".cfg": true,
-        ".alg": true,
-        ".md": true,
-        ".ftl": true
+        ".dotx": true
     },
     "videos": {
         ".mov": true,
@@ -90,7 +109,7 @@
         ".raw": true,
         ".af": true
     },
-    "timeverification": "1",
-    "Startup": true,
-    "Folder": "C:/Users/Thainan/Downloads"
+    "timeverification": "5",
+    "Startup": false,
+    "Folder": "pasta de organização"
 }

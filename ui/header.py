@@ -34,7 +34,7 @@ def changelog_button(parent):
         hover_color=COLORS["button_hover"],
         text_color=COLORS["text_primary"]
     )
-    btn.bind("<Button-1>", lambda event: changelog.open_changelog())
+    btn.bind("<Button-1>", lambda event: changelog.show_custom_changelog())
     return btn
 
 def header(root):
