@@ -161,33 +161,141 @@ def reorganizar_estrutura():
             shutil.move(origem, destino)
         shutil.rmtree(fileorz_dist)
         print(f"  [OK] FileORZ.exe movido para {OUTPUT_DIR}/dist/")
-
-# copy config.json to ./dist/
-def copiar_arquivos():
-    print("\nCopiando config.json...")
+        
+def Criar_Config_Padrao():
+    config = {
+        "Desenvolvimento": {
+        ".htm": True,
+        ".html": True,
+        ".cfg": True,
+        ".alg": True,
+        ".md": True,
+        ".ftl": True,
+        ".json": True,
+        ".py": True,
+        ".bat": True,
+        ".cmd": True,
+        ".ps1": True,
+        ".sh": True,
+        ".ini": True,
+        ".js": True,
+        ".ts": True,
+        ".css": True,
+        ".java": True,
+        ".cpp": True,
+        ".cs": True,
+        ".php": True,
+        ".c": True,
+        ".net": True,
+        ".pyd": True
+    },
+        "documentos": {
+        ".pdf": True,
+        ".doc": True,
+        ".txt": True,
+        ".pptx": True,
+        ".docx": True,
+        ".xlsx": True,
+        ".xlsm": True,
+        ".csv": True,
+        ".xls": True,
+        ".dotm": True,
+        ".ponto": True,
+        ".dotx": True,
+        ".htm": True,
+        ".html": True,
+        ".cfg": True,
+        ".alg": True,
+        ".md": True,
+        ".ftl": True
+    },
+    "videos": {
+        ".mov": True,
+        ".mp4": True,
+        ".avi": True,
+        ".av1": True,
+        ".mpeg-2": True,
+        ".avchd": True,
+        ".aac": True,
+        ".mkv": True,
+        ".divx": True,
+        ".h.264": True,
+        ".mpeg-1": True,
+        ".wmv": True
+    },
+    "audios": {
+        ".mp3": True,
+        ".wav": True,
+        ".flac": True,
+        ".3GP": True,
+        ".M4A": True,
+        ".ogg": True,
+        ".wma": True,
+        ".m4a": True,
+        ".webm": True
+    },
+    "compactos": {
+        ".rar": True,
+        ".zip": True,
+        ".zpix": True,
+        ".7z": True,
+        ".rar5": True,
+        ".iso": True,
+        ".gzip": True,
+        ".7-zip": True,
+        ".tar": True
+    },
+    "fontes": {
+        ".ttf": True,
+        ".eot": True,
+        ".woff": True,
+        ".woff2": True
+    },
+    "setups": {
+        ".exe": True,
+        ".msi": True,
+        ".appx": True,
+        ".appxbundle": True,
+        ".msix": True,
+        ".apk": True,
+        ".Msixbundle": True
+    },
+    "imagens": {
+        ".jpg": True,
+        ".jpeg": True,
+        ".png": True,
+        ".bmp": True,
+        ".tiff": True,
+        ".gif": True,
+        ".cr3": True,
+        ".cr2": True,
+        ".exif": True,
+        ".psd": True,
+        ".eps": True,
+        ".ai": True,
+        ".svg": True,
+        ".webp": True,
+        ".heic": True,
+        ".heif": True,
+        ".raw": True,
+        ".af": True
+    },
+    "timeverification": "5",
+    "Startup": False,
+    "Folder": "pasta de organização"
+    }
     
-    config_origem = os.path.join(BASE_DIR, 'dist', 'config.json')
-    config_destino = os.path.join(BASE_DIR, OUTPUT_DIR, 'dist', 'config.json')
-    
-    if os.path.exists(config_origem):
-        os.makedirs(os.path.dirname(config_destino), exist_ok=True)
-        shutil.copy(config_origem, config_destino)
-        print(f"  [OK] config.json copiado para {OUTPUT_DIR}/dist/")
-    else:
-        print(f"  [AVISO] config.json não encontrado em {config_origem}")
+    BUILD_DIR = os.path.join(BASE_DIR, OUTPUT_DIR, 'FileORZ', 'dist', 'config.json')
+    DIST_DIR = os.path.join(BASE_DIR, OUTPUT_DIR, 'dist', 'config.json')
 
-    print("\nCopiando changelog...")
-    changelog_origem = os.path.join(BASE_DIR, 'changelog')
-    changelog_destino = os.path.join(BASE_DIR, OUTPUT_DIR, 'changelog')
-    
-    if os.path.exists(changelog_origem):
-        if os.path.exists(changelog_destino):
-            shutil.rmtree(changelog_destino)
-        shutil.copytree(changelog_origem, changelog_destino)
-        print(f"Pasta changelog copiada para {OUTPUT_DIR}/")
-    else:
-        print(f"Pasta changelog não encontrada em {changelog_origem}")
+    paths = [BUILD_DIR, DIST_DIR]
 
+    for path in paths:
+        with open(path, 'w', encoding='utf-8') as f:
+            json.dump(config, f, indent=4, ensure_ascii=False)
+            print(f"config.json padrão criado em: {path}")
+            sleep(2)
+    
 # clean temporary files
 def limpar_temporarios():
     print("\nLimpando arquivos temporários...")
@@ -216,6 +324,7 @@ if __name__ == "__main__":
     alterar_Config()
     limpar_builds_anteriores()
     criar_pasta_build()
+    Criar_Config_Padrao()
     
     if not compilar_organizador():
         print("\nFalha na compilação do organizador!")
@@ -224,9 +333,12 @@ if __name__ == "__main__":
     if not compilar_ui():
         print("\nFalha na compilação da UI!")
         exit(1)
+
+    if not Criar_Config_Padrao():
+        print("\nFalha na criação do config.json!")
+        exit(1)
     
     reorganizar_estrutura()
-    copiar_arquivos()
     limpar_temporarios()
     
     # Structure of files after build

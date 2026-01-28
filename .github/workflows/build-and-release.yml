@@ -60,10 +60,6 @@ jobs:
         git tag "v$env:NEW_VERSION"
         git push origin HEAD:main --tags
 
-    - name: Criar Configuração Padrão
-      run: |
-        python .github/scripts/create_config.py
-
     - name: Compilar Projeto (AutoBuild)
       run: |
         python AutoBuild/AutoBuild.py
