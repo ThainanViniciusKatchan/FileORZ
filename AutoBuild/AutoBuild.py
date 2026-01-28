@@ -285,8 +285,8 @@ def Criar_Config_Padrao():
     "Folder": "pasta de organização"
     }
     
-    BUILD_DIR = os.path.join(BASE_DIR, OUTPUT_DIR, 'FileORZ', 'dist', 'config.json')
-    DIST_DIR = os.path.join(BASE_DIR, OUTPUT_DIR, 'dist', 'config.json')
+    BUILD_DIR = os.path.join(BASE_DIR, OUTPUT_DIR, 'dist', 'config.json')
+    DIST_DIR = os.path.join(BASE_DIR, 'dist', 'config.json')
 
     paths = [BUILD_DIR, DIST_DIR]
 
@@ -314,43 +314,37 @@ def limpar_temporarios():
             except Exception as e:
                 print(f"Erro ao remover {pasta}: {e}")
 
-# main
+# Iniciar compilação
 if __name__ == "__main__":
     print("\n" + "=" * 50)
     print("Compilando FileORZ")
     print("=" * 50)
     sleep(2)
 
-    alterar_Config()
-    limpar_builds_anteriores()
-    criar_pasta_build()
-    Criar_Config_Padrao()
-    
-    if not compilar_organizador():
-        print("\nFalha na compilação do organizador!")
-        exit(1)
-    
-    if not compilar_ui():
-        print("\nFalha na compilação da UI!")
-        exit(1)
+    ETAPAS = [
+        ("limpar_builds_anteriores",limpar_builds_anteriores),
+        ("criar_pasta_build",criar_pasta_build),
+        ("compilar_ui",compilar_ui),
+        ("compilar_organizador",compilar_organizador),
+        ("reorganizar_estrutura",reorganizar_estrutura),
+        ("Criar_Config_Padrao",Criar_Config_Padrao),
+        ("alterar_Config",alterar_Config),
+        ("limpar_temporarios",limpar_temporarios)
+    ]
 
-    if not Criar_Config_Padrao():
-        print("\nFalha na criação do config.json!")
-        exit(1)
-    
-    reorganizar_estrutura()
-    limpar_temporarios()
-    
-    # Structure of files after build
-    print("\n" + "=" * 50)
+    print("Iniciando processo de compilação...\n")
+    sleep(2)
+
+    for nome_etapa, etapa in ETAPAS:
+        print(f"\nEtapa: {nome_etapa}")
+        try:
+            resultado = etapa()
+        except Exception as e:
+            print(f"Erro na etapa {nome_etapa}: {e}")
+            exit(1)
+
+        print(f"\nEtapa {nome_etapa} concluída com sucesso!")
+        sleep(2)
+        print("\n" + "=" * 50)
+
     print("\nCompilação concluída com sucesso!")
-    print("=" * 50)
-    print(f"\nEstrutura criada:")
-    print(f"   FileORZ/")
-    print(f"   |-- FL_ORZ.exe")
-    print(f"   +-- dist/")
-    print(f"       |-- FileORZ.exe")
-    print(f"       +-- config.json")
-    print(f"   +-- changelog/")
-    print(f"       +-- changelog.md")
-    print("=" * 50)
