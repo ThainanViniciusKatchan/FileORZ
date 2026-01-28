@@ -12,18 +12,17 @@ CONFIG_PATH = json_path()
 def load_extensions():
     with open(CONFIG_PATH, 'r', encoding='utf-8') as f:
         data = json.load(f)
-        
     # Converter para o formato esperado
     extensions = {}
     for category, exts in data.items():
         if category != "Folder" and category != "timeverification" and category != "Startup":
-            if type(exts) == str:
+            if isinstance(exts, str):
                 extensions[category.capitalize()] = [exts]
             else:
                 extensions[category.capitalize()] = [ext for ext, enabled in exts.items() if enabled]
     return extensions
 
-# pasta de downloads e extenção de arquivo
+# pasta de downloads e extenssão de arquivo
 def organize_files():
     with open(CONFIG_PATH, 'r', encoding='utf-8') as f:
         data = json.load(f)
@@ -58,7 +57,7 @@ def organize_files():
                 if os.path.exists(source_file):
                     os.rename(source_file, destination_file)
                     break
-#verificar a pasta a com o tempo determiado pelo usuário
+#verificar a pasta a com o tempo determinado pelo usuário
 if __name__ == "__main__":
     while True:
         organize_files()
@@ -68,7 +67,7 @@ if __name__ == "__main__":
             with open(CONFIG_PATH, 'r', encoding='utf-8') as f:
                 data = json.load(f)
             time_verification = int(data.get("timeverification", 1))
-        except:
+        except (FileNotFoundError, json.JSONDecodeError):
             time_verification = 1
-            
+        
         time.sleep(time_verification * 60)
