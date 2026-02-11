@@ -16,7 +16,6 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # alter config.json
 def alterar_Config():
     print("\nAlterando config.json...")
-    
     config = load_config()
     config["timeverification"] = "5"
     config['Startup'] = False
@@ -24,7 +23,7 @@ def alterar_Config():
     save_config(config)
     print("\nConfig.json alterado com sucesso")
 
-# clean before build
+# clean previus build
 def limpar_builds_anteriores():
     print("\nLimpando builds anteriores...")
 
@@ -161,7 +160,8 @@ def reorganizar_estrutura():
             shutil.move(origem, destino)
         shutil.rmtree(fileorz_dist)
         print(f"  [OK] FileORZ.exe movido para {OUTPUT_DIR}/dist/")
-        
+
+# create default file config.json
 def Criar_Config_Padrao():
     config = {
         "Desenvolvimento": {
@@ -189,7 +189,7 @@ def Criar_Config_Padrao():
         ".net": True,
         ".pyd": True
     },
-        "documentos": {
+    "documentos": {
         ".pdf": True,
         ".doc": True,
         ".txt": True,
@@ -271,14 +271,14 @@ def Criar_Config_Padrao():
         ".cr2": True,
         ".exif": True,
         ".psd": True,
+        ".af": True,
         ".eps": True,
         ".ai": True,
         ".svg": True,
         ".webp": True,
         ".heic": True,
         ".heif": True,
-        ".raw": True,
-        ".af": True
+        ".raw": True
     },
     "timeverification": "5",
     "Startup": False,
@@ -314,13 +314,14 @@ def limpar_temporarios():
             except Exception as e:
                 print(f"Erro ao remover {pasta}: {e}")
 
-# Iniciar compilação
+# Start build
 if __name__ == "__main__":
     print("\n" + "=" * 50)
     print("Compilando FileORZ")
     print("=" * 50)
     sleep(2)
 
+    # stages of build
     ETAPAS = [
         ("limpar_builds_anteriores",limpar_builds_anteriores),
         ("criar_pasta_build",criar_pasta_build),
@@ -335,16 +336,17 @@ if __name__ == "__main__":
     print("Iniciando processo de compilação...\n")
     sleep(2)
 
+    # execute stages
     for nome_etapa, etapa in ETAPAS:
         print(f"\nEtapa: {nome_etapa}")
         try:
             resultado = etapa()
         except Exception as e:
-            print(f"Erro na etapa {nome_etapa}: {e}")
+            print(f" 🛑 Erro na etapa {nome_etapa}: {e}")
             exit(1)
 
-        print(f"\nEtapa {nome_etapa} concluída com sucesso!")
+        print(f"\n ✅ Etapa {nome_etapa} concluída com sucesso!")
         sleep(2)
         print("\n" + "=" * 50)
 
-    print("\nCompilação concluída com sucesso!")
+    print("\n ✅ Compilação concluída com sucesso!")

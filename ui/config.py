@@ -1,7 +1,7 @@
 import customtkinter
 import os
 import sys
-from centralizeWindow import centralize_window
+from Centralizar_Janela import Centralizar_Janela
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from utils.model import load_config, save_config
@@ -35,7 +35,7 @@ def open_config_window(parent):
     window.configure(fg_color=COLORS["bg_primary"])
     window.resizable(False, False)
     window.grab_set()
-    centralize_window(window, 900, 650) # Função para centralizar a janela ao abrir
+    Centralizar_Janela(window, 900, 650)
     
     try:
         if os.path.exists(icon_path):

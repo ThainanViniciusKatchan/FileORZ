@@ -25,7 +25,7 @@ jobs:
     - name: Checkout do código
       uses: actions/checkout@v4
       with:
-        fetch-depth: 0 # Importante para histórico de git se necessário
+        fetch-depth: 0
 
     - name: Configurar Python
       uses: actions/setup-python@v5

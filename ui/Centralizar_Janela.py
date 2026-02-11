@@ -1,6 +1,7 @@
 import customtkinter as ctk
 
-def centralize_window(window, width, height):
+# centralize window
+def Centralizar_Janela(window, width, height):
     window.update_idletasks()
     
     width_screen = window.winfo_screenwidth()

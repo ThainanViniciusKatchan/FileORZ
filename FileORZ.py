@@ -22,14 +22,23 @@ def load_extensions():
                 extensions[category.capitalize()] = [ext for ext, enabled in exts.items() if enabled]
     return extensions
 
-# pasta de downloads e extenssão de arquivo
+# pasta para organizar e extenssão de arquivos
 def organize_files():
     with open(CONFIG_PATH, 'r', encoding='utf-8') as f:
         data = json.load(f)
     path = data["Folder"]
-    print(path)
-    files = os.listdir(path)
-    extensions_to_include = load_extensions()
+    print("Folder of organization: " + path)
+    if not os.path.exists(path): # Checar se a pasta existe
+        print(f"this folder {path} does not exist.")
+        return
+    elif os.path.exists(path) and os.path.isdir(path): # Checar se a pasta existe e se é uma pasta
+        if os.access(path, os.R_OK) and os.access(path, os.W_OK): # Checar se a pasta tem permissão de leitura e escrita
+            print(f"this folder {path} has read and write permission.")
+            files = os.listdir(path)
+        else:
+            print(f"this folder {path} has no read and write permission.")
+            return
+    extensions_to_include = load_extensions() # Carregar as extensões do arquivo config.json
 
     # verificar se o arquivo ja existe
     found_files = {}
@@ -48,10 +57,17 @@ def organize_files():
                 counter = 1
                 
                 # Encontrar um nome disponível
-                while os.path.exists(destination_file):
-                    new_filename = f"{filename}_{counter}{file_extension}"
-                    destination_file = os.path.join(new_folder, new_filename)
-                    counter += 1
+                try:
+                    with open(destination_file, 'rb', encoding='utf-8') as f:
+                        f.read()
+                        if os.path.exists(destination_file):
+                            while os.path.exists(destination_file):
+                                new_filename = f"{filename}_{counter}{file_extension}"
+                                destination_file = os.path.join(new_folder, new_filename)
+                                counter += 1
+                except Exception as e:
+                    print(f"Erro ao encontrar um nome disponível: {e}")
+                    continue
 
                 # Mover o arquivo apenas uma vez com o nome correto
                 if os.path.exists(source_file):
@@ -64,10 +80,9 @@ if __name__ == "__main__":
         
         # Ler o tempo de verificação a cada ciclo para permitir atualizações em tempo real
         try:
-            with open(CONFIG_PATH, 'r', encoding='utf-8') as f:
+            with open(CONFIG_PATH, 'rb', encoding='utf-8') as f:
                 data = json.load(f)
             time_verification = int(data.get("timeverification", 1))
         except (FileNotFoundError, json.JSONDecodeError):
             time_verification = 1
-        
         time.sleep(time_verification * 60)

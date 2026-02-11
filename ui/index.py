@@ -4,7 +4,7 @@ import os
 import sys
 from config import open_config_window
 from header import header
-from centralizeWindow import centralize_window
+from Centralizar_Janela import Centralizar_Janela
 import ctypes
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -48,8 +48,8 @@ root.resizable(False, False)
 
 # Header
 header(root)
-# Centralizar janela na tela
-centralize_window(root, 700, 420)
+# Centralize window
+Centralizar_Janela(root, 700, 420)
 
 main_container = customtkinter.CTkFrame(root, fg_color="transparent")
 main_container.pack(fill="both", expand=True, padx=30, pady=20)

@@ -22,7 +22,8 @@
         ".php": true,
         ".c": true,
         ".net": true,
-        ".pyd": true
+        ".pyd": true,
+        ".lexical": true
     },
     "documentos": {
         ".pdf": true,
@@ -107,9 +108,10 @@
         ".heic": true,
         ".heif": true,
         ".raw": true,
-        ".af": true
+        ".af": true,
+        ".afpub": true
     },
-    "timeverification": "5",
-    "Startup": false,
-    "Folder": "pasta de organização"
+    "timeverification": "1",
+    "Startup": true,
+    "Folder": "C:/Users/Thainan/Downloads"
 }
