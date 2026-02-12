@@ -165,7 +165,7 @@ def reorganizar_estrutura():
 # create default file config.json
 def Criar_Config_Padrao():
     config = {
-        "Desenvolvimento": {
+    "Desenvolvimento": {
         ".htm": True,
         ".html": True,
         ".cfg": True,
@@ -189,7 +189,8 @@ def Criar_Config_Padrao():
         ".cs": True,
         ".net": True,
         ".pyd": True,
-        ".lexical": True
+        ".lexical": True,
+        ".dll": True,
     },
     "documentos": {
         ".pdf": True,
@@ -209,7 +210,8 @@ def Criar_Config_Padrao():
         ".cfg": True,
         ".alg": True,
         ".md": True,
-        ".ftl": True
+        ".ftl": True,
+        ".ppt": True
     },
     "videos": {
         ".mov": True,
@@ -280,7 +282,8 @@ def Criar_Config_Padrao():
         ".webp": True,
         ".heic": True,
         ".heif": True,
-        ".raw": True
+        ".raw": True,
+        ".img": True
     },
     "timeverification": "5",
     "Startup": False,

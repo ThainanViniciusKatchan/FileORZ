@@ -53,12 +53,13 @@ def organize_files():
 
                 # Mudar nome do arquivo para evitar conflitos
                 source_file = os.path.join(path, file)
+                print("found file: " + source_file)
                 destination_file = os.path.join(new_folder, file)
                 counter = 1
                 
                 # Encontrar um nome disponível
                 try:
-                    with open(destination_file, 'rb', encoding='utf-8') as f:
+                    with open(source_file, 'rb') as f:
                         f.read()
                         if os.path.exists(destination_file):
                             while os.path.exists(destination_file):
@@ -82,7 +83,7 @@ if __name__ == "__main__":
         try:
             with open(CONFIG_PATH, 'r', encoding='utf-8') as f:
                 data = json.load(f)
-            time_verification = int(data.get("timeverification", 1))
+            time_verification = float(data.get("timeverification", 0.1))
         except (FileNotFoundError, json.JSONDecodeError):
-            time_verification = 1
+            time_verification = 0.1
         time.sleep(time_verification * 60)
