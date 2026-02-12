@@ -112,6 +112,6 @@
         ".afpub": true
     },
     "timeverification": "5",
-    "Startup": false,
-    "Folder": "pasta de organização"
+    "Startup": true,
+    "Folder": "C:/Users/Thainan/Downloads"
 }

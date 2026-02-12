@@ -231,8 +231,6 @@ def start_organizer():
     if feedback_label is not None:
         feedback_label.destroy()
 
-    status = check_if_running("FileORZ.exe")
-
     # verifica se a pasta foi selecionada
     if not folder or folder == "pasta de organização":
         feedback_label = customtkinter.CTkLabel(
@@ -254,19 +252,18 @@ def start_organizer():
             )
             feedback_label.pack(pady=(15, 0))
             root.after(3000, lambda: feedback_label.destroy() if feedback_label.winfo_exists() else None)
+        else:
+            feedback_label = customtkinter.CTkLabel(
+                main_container,
+                text="Erro ao iniciar o organizador!",
+                font=customtkinter.CTkFont(family="Segoe UI", size=13, weight="bold"),
+                text_color="red"
+            )
+            feedback_label.pack(pady=(15, 0))
+            root.after(3000, lambda: feedback_label.destroy() if feedback_label.winfo_exists() else None) 
 
     # verifica se o processo do organizador já está funcionando
-    if status:
-        feedback_label = customtkinter.CTkLabel(
-            main_container,
-            text="Erro ao iniciar o organizador!",
-            font=customtkinter.CTkFont(family="Segoe UI", size=13, weight="bold"),
-            text_color="red"
-        )
-        feedback_label.pack(pady=(15, 0))
-        root.after(3000, lambda: feedback_label.destroy() if feedback_label.winfo_exists() else None)
-    else:
-        start_task()
+    
 # Botão para iniciar a organização
 btn_Start_Organizer = customtkinter.CTkButton(
     actions_frame, 
