@@ -7,6 +7,7 @@ import shutil
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from utils.model import *
 from time import sleep
+from utils.RsaCryptography import *
 
 # Pasta de saída para as builds
 # exit folder to build
@@ -183,11 +184,12 @@ def Criar_Config_Padrao():
         ".css": True,
         ".java": True,
         ".cpp": True,
-        ".cs": True,
         ".php": True,
         ".c": True,
+        ".cs": True,
         ".net": True,
-        ".pyd": True
+        ".pyd": True,
+        ".lexical": True
     },
     "documentos": {
         ".pdf": True,
@@ -314,6 +316,14 @@ def limpar_temporarios():
             except Exception as e:
                 print(f"Erro ao remover {pasta}: {e}")
 
+def assing_keys():
+    EXE_PATH = os.path.join(OUTPUT_DIR, 'dist', 'FileORZ.exe')
+
+    generate_keys() # gera as chaves
+    sign_file(EXE_PATH, 'private_key.pem') # assina o arquivo
+    verify_file(EXE_PATH, 'public_key.pem') # verifica a assinatura
+    
+
 # Start build
 if __name__ == "__main__":
     print("\n" + "=" * 50)
@@ -330,7 +340,8 @@ if __name__ == "__main__":
         ("reorganizar_estrutura",reorganizar_estrutura),
         ("Criar_Config_Padrao",Criar_Config_Padrao),
         ("alterar_Config",alterar_Config),
-        ("limpar_temporarios",limpar_temporarios)
+        ("limpar_temporarios",limpar_temporarios),
+        ("Assinar software",assing_keys)
     ]
 
     print("Iniciando processo de compilação...\n")

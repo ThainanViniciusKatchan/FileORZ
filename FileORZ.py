@@ -80,7 +80,7 @@ if __name__ == "__main__":
         
         # Ler o tempo de verificação a cada ciclo para permitir atualizações em tempo real
         try:
-            with open(CONFIG_PATH, 'rb', encoding='utf-8') as f:
+            with open(CONFIG_PATH, 'r', encoding='utf-8') as f:
                 data = json.load(f)
             time_verification = int(data.get("timeverification", 1))
         except (FileNotFoundError, json.JSONDecodeError):
