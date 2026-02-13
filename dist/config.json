@@ -1,5 +1,6 @@
 {
     "Desenvolvimento": {
+        ".bin": true,
         ".htm": true,
         ".html": true,
         ".cfg": true,
@@ -23,7 +24,8 @@
         ".c": true,
         ".net": true,
         ".pyd": true,
-        ".lexical": true
+        ".lexical": true,
+        ".dll": true
     },
     "documentos": {
         ".pdf": true,
@@ -37,7 +39,8 @@
         ".xls": true,
         ".dotm": true,
         ".ponto": true,
-        ".dotx": true
+        ".dotx": true,
+        ".ppt": true
     },
     "videos": {
         ".mov": true,
@@ -109,9 +112,10 @@
         ".heif": true,
         ".raw": true,
         ".af": true,
-        ".afpub": true
+        ".afpub": true,
+        ".img": true
     },
-    "timeverification": "0.1",
-    "Startup": true,
-    "Folder": "C:/Users/Thainan/Desktop/Teste FILEORZ"
+    "timeverification": "5",
+    "Startup": false,
+    "Folder": "pasta de organização"
 }
