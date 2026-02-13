@@ -60,6 +60,12 @@ jobs:
         git tag "v$env:NEW_VERSION"
         git push origin HEAD:main --tags
 
+    - name: Restore private key
+      env:
+        SIGNING_KEY: ${{ secrets.SIGNING_KEY_BASE64 }}
+      run: |
+        python -c "import os, base64; open('private_key.pem', 'wb').write(base64.b64decode(os.environ['SIGNING_KEY']))"
+
     - name: Compilar Projeto (AutoBuild)
       run: |
         python AutoBuild/AutoBuild.py
