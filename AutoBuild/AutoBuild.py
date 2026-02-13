@@ -1,7 +1,11 @@
 import os
 import sys
 import subprocess
+import io
 import shutil
+
+# Força o encoding do stdout para utf-8
+sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 
 # add path to utils
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -347,7 +351,7 @@ if __name__ == "__main__":
         ("Assinar_software",assing_keys)
     ]
 
-    print("Iniciando processo de compilação...\n")
+    print("Iniciando processo de compilacao...\n")
     sleep(2)
 
     # execute stages
@@ -359,8 +363,8 @@ if __name__ == "__main__":
             print(f" 🛑 Erro na etapa {nome_etapa}: {e}")
             exit(1)
 
-        print(f"\n ✅ Etapa {nome_etapa} concluída com sucesso!")
+        print(f"\n ✅ Etapa {nome_etapa} concluida com sucesso!")
         sleep(2)
         print("\n" + "=" * 50)
 
-    print("\n ✅ Compilação concluída com sucesso!")
+    print("\n ✅ Compilacao concluida com sucesso!")
