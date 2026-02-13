@@ -58,7 +58,7 @@ jobs:
         git add utils/version.py
         git commit -m "chore: bump version to v$env:NEW_VERSION"
         git tag "v$env:NEW_VERSION"
-        git push origin HEAD:main --tags
+        git push origin HEAD:${{ github.ref_name }} --tags
 
     - name: Restore private key
       env:
