@@ -86,3 +86,10 @@ jobs:
         files: ${{ env.RELEASE_ZIP }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Reverter Tag em Caso de Falha
+      if: failure() && env.NEW_VERSION != ''
+      continue-on-error: true
+      run: |
+        git tag -d v$env:NEW_VERSION
+        git push origin --delete v$env:NEW_VERSION
