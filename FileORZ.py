@@ -49,7 +49,7 @@ def organize_files():
             if file_extension.lower() in extensions:
                 new_folder = os.path.join(path, folder, file_extension.upper()[1:])
                 if not os.path.exists(new_folder):
-                    os.makedirs(new_folder)
+                    os.makedirs(new_folder, exist_ok=True)
 
                 # Mudar nome do arquivo para evitar conflitos
                 source_file = os.path.join(path, file)
