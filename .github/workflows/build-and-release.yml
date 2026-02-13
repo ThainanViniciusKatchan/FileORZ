@@ -55,6 +55,8 @@ jobs:
     - name: Commit e Tag da Nova Versão
       if: ${{ inputs.version_type != 'none' }}
       run: |
+        git config pull.rebase false
+        git pull origin ${{ github.ref_name }}
         git add utils/version.py
         git commit -m "chore: bump version to v$env:NEW_VERSION"
         git tag "v$env:NEW_VERSION"
@@ -91,5 +93,18 @@ jobs:
       if: failure() && env.NEW_VERSION != ''
       continue-on-error: true
       run: |
-        git tag -d v$env:NEW_VERSION
-        git push origin --delete v$env:NEW_VERSION
+        $tagName = "v$env:NEW_VERSION"
+        Write-Host "Iniciando rollback da tag $tagName devido a falha no workflow..."
+        try { 
+          git tag -d $tagName 
+          Write-Host "Tag local removida com sucesso."
+        } catch { 
+          Write-Host "Tag local não encontrada ou erro ao remover: $_" 
+        }
+        
+        try { 
+          git push origin --delete $tagName 
+          Write-Host "Tag remota removida com sucesso."
+        } catch { 
+            Write-Host "Falha ao deletar tag remota (pode não ter sido enviada): $_" 
+        }
