@@ -344,7 +344,7 @@ if __name__ == "__main__":
         ("Criar_Config_Padrao",Criar_Config_Padrao),
         ("alterar_Config",alterar_Config),
         ("limpar_temporarios",limpar_temporarios),
-        ("Assinar software",assing_keys)
+        ("Assinar_software",assing_keys)
     ]
 
     print("Iniciando processo de compilação...\n")
