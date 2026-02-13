@@ -10,70 +10,93 @@ CONFIG_PATH = json_path()
 
 # Carregar as extensões do arquivo config.json
 def load_extensions():
-    with open(CONFIG_PATH, 'r', encoding='utf-8') as f:
-        data = json.load(f)
-    # Converter para o formato esperado
-    extensions = {}
-    for category, exts in data.items():
-        if category != "Folder" and category != "timeverification" and category != "Startup":
-            if isinstance(exts, str):
-                extensions[category.capitalize()] = [exts]
-            else:
-                extensions[category.capitalize()] = [ext for ext, enabled in exts.items() if enabled]
-    return extensions
+    """Lê o config.json e retorna dicionário com tratamento de erros."""
+    try:
+        with open(CONFIG_PATH, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+        
+        extensions = {}
+        # Lista negra de chaves que não são categorias de arquivos
+        ignored_keys = {"Folder", "timeverification", "Startup"}
+
+        for category, exts in data.items():
+            if category not in ignored_keys:
+                # Normaliza o nome da categoria (ex: imAgens -> Imagens)
+                cat_name = category.capitalize()
+                
+                if isinstance(exts, str):
+                    extensions[cat_name] = [exts]
+                elif isinstance(exts, dict):
+                    # Garante que só processa se for dicionário mesmo
+                    extensions[cat_name] = [ext for ext, enabled in exts.items() if enabled]
+                    
+        return extensions
+    except Exception as e:
+        print(f"Erro ao carregar extensões: {e}")
+        return {}
 
 # pasta para organizar e extenssão de arquivos
 def organize_files():
     with open(CONFIG_PATH, 'r', encoding='utf-8') as f:
         data = json.load(f)
-    path = data["Folder"]
-    print("Folder of organization: " + path)
-    if not os.path.exists(path): # Checar se a pasta existe
-        print(f"this folder {path} does not exist.")
+    
+    # 1. Definir o caminho original
+    original_path = data["Folder"] 
+    print("Folder of organization: " + original_path)
+    
+    if not os.path.exists(original_path):
+        print(f"this folder {original_path} does not exist.")
         return
-    elif os.path.exists(path) and os.path.isdir(path): # Checar se a pasta existe e se é uma pasta
-        if os.access(path, os.R_OK) and os.access(path, os.W_OK): # Checar se a pasta tem permissão de leitura e escrita
-            print(f"this folder {path} has read and write permission.")
-            files = os.listdir(path)
-        else:
-            print(f"this folder {path} has no read and write permission.")
+    elif os.path.exists(original_path) and os.path.isdir(original_path):
+        if not (os.access(original_path, os.R_OK) and os.access(original_path, os.W_OK)):
+            print(f"this folder {original_path} has no read and write permission.")
             return
-    extensions_to_include = load_extensions() # Carregar as extensões do arquivo config.json
-
-    # verificar se o arquivo ja existe
-    found_files = {}
-    # Mover os arquivos para a pasta referente ao tipo de arquivo e a extenção
-    for file in files:
-        filename, file_extension = os.path.splitext(file)
-        for folder, extensions in extensions_to_include.items():
-            if file_extension.lower() in extensions:
-                new_folder = os.path.join(path, folder, file_extension.upper()[1:])
-                if not os.path.exists(new_folder):
-                    os.makedirs(new_folder, exist_ok=True)
-
-                # Mudar nome do arquivo para evitar conflitos
-                source_file = os.path.join(path, file)
-                print("found file: " + source_file)
-                destination_file = os.path.join(new_folder, file)
-                counter = 1
-                
-                # Encontrar um nome disponível
-                try:
-                    with open(source_file, 'rb') as f:
-                        f.read()
-                        if os.path.exists(destination_file):
-                            while os.path.exists(destination_file):
-                                new_filename = f"{filename}_{counter}{file_extension}"
-                                destination_file = os.path.join(new_folder, new_filename)
-                                counter += 1
-                except Exception as e:
-                    print(f"Erro ao encontrar um nome disponível: {e}")
+    extensions_to_include = load_extensions()
+    extension_map = {}
+    
+    # 2. Correção da variável 'path' sobrescrita: Usando 'category' em vez de 'path' no loop
+    for category, exts in extensions_to_include.items():
+        for ext in exts:
+            clean_ext = ext.lower().strip()
+            if not clean_ext.startswith('.'):
+                clean_ext = '.' + clean_ext
+            extension_map[clean_ext] = category
+    try:
+        # 3. Usando a variável correta (original_path)
+        with os.scandir(original_path) as entries:
+            for entry in entries:
+                # 4. Correção da lógica is_file: 
+                # Se NÃO for arquivo (ou seja, for pasta) OU for oculto, PULA.
+                if not entry.is_file() or entry.name.startswith("."):
                     continue
-
-                # Mover o arquivo apenas uma vez com o nome correto
-                if os.path.exists(source_file):
-                    os.rename(source_file, destination_file)
-                    break
+                filename, file_extension = os.path.splitext(entry.name)
+                file_extension_lower = file_extension.lower()
+                # 5. Correção da lógica de categoria
+                if file_extension_lower in extension_map:
+                    target_category = extension_map[file_extension_lower]
+                else:
+                    target_category = "OUTROS"
+                sub_folder_name = file_extension.upper()[1:] if len(file_extension) > 1 else "OUTROS"
+                new_folder = os.path.join(original_path, target_category, sub_folder_name)
+                os.makedirs(new_folder, exist_ok=True)
+                destination_file = os.path.join(new_folder, entry.name)
+                counter = 1
+                while os.path.exists(destination_file):
+                   new_filename = f"{filename}_{counter}{file_extension}" 
+                   destination_file = os.path.join(new_folder, new_filename)
+                   counter += 1
+                
+                try:
+                    print(f"Processando {entry.path}...", end=" ", flush=True)
+                    os.rename(entry.path, destination_file)
+                    print(f"[OK] Movendo {entry.path} -> {destination_file}")
+                except PermissionError:
+                    print(f"[ERRO] Erro ao mover {entry.path}: Permissão negada.")
+                except Exception as e:
+                    print(f"[ERRO] Erro ao mover: {e}")
+    except Exception as e:
+        print(f"Erro ao ler diretório: {e}")
+                    
 #verificar a pasta a com o tempo determinado pelo usuário
 if __name__ == "__main__":
     while True:
@@ -83,7 +106,7 @@ if __name__ == "__main__":
         try:
             with open(CONFIG_PATH, 'r', encoding='utf-8') as f:
                 data = json.load(f)
-            time_verification = float(data.get("timeverification", 0.1))
+            time_verification = float(data.get("timeverification", 1))
         except (FileNotFoundError, json.JSONDecodeError):
-            time_verification = 0.1
+            time_verification = 1
         time.sleep(time_verification * 60)
