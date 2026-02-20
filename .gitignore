@@ -14,3 +14,4 @@ FileORZ.zip
 *.pem
 utils/watchdo_file.py
 key_base64.txt
+ui/LiveReload.py

@@ -88,7 +88,7 @@ def open_config_window(parent):
     scroll_frame.pack(pady=15, padx=15, fill="both", expand=True)
     
     for category, extensions in config.items():
-        if category == "Folder":
+        if category == "Folder" or category == "AutoDelete":
             continue 
         
         if not isinstance(extensions, dict):
@@ -268,3 +268,7 @@ def open_config_window(parent):
         corner_radius=10
     )
     save_button.pack(side="right")
+
+
+if __name__ == "__main__":
+    open_config_window(None)

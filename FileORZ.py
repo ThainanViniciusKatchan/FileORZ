@@ -10,7 +10,7 @@ CONFIG_PATH = json_path()
 
 # Carregar as extensões do arquivo config.json
 def load_extensions():
-    """Lê o config.json e retorna dicionário com tratamento de erros."""
+    # Lê o config.json e retorna dicionário com tratamento de erros.
     try:
         with open(CONFIG_PATH, 'r', encoding='utf-8') as f:
             data = json.load(f)
@@ -40,7 +40,7 @@ def organize_files():
     with open(CONFIG_PATH, 'r', encoding='utf-8') as f:
         data = json.load(f)
     
-    # 1. Definir o caminho original
+    # Definir o caminho original
     original_path = data["Folder"] 
     print("Folder of organization: " + original_path)
     
@@ -54,7 +54,7 @@ def organize_files():
     extensions_to_include = load_extensions()
     extension_map = {}
     
-    # 2. Correção da variável 'path' sobrescrita: Usando 'category' em vez de 'path' no loop
+    # variável 'path' sobrescrita: Usando 'category' em vez de 'path' no loop
     for category, exts in extensions_to_include.items():
         for ext in exts:
             clean_ext = ext.lower().strip()
@@ -62,16 +62,15 @@ def organize_files():
                 clean_ext = '.' + clean_ext
             extension_map[clean_ext] = category
     try:
-        # 3. Usando a variável correta (original_path)
+        # Usando a variável correta (original_path)
         with os.scandir(original_path) as entries:
             for entry in entries:
-                # 4. Correção da lógica is_file: 
                 # Se NÃO for arquivo (ou seja, for pasta) OU for oculto, PULA.
                 if not entry.is_file() or entry.name.startswith("."):
                     continue
                 filename, file_extension = os.path.splitext(entry.name)
                 file_extension_lower = file_extension.lower()
-                # 5. Correção da lógica de categoria
+                # lógica de categoria
                 if file_extension_lower in extension_map:
                     target_category = extension_map[file_extension_lower]
                 else:

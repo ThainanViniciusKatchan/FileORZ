@@ -21,7 +21,7 @@ def script_dir(): # find the path of the script
 NoInstallDir = os.path.join(script_dir()) # Receives the path of the current script 
 
 def json_path(): # Performs a search to find the config.json file regardless of location
-    search_path = [NoInstallDir, INSTALL_DIR, script_dir(), os.path.join(script_dir(), "dist")]
+    search_path = [script_dir(), os.path.join(script_dir(), "dist")]
 
     for path in search_path:
         path = os.path.join(path, "config.json")

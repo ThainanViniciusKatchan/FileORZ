@@ -117,5 +117,12 @@
     },
     "timeverification": "5",
     "Startup": false,
-    "Folder": "pasta de organização"
+    "Folder": "C:/Users/Thayn/OneDrive/Área de Trabalho/testes_ORZ",
+    "AutoDelete": true,
+    "AutoDeleteConfig": {
+        "Por Data de Criação": false,
+        "Por Data de Abertura": false,
+        "Por Data de Modificação": true,
+        "Dias para Auto Deletar": "15"
+    }
 }

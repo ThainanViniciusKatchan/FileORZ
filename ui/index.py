@@ -3,6 +3,7 @@ from customtkinter import filedialog
 import os
 import sys
 from config import open_config_window
+from Config_AutoDell import open_Windows_CFG_autoDell
 from header import header
 from Centralizar_Janela import Centralizar_Janela
 import ctypes
@@ -205,7 +206,7 @@ actions_frame.pack(fill="x", pady=(10, 0))
 # Botão de configurações (esquerda)
 btn_config = customtkinter.CTkButton(
     actions_frame, 
-    text="⚙️  Configurações",
+    text="⚙️  Configurar Organizador",
     command=lambda: open_config_window(root),
     fg_color=COLORS["button_secondary"],
     hover_color=COLORS["button_secondary_hover"],
@@ -213,9 +214,23 @@ btn_config = customtkinter.CTkButton(
     corner_radius=10, 
     font=customtkinter.CTkFont(family="Segoe UI", size=13, weight="bold"),
     width=160,
-    height=42
+    height=48
 )
 btn_config.pack(side="left")
+
+btn_config_autoDell = customtkinter.CTkButton(
+    actions_frame, 
+    text="⚙️  Configurar AutoDeletar",
+    command=lambda: open_Windows_CFG_autoDell(root),
+    fg_color=COLORS["button_secondary"],
+    hover_color=COLORS["button_secondary_hover"],
+    border_width=0, 
+    corner_radius=10, 
+    font=customtkinter.CTkFont(family="Segoe UI", size=13, weight="bold"),
+    width=160,
+    height=48
+)
+btn_config_autoDell.pack(side="left", padx=(29, 0))
 
 # Label de feedback
 feedback_label = None
