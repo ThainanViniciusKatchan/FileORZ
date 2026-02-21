@@ -5,6 +5,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from utils.model import json_path
+from utils.AutoDelete import AutoDelete
 
 CONFIG_PATH = json_path()
 
@@ -100,6 +101,7 @@ def organize_files():
 if __name__ == "__main__":
     while True:
         organize_files()
+        AutoDelete()
         
         # Ler o tempo de verificação a cada ciclo para permitir atualizações em tempo real
         try:

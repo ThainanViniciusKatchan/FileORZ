@@ -117,12 +117,12 @@
     },
     "timeverification": "5",
     "Startup": false,
-    "Folder": "C:/Users/Thayn/OneDrive/Área de Trabalho/testes_ORZ",
+    "Folder": "C:/Users/Thayn/Downloads",
     "AutoDelete": true,
     "AutoDeleteConfig": {
         "Por Data de Criação": false,
-        "Por Data de Abertura": false,
-        "Por Data de Modificação": true,
+        "Por Data de Abertura": true,
+        "Por Data de Modificação": false,
         "Dias para Auto Deletar": "15"
     }
 }
