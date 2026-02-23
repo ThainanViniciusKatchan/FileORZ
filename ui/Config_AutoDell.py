@@ -59,7 +59,7 @@ def Enable_Disable_AutoDelete(Windows_cfg_autoDell, ext_frame):
         if New_value:
             checkbox.configure(text="Auto Deletar Ativado")
             # Se ativou, mostra as opções
-            ext_frame.pack(fill="x", padx=85, pady=(20, 20))
+            ext_frame.pack(fill="x", padx=22, pady=(20, 20))
         else:
             checkbox.configure(text="Auto Deletar Desativado")
             # Se desativou, esconde as opções
@@ -147,8 +147,8 @@ def Select_Filter(Windows_cfg_autoDell, ext_frame):
                     hover_color=COLORS["checkbox_hover"],
                     border_color=COLORS["border"],
                     text_color=COLORS["text_primary"],
-                    width=120,
-                    height=20,
+                    width=100,
+                    height=24,
                     command=lambda f=Filter: save_filter_choice(f)
                 )
                 radio.grid(row=row, column=col, padx=10, pady=5, sticky="w")
@@ -168,7 +168,7 @@ def Select_Filter(Windows_cfg_autoDell, ext_frame):
             
     # Mostrar o frame de filtros apenas se o 'Ativa Auto Deletar' estiver True logo de início
     if config["AutoDelete"]:
-        ext_frame.pack(fill="x", padx=40, pady=(10, 20))
+        ext_frame.pack(fill="x", padx=22, pady=(10, 20))
 
 def save_time_verification(time):
     config["AutoDeleteConfig"]["Dias para Auto Deletar"] = time

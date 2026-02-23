@@ -33,16 +33,21 @@ COLORS = {
 ORZ = 'FLORZ'
 ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(ORZ)
 
-if getattr(sys, 'frozen', False):
-    application_path = os.path.dirname(sys.executable)
-    icon_path = os.path.join("ui", "icon", "IconApp.ico")
+if getattr(sys, "frozen", False):
+    base_path = getattr(sys, "_MEIPASS", os.path.dirname(sys.executable))
 else:
-    application_path = os.path.dirname(os.path.abspath(__file__))
-    icon_path = os.path.join("ui", "icon", "IconApp.ico")
+    base_path = os.path.dirname(os.path.abspath(__file__))
+
+icon_path = os.path.join(base_path, "icon", "IconApp.ico")
 
 root = customtkinter.CTk()
 root.title("File ORZ")
-root.iconbitmap(default=icon_path)
+
+if os.path.exists(icon_path):
+    root.iconbitmap(default=icon_path)
+else:
+    print(f"[AVISO] Ícone não encontrado em: {icon_path}")
+
 root.geometry("700x420")
 root.configure(fg_color=COLORS["bg_primary"])
 root.resizable(False, False)
@@ -304,3 +309,6 @@ footer.pack(side="bottom", pady=10)
 
 root.resizable(False, False)
 root.mainloop()
+
+if __name__ == "__main__":
+    start_organizer()

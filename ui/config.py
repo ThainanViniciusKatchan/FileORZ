@@ -88,9 +88,9 @@ def open_config_window(parent):
     scroll_frame.pack(pady=15, padx=15, fill="both", expand=True)
     
     for category, extensions in config.items():
-        if category == "Folder" or category == "AutoDelete":
-            continue 
-        
+        if category == "Folder" or category == "AutoDelete" or category == "AutoDeleteConfig":
+            continue
+
         if not isinstance(extensions, dict):
             continue
         
