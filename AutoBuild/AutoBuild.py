@@ -291,7 +291,14 @@ def Criar_Config_Padrao():
     },
     "timeverification": "5",
     "Startup": False,
-    "Folder": "pasta de organização"
+    "Folder": "pasta de organização",
+    "AutoDelete": False,
+    "AutoDeleteConfig": {
+        "Por Data de Criação": False,
+        "Por Data de Abertura": False,
+        "Por Data de Modificação": False,
+        "Dias para Auto Deletar": "15"
+    }
     }
     
     BUILD_DIR = os.path.join(BASE_DIR, OUTPUT_DIR, 'dist', 'config.json')
