@@ -44,7 +44,7 @@
 
 
     <div class="mb-8" style="text-align: center;">
-        <h1 style="font-size: 2rem; font-weight: bold;">Changelog v0.1.6</h1>
+        <h1 style="font-size: 2rem; font-weight: bold;">Changelog v1.0.0</h1>
         <hr style="margin: 1rem 0;">
         <p style="font-size: 0.8rem; opacity: 0.75;">Português-BR</p>
     </div>
@@ -53,18 +53,25 @@
         mudanças, melhorias e Bugs corrigidos</h3>
     <ul style="list-style-type: disc; padding-left: 1rem; margin-top: 1rem; margin-bottom: 2rem;"
         class="list-disc pl-5 space-y-2">
-        <li>Corrigido o bug de inicialização do aplicativo com o windows</li>
-        <li>Mudança no tempo de verificação do aplicativo de segundos para minutos</li>
+        <li>Melhoria de Desempenho, otimização de recursos e redução de consumo de memória e disco</li>
     </ul>
 
     <h3 id="bugs-conhecidos" style="font-size: 1.5rem; font-weight: bold; margin-top: 2rem; margin-bottom: 1rem;">Bugs
         conhecidos</h3>
     <ul style="list-style-type: disc; padding-left: 1rem; margin-top: 1rem; margin-bottom: 2rem;"
         class="list-disc pl-5 space-y-2">
-        <li>Ao iniciar o aplicativo ele pode fechar sozinho instantaneamente</li>
-        <li>Ao desativar a inicialização do aplicativo ele pode exibir uma mensagem de erro</li>
+        <li>Ao iniciar o aplicativo ele pode fechar sozinho instantaneamente: <strong>Corrigido</strong></li>
+        <li>Ao desativar a inicialização do aplicativo ele pode exibir uma mensagem de erro: <strong>Corrigido</strong></li>
         <li>Correção do bug onde o botão de inciar organização não funcionava quando a chave de
-            inicialização do aplicativo com o sistema estava ativada.</li>
+            inicialização do aplicativo com o sistema estava ativada.: <strong>Corrigido</strong></li>
+        <li>
+            Ao atualizar para uma nova versão ele não realiza a exclusão do script de versão anterior:
+            <strong>Ainda sem Correção</strong>
+        </li>
+        <li>
+            Arquivos .PDF muito grandes acima de 500MB travam o processo de organização pois constam como em uso:
+            <strong>Ainda sem Correção</strong>
+        </li>
     </ul>
 
     <h3 id="melhorias-futuras" class="text-2xl font-semibold mt-8 mb-4">Melhorias futuras</h3>
@@ -74,34 +81,15 @@
         <li>Adicionar a opção de personalizar os formatos que serão organizados (Adicionando os formatos necessários
             manualmente)</li>
         <li>Compilar o aplicativo para Linux</li>
+        <br>
+        <strong>Próxima Versão 1.1.0</strong>
+        <ul class="list-disc pl-5 space-y-2">
+            <li>Função de AutoDelete</li>
+            <li>Melhorias no Desempenho</li>
+            <li>Menor Consumo de memória</li>
+        </ul>
     </ul>
 
-    <div class="my-10 border-t border-gray-300 dark:border-gray-700"></div>
-
-    <div class="mb-8">
-        <p class="text-sm opacity-75" style="text-align: center;">Inglês-US</p>
-    </div>
-
-    <h3 id="changes-improvements-and-bug-fixes" class="text-2xl font-semibold mt-8 mb-4">Changes, improvements and Bug
-        fixes</h3>
-    <ul class="list-disc pl-5 space-y-2">
-        <li>Fixed application startup bug with Windows</li>
-        <li>Changed application check time from seconds to minutes</li>
-    </ul>
-
-    <h3 id="known-bugs" class="text-2xl font-semibold mt-8 mb-4">Known bugs</h3>
-    <ul class="list-disc pl-5 space-y-2">
-        <li>When starting the application it can close instantaneously</li>
-        <li>When disabling the application startup it can display an error message</li>
-    </ul>
-
-    <h3 id="future-improvements" class="text-2xl font-semibold mt-8 mb-4">Future improvements</h3>
-    <ul class="list-disc pl-5 space-y-2">
-        <li>Add the option to select multiple folders for organization</li>
-        <li>Add the option to customize the organization folder names</li>
-        <li>Add the option to customize the formats that will be organized (Adding the formats manually)</li>
-        <li>Compile the application for Linux</li>
-    </ul>
     <script src="assets/js/main.js"></script>
 </body>
 

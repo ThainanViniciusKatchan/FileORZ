@@ -1,0 +1,16 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# IDE
+.idea/
+
+# Private keys and secrets
+private_key.pem
+*.pem
+
+# OS
+.DS_Store
+Thumbs.db
