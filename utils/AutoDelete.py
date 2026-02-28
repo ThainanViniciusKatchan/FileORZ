@@ -4,6 +4,7 @@ import io
 from datetime import datetime
 import sys
 import os
+from send2trash import send2trash
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from utils.model import load_config
@@ -38,8 +39,10 @@ def AutoDelete():
                 if CONFIG_AUTO_DELETE == True:
                     if (datetime.now() - CreateDate).days > Dias_Config: 
                         if GetConfig()[0] == True:
-                            remove(entry.path)
-                            print(f"Arquivo {File_Name} excluído por data de criação")
+                            if CONFIG["Enviar Para Lixeira"] == True:
+                                send2trash(entry.path)
+                            elif CONFIG["Excluir permanentemente"] == True:
+                                remove(entry.path)
                         else:
                             print(f"Configuração de data de criação desativada")
                     else:
@@ -47,7 +50,10 @@ def AutoDelete():
 
                     if (datetime.now() - AccessDate).days > Dias_Config:
                         if GetConfig()[1] == True:
-                            remove(entry.path)
+                            if CONFIG["Enviar Para Lixeira"] == True:
+                                send2trash(entry.path)
+                            elif CONFIG["Excluir permanentemente"] == True:
+                                remove(entry.path)
                             print(f"Arquivo {File_Name} excluído por data de acesso")
                         else:
                             print(f"Nenhum arquivo está a mais de  {Dias_Config} dias para ser excluído\n Por data de acesso")
@@ -56,28 +62,33 @@ def AutoDelete():
 
                     if GetConfig()[2] == True:
                         if (datetime.now() - ModifyDate).days > Dias_Config:
-                            remove(entry.path)
+                            if CONFIG["Enviar Para Lixeira"] == True:
+                                send2trash(entry.path)
+                            elif CONFIG["Excluir permanentemente"] == True:
+                                remove(entry.path)
                             print(f"Arquivo {File_Name} excluído por data de modificação")
                         else:
                             print(f"Nenhum arquivo está a mais de  {Dias_Config} dias para ser excluído\n Por data de modificação")
                     else:
                         print("Configuração de data de modificação desativada")          
                 else:
-                    print("Configuração de auto-delete desativada")        
+                    print("Configuração de auto-delete desativada")
 
+    Ignore_Config = ['Folder', 'AutoDelete','AutoDeleteConfig','Startup','timeverification',
+                     'Enviar Para Lixeira', 'Excluir permanentemente']
     if CONFIG_AUTO_DELETE == True:
         for folder in CONFIG:
-            if folder == 'Folder' or folder == 'AutoDelete' or folder == 'AutoDeleteConfig' or folder == 'Startup' or folder == 'timeverification':
+            if folder in Ignore_Config:
                 continue
             else:
                 for subfolder in CONFIG[folder]:
                     subfolder = subfolder.upper().replace(".", "")
-                    Absolute_Path = CONFIG['Folder'] + "/" + folder + "/" + subfolder
-                    if path.exists(Absolute_Path):   
+                    Absolute_Path = CONFIG['Folder'] + "\\" + folder + "\\" + subfolder
+                    if path.exists(Absolute_Path):
                         scan_files(Absolute_Path)
                         print(f"A pasta {Absolute_Path} foi Encontrada")
                     else:
-                        print(f"Pasta {Absolute_Path} não encontrada ou não existe")    
+                        print(f"Pasta {Absolute_Path} não encontrada ou não existe")
     else:
         print("Configuração de auto-delete desativada")               
 

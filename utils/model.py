@@ -3,6 +3,7 @@ import json
 import sys
 import winreg
 import shutil
+from tkinter.messagebox import IGNORE
 
 # Local installation path
 INSTALL_DIR = os.path.join(os.getenv('LOCALAPPDATA'), 'FileORZ')
@@ -60,7 +61,7 @@ def save_config(config): # Function that saves the settings
         except Exception as e:
             print(f"Erro ao sincronizar config: {e}")
 
-# Load saved current folder on config.json
+# Recebe e enviar o valor de pasta atual de organização
 def get_current_folder():
     return load_config().get("Folder", "")
 
@@ -69,7 +70,7 @@ def set_current_folder(folder):
     config["Folder"] = folder
     save_config(config)
 
-# Load saved time verification on config.json
+# Recebe e enviar o valor de tempo de verificação
 def get_time_verification():
     return load_config().get("timeverification", "5")
 
@@ -78,8 +79,7 @@ def set_time_verification(time):
     config["timeverification"] = time
     save_config(config)
 
-
-# Function to enable the script to start with the windows
+# Recebe e enviar o valor de startup
 def set_startup(var):
     config = load_config()
     config["Startup"] = var
@@ -88,7 +88,7 @@ def set_startup(var):
 def get_startup():
     return load_config().get("Startup", False)
 
-# Control the windows registry for the script to start with the system
+# Controla se o script está sendo executado como .exe ou .py
 def get_app_path():
     """Returns the correct path of the executable or the python script."""
     if getattr(sys, 'frozen', False):
@@ -98,6 +98,7 @@ def get_app_path():
         # If running as .py script
         return os.path.abspath(__file__)
 
+# Cria a chave do script no registro do Windows
 def is_startup_enabled():
     """Checks if the program is already configured to start with the Windows."""
     try:
@@ -168,3 +169,56 @@ def toggle_startup(enable):
         winreg.CloseKey(key)
     except Exception as e:
         print(f"Erro ao alterar registro/arquivos: {e}")
+
+# Recebe e envia os dados de dias para auto deletar
+def get_days_to_delete():
+    config = load_config()
+    return config.get(config["AutoDeleteConfig"]["Dias para Auto Deletar"], 30)
+
+def set_days_to_delete(days):
+    config = load_config()
+    config["AutoDeleteConfig"]["Dias para Auto Deletar"] = days
+    save_config(config)
+
+# Recebe e envia os valores dos filtros para auto deletar
+def get_autodelete_filter():
+    config = load_config()
+    cfg = config.get("AutoDeleteConfig", {})
+
+    return {k for k, v in cfg.items() if k != "Dias para Auto Deletar"}
+
+def set_autodelete_filter(filter_name, value):
+    config = load_config()
+    if filter_name == "Dias para Auto Deletar":
+        config['AutoDeleteConfig'][filter_name] = get_days_to_delete()
+    ignore_filter = get_autodelete_filter()
+
+    for k in ignore_filter:
+        if k != filter_name:
+            config['AutoDeleteConfig'][k] = False
+        else:
+            config['AutoDeleteConfig'][k] = value
+
+    save_config(config)
+
+# Recebe e envia os valores do tipo de exclusão
+def get_type_of_delete():
+    config = load_config()
+
+    return {k for k, v in config.items() if k.startswith("Enviar Para Lixeira") or k.startswith("Excluir permanentemente")}
+
+def set_type_of_delete(filter_name, value):
+    config = load_config()
+
+    for C in config:
+        if C in get_type_of_delete():
+            if filter_name == C:
+                config[filter_name] = value
+            else:
+                config[C] = False
+            if filter_name == True and C == True:
+                raise ValueError("Ambos os filtros não podem ser ativados ao mesmo tempo")
+    save_config(config)
+
+if __name__ == "__main__":
+    ...

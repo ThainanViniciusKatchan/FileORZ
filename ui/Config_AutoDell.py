@@ -5,7 +5,7 @@ from Centralizar_Janela import Centralizar_Janela
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from utils.model import load_config, save_config
-
+from utils.model import set_days_to_delete, set_autodelete_filter
 row = 0
 col = 6
 
@@ -86,9 +86,12 @@ def Enable_Disable_AutoDelete(Windows_cfg_autoDell, ext_frame):
 
 def save_filter_choice(selected_filter):
     # Reseta todos para false primeiro e true apenas pro selecionado
-    for k in config["AutoDeleteConfig"].keys():
+    for k, v in config["AutoDeleteConfig"].items():
+        if k == "Dias para Auto Deletar":
+            pass
         config["AutoDeleteConfig"][k] = False
-    
+    if selected_filter == "Dias para Auto Deletar":
+        pass
     config["AutoDeleteConfig"][selected_filter] = True
     save_config(config)
 
@@ -135,7 +138,7 @@ def Select_Filter(Windows_cfg_autoDell, ext_frame):
             radio_var = customtkinter.StringVar(value=selected_option_str)
 
             for Filter, enabled in Filters.items():
-                if Filter == "TimeforDell":
+                if Filter == "Dias para Auto Deletar":
                     continue
                 radio = customtkinter.CTkRadioButton(
                     ext_frame,
@@ -149,7 +152,7 @@ def Select_Filter(Windows_cfg_autoDell, ext_frame):
                     text_color=COLORS["text_primary"],
                     width=100,
                     height=24,
-                    command=lambda f=Filter: save_filter_choice(f)
+                    command=lambda f=Filter: set_autodelete_filter(f, True)
                 )
                 radio.grid(row=row, column=col, padx=10, pady=5, sticky="w")
                 
@@ -171,8 +174,7 @@ def Select_Filter(Windows_cfg_autoDell, ext_frame):
         ext_frame.pack(fill="x", padx=22, pady=(10, 20))
 
 def save_time_verification(time):
-    config["AutoDeleteConfig"]["Dias para Auto Deletar"] = time
-    save_config(config)
+    set_days_to_delete(time)
 
 def Time_AutoDelete(Windows_cfg_autoDell, ext_frame):
     # Título da seção de Dias

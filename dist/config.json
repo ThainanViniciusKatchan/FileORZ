@@ -119,10 +119,12 @@
     "Startup": false,
     "Folder": "C:/Users/Thayn/Downloads",
     "AutoDelete": true,
+    "Enviar Para Lixeira": true,
+    "Excluir permanentemente": false,
     "AutoDeleteConfig": {
         "Por Data de Criação": false,
         "Por Data de Abertura": true,
         "Por Data de Modificação": false,
-        "Dias para Auto Deletar": "15"
+        "Dias para Auto Deletar": "30"
     }
 }
