@@ -13,13 +13,13 @@ def check_if_running(TaskName):
 
 def start_task():
     config = load_config()
-    Startup = config.get("Startup", False)
+    Startup = config["Startup"]
 
     STATUS = check_if_running("FileORZ.exe")
 
-    if STATUS == False and Startup == False:
+    if Startup == False:
        SCRIPT_DIR = os.path.join(os.getcwd(), "dist", "FileORZ.exe")
-    else:
+    elif Startup == True:
         SCRIPT_DIR = os.path.join(os.getenv('LOCALAPPDATA'), 'FileORZ', 'FileORZ.exe')
 
     if STATUS == False:

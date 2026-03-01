@@ -293,6 +293,8 @@ def Criar_Config_Padrao():
     "Startup": False,
     "Folder": "pasta de organização",
     "AutoDelete": False,
+    "Enviar Para Lixeira": False,
+    "Excluir permanentemente": False,
     "AutoDeleteConfig": {
         "Por Data de Criação": False,
         "Por Data de Abertura": False,

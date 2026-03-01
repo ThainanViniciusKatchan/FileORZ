@@ -4,7 +4,7 @@ import os
 import sys
 import changelog
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from utils.model import get_startup, set_startup, is_startup_enabled, toggle_startup as toggle_startup_registry
+from utils.model import get_startup, set_startup, is_startup_enabled, toggle_startup as toggle_startup_registry, load_config
 
 COLORS = {
     "header_gradient_start": "#667eea",
@@ -37,63 +37,6 @@ def changelog_button(parent):
     btn.bind("<Button-1>", lambda event: changelog.abrir_changelog())
     return btn
 
-def header(root):
-    header_frame = customtkinter.CTkFrame(
-        root, 
-        fg_color=COLORS["header_bg"], 
-        corner_radius=0, 
-        height=60
-    )
-    header_frame.pack(fill="x", side="top")
-    header_frame.pack_propagate(False) 
-    
-    inner_container = customtkinter.CTkFrame(header_frame, fg_color="transparent")
-    inner_container.pack(fill="both", expand=True, padx=20, pady=10)
-    
-    logo_frame = customtkinter.CTkFrame(inner_container, fg_color="transparent")
-    logo_frame.pack(side="left", anchor="center")
-    
-    icon_label = customtkinter.CTkLabel(
-        logo_frame,
-        text="🗂️",
-        font=customtkinter.CTkFont(size=24)
-    )
-    icon_label.pack(side="left", padx=(0, 8))
-    
-    # Nome da aplicação
-    title_label = customtkinter.CTkLabel(
-        logo_frame, 
-        text="FileORZ",
-        font=customtkinter.CTkFont(family="Segoe UI", size=22, weight="bold"),
-        text_color=COLORS["text_primary"]
-    )
-    title_label.pack(side="left")
-    
-    # Subtítulo
-    subtitle_label = customtkinter.CTkLabel(
-        logo_frame,
-        text="Organizador de Arquivos",
-        font=customtkinter.CTkFont(family="Segoe UI", size=10),
-        text_color="#A0A0A0"
-    )
-    subtitle_label.pack(side="left", padx=(10, 0))
-    
-    controls_frame = customtkinter.CTkFrame(inner_container, fg_color="transparent")
-    controls_frame.pack(side="right", anchor="center")
-    
-    startup_switch = startup_button(controls_frame)
-    startup_switch.pack(side="left", padx=(0, 15))
-    
-    # Botão GitHub
-    git = git_button(controls_frame)
-    git.pack(side="left")
-
-    # Botão Changelog
-    changelog = changelog_button(controls_frame)
-    changelog.pack(side="left", padx=(15, 0))
-    
-    return header_frame
-
 def git_button(parent):
     btn = customtkinter.CTkButton(
         parent, 
@@ -113,16 +56,17 @@ def git_button(parent):
 
 def startup_button(parent):
     startup_var = customtkinter.BooleanVar(value=get_startup())
+    config = load_config()
 
-    def on_toggle():
-        is_enabled = startup_var.get()
-        set_startup(is_enabled)
-        toggle_startup_registry(is_enabled)
+    def toggle_startup():
+        new_value = startup_var.get()
+        set_startup(new_value)
+        toggle_startup_registry(new_value)
 
     startup_switch = customtkinter.CTkSwitch(
-        parent, 
+        parent,
         text="Iniciar com Windows",
-        command=on_toggle,
+        command= toggle_startup,
         variable=startup_var,
         font=customtkinter.CTkFont(family="Segoe UI", size=11),
         text_color=COLORS["text_primary"],
@@ -131,5 +75,69 @@ def startup_button(parent):
         button_color=COLORS["text_primary"],
         button_hover_color="#E0E0E0"
     )
+    startup_switch.pack(side="left", padx=(0, 28))
 
-    return startup_switch
+def header(root):
+    header_frame = customtkinter.CTkFrame(
+        root,
+        fg_color=COLORS["header_bg"],
+        corner_radius=0,
+        height=60
+    )
+    header_frame.pack(fill="x", side="top")
+    header_frame.pack_propagate(False)
+
+    inner_container = customtkinter.CTkFrame(header_frame, fg_color="transparent")
+    inner_container.pack(fill="both", expand=True, padx=20, pady=10)
+
+    logo_frame = customtkinter.CTkFrame(inner_container, fg_color="transparent")
+    logo_frame.pack(side="left", anchor="center")
+
+    icon_label = customtkinter.CTkLabel(
+        logo_frame,
+        text="🗂️",
+        font=customtkinter.CTkFont(size=24)
+    )
+    icon_label.pack(side="left", padx=(0, 5))
+
+    # Nome da aplicação
+    title_label = customtkinter.CTkLabel(
+        logo_frame,
+        text="FileORZ",
+        font=customtkinter.CTkFont(family="Segoe UI", size=22, weight="bold"),
+        text_color=COLORS["text_primary"]
+    )
+    title_label.pack(side="left")
+
+    # Subtítulo
+    subtitle_label = customtkinter.CTkLabel(
+        logo_frame,
+        text="Organizador de Arquivos",
+        font=customtkinter.CTkFont(family="Segoe UI", size=10),
+        text_color="#A0A0A0"
+    )
+    subtitle_label.pack(side="left", padx=(10, 0))
+
+    controls_frame = customtkinter.CTkFrame(inner_container, fg_color="transparent")
+    controls_frame.pack(side="right", anchor="center")
+
+    startup_button(controls_frame)
+
+    # Botão GitHub
+    git = git_button(controls_frame)
+    git.pack(side="left")
+
+    # Botão Changelog
+    changelog = changelog_button(controls_frame)
+    changelog.pack(side="left", padx=(15, 0))
+
+    return header_frame
+
+
+if __name__ == "__main__":
+    root = customtkinter.CTk()
+    root.geometry("700x50")
+    root.title("FileORZ")
+    root.configure(bg=COLORS["header_bg"])
+    header(root)
+    root.mainloop()

@@ -221,4 +221,4 @@ def set_type_of_delete(filter_name, value):
     save_config(config)
 
 if __name__ == "__main__":
-    ...
+    print(is_startup_enabled())
