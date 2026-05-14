@@ -1,5 +1,8 @@
 .gitignore
 .venv
+.Venv
+ISCC.exe
+FileORZ_Install.exe
 __pycache__
 build_ui
 build
