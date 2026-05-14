@@ -1,6 +1,6 @@
-import ui.index
+from ui.index import on_app
 
 
 if __name__ == "__main__":
-    ui.index
+    on_app()
 
