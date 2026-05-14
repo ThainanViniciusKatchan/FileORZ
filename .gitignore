@@ -1,8 +1,11 @@
 .gitignore
 .venv
 .Venv
-ISCC.exe
+./ISCC.exe
+./FileORZ_Install.exe
 FileORZ_Install.exe
+ISCC.exe
+./Setup.iss
 __pycache__
 build_ui
 build
