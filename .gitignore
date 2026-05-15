@@ -1,5 +1,11 @@
 .gitignore
 .venv
+.Venv
+./ISCC.exe
+./FileORZ_Install.exe
+FileORZ_Install.exe
+ISCC.exe
+./Setup.iss
 __pycache__
 build_ui
 build
@@ -16,6 +22,8 @@ utils/watchdo_file.py
 key_base64.txt
 ui/LiveReload.py
 .idea
+*.iss
+Setup.iss
 <<<<<<< HEAD
 .github
 ./AdvancedAlg/Key_Words.json
