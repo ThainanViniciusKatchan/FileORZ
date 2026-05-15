@@ -351,36 +351,88 @@ def assinar_binarios():
     else:
         print("  [AVISO] Executável não encontrado para assinatura")
 
+def setup_compiler(v):
+    try:
+        comando = [
+            r"C:\Program Files (x86)\Inno Setup 6\ISCC.exe",
+            rf"/dMyAppVersion={v}",
+            r"..\Setup.iss"
+        ]
+        subprocess.run(comando, check=True)
+        print("  [OK] Setup criado com sucesso")
+    except subprocess.CalledProcessError as Error:
+        print(f"Erro ao Cria o Setup: {Error}")
+
+def git_comands(v):
+    try:
+        comandos = [
+            ["git", "tag", "-a", f"v{v}", "-m", f"versão {v}"],
+            ["git", "push", "testeAction", f"v{v}"],
+            ["gh", "release", "create", f"v{v}", r"..\FileORZ_install.exe",
+             "--title", f"Versão {v}", "--notes", f"Lançamento da versão {v}"]
+        ]
+        for cmd in comandos:
+            subprocess.run(cmd, check=True)
+        print("Git tag e Release criadas com sucesso!")
+    except subprocess.CalledProcessError as Error:
+        print(f"Erro ao Cria a tag ou release: {Error}")
+
 if __name__ == "__main__":
-    print("\n" + "=" * 50)
-    print("INICIANDO BUILD: FileORZ")
-    print("=" * 50)
-    sleep(1)
-
-    ETAPAS = [
-        ("Matar processos existentes", matar_processos),
-        ("Limpar builds anteriores", limpar_builds_anteriores),
-        ("Criar pasta de build", criar_pasta_build),
-        ("Compilar UI", compilar_ui),
-        ("Compilar Organizador", compilar_organizador),
-        ("Reorganizar estrutura", reorganizar_estrutura),
-        ("Criar Key_Words padrão", criar_keywords_padrao),
-        ("Criar config padrão", criar_config_padrao),
-        ("Ajustar configurações", alterar_config_build),
-        ("Limpar arquivos temporários", limpar_temporarios),
-        ("Assinar binários", assinar_binarios)
-    ]
-
-    for nome, func in ETAPAS:
-        print(f"\n>>> {nome}")
-        try:
-            func()
-            print(f"--- {nome} concluído ---")
-        except Exception as e:
-            print(f"🛑 ERRO FATAL em {nome}: {e}")
-            sys.exit(1)
-        sleep(1)
-
-    print("\n" + "=" * 50)
-    print("✅ COMPILAÇÃO CONCLUÍDA COM SUCESSO!")
-    print("=" * 50)
+    # type_version = input("Qual o tipo de versão: \n"
+    #       "[0] Teste \n"
+    #       "[1] major \n"
+    #       "[2] minor \n"
+    #       "[3] Patch:\n")
+    # if type == 0:
+    #     pass
+    # print("\n" + "=" * 50)
+    # print("INICIANDO BUILD: FileORZ")
+    # print("=" * 50)
+    # sleep(1)
+    #
+    # ETAPAS = [
+    #     ("Matar processos existentes", matar_processos),
+    #     ("Limpar builds anteriores", limpar_builds_anteriores),
+    #     ("Criar pasta de build", criar_pasta_build),
+    #     ("Compilar UI", compilar_ui),
+    #     ("Compilar Organizador", compilar_organizador),
+    #     ("Reorganizar estrutura", reorganizar_estrutura),
+    #     ("Criar Key_Words padrão", criar_keywords_padrao),
+    #     ("Criar config padrão", criar_config_padrao),
+    #     ("Ajustar configurações", alterar_config_build),
+    #     ("Limpar arquivos temporários", limpar_temporarios),
+    #     ("Assinar binários", assinar_binarios),
+    #     ("Criando o Setup de Instação", setup_compiler),
+    #     ("Criando a tag e release no GitHub", git_comands)]
+    #
+    # from utils import version
+    # vertion = version.__version__
+    # for nome, func in ETAPAS:
+    #     print(f"\n>>> {nome}")
+    #     try:
+    #         if nome == "Criando a tag e release no GitHub" or nome == "Criando o Setup de Instação":
+    #             if type_version == 1:
+    #                 vertion[0] += vertion[0]
+    #                 func(vertion)
+    #                 vertion = 0
+    #             elif type_version == 2:
+    #                 vertion[2] += vertion[2]
+    #                 func(vertion)
+    #                 vertion = 0
+    #             elif type_version == 3:
+    #                 vertion[4] += vertion[4]
+    #                 func(vertion)
+    #                 vertion = 0
+    #         else:
+    #             func()
+    #         print(f"--- {nome} concluído ---")
+    #     except Exception as e:
+    #         print(f"🛑 ERRO FATAL em {nome}: {e}")
+    #         sys.exit(1)
+    #     sleep(1)
+    #
+    # print("\n" + "=" * 50)
+    # print("✅ COMPILAÇÃO CONCLUÍDA COM SUCESSO!")
+    # print("=" * 50)
+    git_comands(v="1.4.4")
+    # TODO -> Descobrir por que o erro de arquivo grande de mais para enviar mesmo usando o lfs

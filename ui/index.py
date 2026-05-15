@@ -104,8 +104,15 @@ footer = customtkinter.CTkLabel(
 )
 footer.pack(side="bottom", pady=10)
 
-root.resizable(False, False)
-root.mainloop()
+def on_app(): # Mantém a app rodando enquanto a janela estiver aberta
+    root.resizable(False, False)
+    root.mainloop()
+
+def close_app(): # Fecha o app quando clicar no X
+    root.destroy()
+    sys.exit()
+
+root.protocol("WM_DELETE_WINDOW", close_app)
 
 if __name__ == "__main__":
-    pass
+    on_app()
