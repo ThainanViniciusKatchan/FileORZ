@@ -377,6 +377,10 @@ def git_comands(v):
     except subprocess.CalledProcessError as Error:
         print(f"Erro ao Cria a tag ou release: {Error}")
 
+def gravar_nova_versao(v):
+    with open(os.path.join(os.getcwd(), "utils", "version.py"), "w") as file:
+        file.write(f'__version__ = "{v}"')
+
 if __name__ == "__main__":
     # type_version = input("Qual o tipo de versão: \n"
     #       "[0] Teste \n"
@@ -407,22 +411,31 @@ if __name__ == "__main__":
     #
     # from utils import version
     # vertion = version.__version__
+    # major = int(vertion[0])
+    # minor = int(vertion[2])
+    # patch = int(vertion[4])
     # for nome, func in ETAPAS:
     #     print(f"\n>>> {nome}")
     #     try:
     #         if nome == "Criando a tag e release no GitHub" or nome == "Criando o Setup de Instação":
     #             if type_version == 1:
-    #                 vertion[0] += vertion[0]
-    #                 func(vertion)
-    #                 vertion = 0
+    #                 major += 1
+    #                 new_vertion = f"{major}.{minor}.{patch}"
+    #                 func(new_vertion)
+    #                 vertion = new_vertion
+    #                 gravar_nova_versao(vertion)
     #             elif type_version == 2:
-    #                 vertion[2] += vertion[2]
-    #                 func(vertion)
-    #                 vertion = 0
+    #                 minor += 1
+    #                 new_vertion = f"{major}.{minor}.{patch}"
+    #                 func(new_vertion)
+    #                 vertion = new_vertion
+    #                 gravar_nova_versao(vertion)
     #             elif type_version == 3:
-    #                 vertion[4] += vertion[4]
-    #                 func(vertion)
-    #                 vertion = 0
+    #                 patch += 1
+    #                 new_vertion = f"{major}.{minor}.{patch}"
+    #                 func(new_vertion)
+    #                 vertion = new_vertion
+    #                 gravar_nova_versao(vertion)
     #         else:
     #             func()
     #         print(f"--- {nome} concluído ---")
@@ -435,4 +448,3 @@ if __name__ == "__main__":
     # print("✅ COMPILAÇÃO CONCLUÍDA COM SUCESSO!")
     # print("=" * 50)
     git_comands(v="1.4.4")
-    # TODO -> Descobrir por que o erro de arquivo grande de mais para enviar mesmo usando o lfs
