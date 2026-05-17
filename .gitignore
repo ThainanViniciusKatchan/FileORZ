@@ -18,6 +18,8 @@ tests
 nuitka-crash-report.xml
 FileORZ.zip
 *.pem
+public_key.pem
+private_key.pem
 utils/watchdo_file.py
 key_base64.txt
 ui/LiveReload.py
