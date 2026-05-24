@@ -6,7 +6,7 @@ from os import path
 # 1. Cria a caixa de correio
 fila_comandos = queue.Queue()
 
-image_icon = Image.open(path.join(path.dirname("__file__"), "icon", "IconApp.ico"))
+image_icon = Image.open(path.join(path.dirname("__file__"), "ui", "icon", "IconApp.ico"))
 
 # 2. As funções APENAS botam a mensagem na fila, NÃO abrem janelas!
 def open_condfig(icon, item):

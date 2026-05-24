@@ -104,12 +104,6 @@ footer = customtkinter.CTkLabel(
 )
 footer.pack(side="bottom", pady=10)
 
-def close_process(): # Fecha o app quando clicar no X
-    try:
-        subprocess.run(['taskkill', '/f', '/im', "FL_ORZ.exe"], capture_output=True)
-    except Exception as Error:
-        print(f"Aviso - Erro ao matar o processo FL_ORZ: {Error}")
-
 def restore_windows():
     root.after(0, root.deiconify)
 
@@ -117,12 +111,20 @@ def on_app():
     root.mainloop()
     root.deiconify()
     root.lift()
+    root.attributes('-topmost', True)
+
+def close_process(): # Fecha o app quando clicar no X
+    try:
+        meu_icone.stop()
+        root.destroy()
+        subprocess.run(['taskkill', '/f', '/im', "FL_ORZ.exe"], capture_output=True)
+    except Exception as Error:
+        print(f"Aviso - Erro ao matar o processo FL_ORZ: {Error}")
 
 def close_app():
     root.withdraw()
 
 root.protocol("WM_DELETE_WINDOW", close_app)
-
 # Icone no SysTray do Windows
 from utils.system_tray import fila_comandos, meu_icone, image_icon
 import queue
@@ -137,9 +139,7 @@ def verificar_fila():
         if comando == "abrir_Index":
             restore_windows()
         elif comando == "fechar_app":
-            meu_icone.stop()
-            root.destroy()
-            subprocess.run(['taskkill', '/f', '/im', "FL_ORZ.exe"], capture_output=True)
+            close_process()
 
     except queue.Empty:
         pass
@@ -151,7 +151,6 @@ def verificar_fila():
 if root.winfo_exists():
     verificar_fila()
     meu_icone.run_detached()
-
 
 if __name__ == "__main__":
     on_app()
