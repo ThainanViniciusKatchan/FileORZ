@@ -75,7 +75,6 @@ def load_extensions():
         print(f"Erro ao carregar extensões: {e}")
         return {}
 
-
 # pasta para organizar e extenssão de arquivos
 def organize_files():
     global f, data

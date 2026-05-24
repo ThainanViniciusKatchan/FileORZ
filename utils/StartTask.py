@@ -4,7 +4,7 @@ import psutil
 import customtkinter
 from tkinter import messagebox
 from utils import StartUp
-
+import subprocess
 
 def check_if_running(taskname):
     for proc in psutil.process_iter(['name']):
@@ -17,26 +17,32 @@ def start_task():
 
     STATUS = check_if_running("FileORZ.exe")
 
-    if not Startup:
-       SCRIPT_DIR = os.path.join(os.getcwd(), "dist", "FileORZ.exe")
-    elif Startup:
-        SCRIPT_DIR = os.path.join(str(os.getenv('LOCALAPPDATA')), 'FileORZ', 'dist', 'FileORZ.exe')
+    SCRIPT_DIR = os.path.join(os.getcwd(), "dist", "FileORZ.exe")
 
-    if not STATUS:
-        if os.path.exists(SCRIPT_DIR):
-            ctypes.windll.shell32.ShellExecuteW(
-                None,
-                'open',
-                SCRIPT_DIR,
-            None,
-            None,
-            1
-            )
-            return True
-        return None
+    if Startup:
+        if not STATUS:
+            if os.path.exists(SCRIPT_DIR):
+                try:
+                    subprocess.Popen([SCRIPT_DIR])
+                except Exception as Error:
+                    print(f"Erro ao iniciar o FileORZ.exe: {Error}")
+                return True
+            return None
+        else:
+            messagebox.showinfo("Erro", "FileORZ.exe ja esta em execução")
+            return False
     else:
-        messagebox.showinfo("Erro", "FileORZ.exe ja esta em execução")
-        return False
+        import FileORZ
+        try:
+            FileORZ.organize_files()
+        except Exception as Error:
+            print(f"Erro ao iniciar o FileORZ.py: {Error}")
+        return None
+
+def close_task():
+    STATUS = check_if_running("FL_ORZ.exe")
+    if STATUS:
+        subprocess.run(['taskkill', '/f', '/im', "FileORZ.exe"], check=True)
 
 # Iniciar a organização
 def start_organizer(main_container, root, folder , feedback_label):

@@ -20,6 +20,7 @@
 import customtkinter
 import os
 import sys
+import subprocess
 
 from ui.header import header
 from ui.Centralizar_Janela import Centralizar_Janela
@@ -74,7 +75,6 @@ else:
 root.geometry("700x420")
 root.configure(fg_color=COLORS["bg_primary"])
 root.resizable(False, False)
-
 # Header
 header(root)
 # Centralize window
@@ -104,15 +104,54 @@ footer = customtkinter.CTkLabel(
 )
 footer.pack(side="bottom", pady=10)
 
-def on_app(): # Mantém a app rodando enquanto a janela estiver aberta
-    root.resizable(False, False)
-    root.mainloop()
+def close_process(): # Fecha o app quando clicar no X
+    try:
+        subprocess.run(['taskkill', '/f', '/im', "FL_ORZ.exe"], capture_output=True)
+    except Exception as Error:
+        print(f"Aviso - Erro ao matar o processo FL_ORZ: {Error}")
 
-def close_app(): # Fecha o app quando clicar no X
-    root.destroy()
-    sys.exit()
+def restore_windows():
+    root.after(0, root.deiconify)
+
+def on_app():
+    root.mainloop()
+    root.deiconify()
+    root.lift()
+
+def close_app():
+    root.withdraw()
 
 root.protocol("WM_DELETE_WINDOW", close_app)
+
+# Icone no SysTray do Windows
+from utils.system_tray import fila_comandos, meu_icone, image_icon
+import queue
+from ui.index import actions_frame
+
+def verificar_fila():
+    try:
+        # Pega a mensagem da fila
+        comando = fila_comandos.get_nowait()
+
+        # Abre a janela de acordo com a mensagem, na thread certa!
+        if comando == "abrir_Index":
+            restore_windows()
+        elif comando == "fechar_app":
+            meu_icone.stop()
+            root.destroy()
+            subprocess.run(['taskkill', '/f', '/im', "FL_ORZ.exe"], capture_output=True)
+
+    except queue.Empty:
+        pass
+
+    # Manda checar de novo daqui a 100 milissegundos
+    actions_frame.after(100, verificar_fila)
+
+# Dá o pontapé inicial na checagem antes de abrir o app
+if root.winfo_exists():
+    verificar_fila()
+    meu_icone.run_detached()
+
 
 if __name__ == "__main__":
     on_app()
