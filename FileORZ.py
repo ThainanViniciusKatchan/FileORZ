@@ -22,6 +22,7 @@ import time
 import json
 import sys
 from utils import AdvancedConfig
+from utils import delete
 
 # Adiciona o diretório raiz ao path para importações
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -35,6 +36,7 @@ from AdvancedAlg import Alg
 
 CONFIG_PATH = json_path("dist", "config")
 WORKS_PATH = json_path("dist", "Key_Words")
+
 
 # Carregar as extensões do arquivo config.json
 def load_extensions():
@@ -75,6 +77,7 @@ def load_extensions():
         print(f"Erro ao carregar extensões: {e}")
         return {}
 
+
 # pasta para organizar e extenssão de arquivos
 def organize_files():
     global f, data
@@ -97,6 +100,14 @@ def organize_files():
     if not (os.access(original_path, os.R_OK) and os.access(original_path, os.W_OK)):
         print(f"Sem permissão de leitura/escrita em: {original_path}")
         return
+
+    autodelete = delete.AutoDelete().GetAutoDelete
+
+    if autodelete == True:
+        AutoDelete()
+    else:
+        print("[INFO] AutoDelete desabilitado.")
+        pass
 
     # 1. Executa organização avançada primeiro (se habilitada)
     if AdvancedConfig().get_enabled():
@@ -159,7 +170,6 @@ if __name__ == "__main__":
     print("Iniciando FileORZ Organizer...")
     while True:
         organize_files()
-        AutoDelete()
 
         # Ler o tempo de verificação a cada ciclo para permitir atualizações em tempo real
         try:

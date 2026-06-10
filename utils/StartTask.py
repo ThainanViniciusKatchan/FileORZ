@@ -1,10 +1,6 @@
-from tkinter import messagebox
 import os
-import ctypes
 import psutil
 import customtkinter
-from tkinter import messagebox
-from utils import StartUp
 from FileORZ import *
 import subprocess
 
@@ -19,10 +15,12 @@ def check_if_running(taskname):
 def start_task():
     try:
         organize_files()
+        rtn = True
     except Exception as Error:
         print(f"Erro ao iniciar o Organizador: {Error}")
-        return False
-    return True
+        rtn = False
+
+    return rtn
 
 
 def close_task():
@@ -52,7 +50,7 @@ def start_organizer(main_container, root, folder, feedback_label):
         )
         return
     else:
-        if start_task():
+        if start_task() is True:
             feedback_label = customtkinter.CTkLabel(
                 main_container,
                 text="Organização concluída com sucesso!",
@@ -80,5 +78,3 @@ def start_organizer(main_container, root, folder, feedback_label):
                     feedback_label.destroy() if feedback_label.winfo_exists() else None
                 ),
             )
-
-    # verifica se o processo do organizador já está funcionando
