@@ -1,8 +1,12 @@
 import os
 import psutil
 import customtkinter
-from FileORZ import *
 import subprocess
+import sys
+
+SCRIPT_DIR = os.path.dirname(os.path.realpath(__file__))
+sys.path.append(os.path.dirname(SCRIPT_DIR))
+from FileORZ import organize_files
 
 
 def check_if_running(taskname):
@@ -13,8 +17,28 @@ def check_if_running(taskname):
 
 
 def start_task():
+    from time import sleep
+    import json
+    from utils.model import json_path
+
+    CONFIG_PATH = json_path("dist", "config")
     try:
-        organize_files()
+        print("Iniciando FileORZ Organizer...")
+        while True:
+            organize_files()
+
+            # Ler o tempo de verificação a cada ciclo para permitir atualizações em tempo real
+            try:
+                with open(CONFIG_PATH, "r", encoding="utf-8") as f:
+                    data = json.load(f)
+                time_verification = float(data.get("timeverification", 5))
+            except (FileNotFoundError, json.JSONDecodeError, ValueError):
+                time_verification = 5
+
+            print(
+                f"\nAguardando {time_verification} minutos para a próxima verificação..."
+            )
+            sleep(time_verification * 60)
         rtn = True
     except Exception as Error:
         print(f"Erro ao iniciar o Organizador: {Error}")
