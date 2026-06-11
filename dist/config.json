@@ -122,14 +122,14 @@
     },
     "timeverification": "5",
     "Startup": false,
-    "Folder": "pasta de organização",
-    "AutoDelete": false,
-    "Enviar Para Lixeira": false,
+    "Folder": "C:\\Users\\Thainan\\Desktop\\Teste ORZ",
+    "AutoDelete": true,
+    "Enviar Para Lixeira": true,
     "Excluir permanentemente": false,
     "AdvancedOrganize": false,
     "AutoDeleteConfig": {
         "Por Data de Criação": false,
-        "Por Data de Modificação": false,
+        "Por Data de Modificação": true,
         "Dias para Auto Deletar": "15"
     }
 }

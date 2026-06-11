@@ -20,25 +20,22 @@ def start_task():
     from time import sleep
     import json
     from utils.model import json_path
+    import threading
 
     CONFIG_PATH = json_path("dist", "config")
     try:
         print("Iniciando FileORZ Organizer...")
-        while True:
-            organize_files()
+        organize_files()
 
-            # Ler o tempo de verificação a cada ciclo para permitir atualizações em tempo real
-            try:
-                with open(CONFIG_PATH, "r", encoding="utf-8") as f:
-                    data = json.load(f)
+        # Ler o tempo de verificação a cada ciclo para permitir atualizações em tempo real
+        try:
+            with open(CONFIG_PATH, "r", encoding="utf-8") as f:
+                data = json.load(f)
                 time_verification = float(data.get("timeverification", 5))
-            except (FileNotFoundError, json.JSONDecodeError, ValueError):
-                time_verification = 5
-
-            print(
-                f"\nAguardando {time_verification} minutos para a próxima verificação..."
-            )
-            sleep(time_verification * 60)
+                time_verification = time_verification * 60
+        except (FileNotFoundError, json.JSONDecodeError, ValueError):
+            time_verification = 5
+        threading.Thread(target=lambda: sleep(time_verification), daemon=True).start()
         rtn = True
     except Exception as Error:
         print(f"Erro ao iniciar o Organizador: {Error}")
