@@ -12,6 +12,7 @@ build
 FileORZ-UI.spec
 FileORZ.spec
 Vemv
+dist
 FileORZ
 .venv12
 tests
