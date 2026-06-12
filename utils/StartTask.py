@@ -17,7 +17,6 @@ def check_if_running(taskname):
 
 
 def start_task():
-    from time import sleep
     import json
     from utils.model import json_path
     import threading
@@ -26,16 +25,18 @@ def start_task():
     try:
         print("Iniciando FileORZ Organizer...")
         organize_files()
-
-        # Ler o tempo de verificação a cada ciclo para permitir atualizações em tempo real
+        
         try:
             with open(CONFIG_PATH, "r", encoding="utf-8") as f:
                 data = json.load(f)
                 time_verification = float(data.get("timeverification", 5))
                 time_verification = time_verification * 60
-        except (FileNotFoundError, json.JSONDecodeError, ValueError):
-            time_verification = 5
-        threading.Thread(target=lambda: sleep(time_verification), daemon=True).start()
+        except Exception as Error:
+            print("Erro ao obter o tempo de verificação: ", Error)
+            time_verification = float(data.get("timeverification", 5))
+
+        threading.Timer(time_verification, start_task).start()
+        
         rtn = True
     except Exception as Error:
         print(f"Erro ao iniciar o Organizador: {Error}")
@@ -99,3 +100,7 @@ def start_organizer(main_container, root, folder, feedback_label):
                     feedback_label.destroy() if feedback_label.winfo_exists() else None
                 ),
             )
+
+
+if __name__ == "__main__":
+    start_task()
