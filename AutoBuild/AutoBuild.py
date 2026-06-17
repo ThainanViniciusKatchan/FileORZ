@@ -509,17 +509,20 @@ def setup_compiler(v):
         print(f"Erro ao Cria o Setup: {Error}")
 
 
+from pathlib import Path
+
+
 def git_comands(v):
     try:
         comandos = [
             ["git", "tag", "-a", f"v{v}", "-m", f"versão {v}"],
-            ["git", "push", "testeAction", f"v{v}"],
+            ["git", "push", "origin", f"v{v}"],
             [
                 "gh",
                 "release",
                 "create",
                 f"v{v}",
-                r"..\FileORZ_install.exe",
+                Path.home() / "Desktop" / "FileORZ_install.exe",
                 "--title",
                 f"Versão {v}",
                 "--notes",
@@ -580,32 +583,37 @@ if __name__ == "__main__":
     minor = int(vertion[2])
     patch = int(vertion[4])
     for nome, func in ETAPAS:
-        print(f"\n>>> {nome}")
-        if type_version == 0 and nome == "Criando o Setup de Instação":
+        if type_version == 0 or nome == "Criando o Setup de Instação":
             func(version.__version__)
             continue
+        print(f"\n>>> {nome}")
         try:
             if nome == "Criando a tag e release no GitHub":
                 if type_version == 1:
+                    print(f"Versão Atual: {vertion}")
                     major += 1
                     new_vertion = f"{major}.{minor}.{patch}"
                     func(new_vertion)
                     vertion = new_vertion
                     gravar_nova_versao(vertion)
+                    print(f"Versão Nova: {new_vertion}")
                 elif type_version == 2:
                     minor += 1
                     new_vertion = f"{major}.{minor}.{patch}"
                     func(new_vertion)
                     vertion = new_vertion
+                    print(f"Versão Nova: {new_vertion}")
                     gravar_nova_versao(vertion)
                 elif type_version == 3:
                     patch += 1
                     new_vertion = f"{major}.{minor}.{patch}"
                     func(new_vertion)
                     vertion = new_vertion
+                    print(f"Versão Nova: {new_vertion}")
                     gravar_nova_versao(vertion)
             else:
                 func()
+                continue
             print(f"--- {nome} concluído ---")
         except Exception as e:
             print(f"🛑 ERRO FATAL em {nome}: {e}")
