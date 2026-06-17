@@ -29,6 +29,7 @@ ui/LiveReload.py
 *.iss
 Setup.iss
 .vscode
+debug_app.py
 <<<<<<< HEAD
 .github
 ./AdvancedAlg/Key_Words.json

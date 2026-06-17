@@ -19,14 +19,12 @@ along with FileORZ.  If not, see <https://www.gnu.org/licenses/
 
 import customtkinter
 from ui.config import open_config_window
-from ui.Config_AutoDell import open_Windows_CFG_autoDell
 
 
 def config_btn(COLORS, actions_frame, root):
-    # Botão de configurações (esquerda)
     btn_config = customtkinter.CTkButton(
         actions_frame,
-        text="⚙️  Configurar Organizador",
+        text="⚙️  Configurações",
         command=lambda: open_config_window(root),
         fg_color=COLORS["button_secondary"],
         hover_color=COLORS["button_secondary_hover"],
@@ -37,20 +35,6 @@ def config_btn(COLORS, actions_frame, root):
         height=48,
     )
     btn_config.pack(side="left")
-
-    btn_config_autoDell = customtkinter.CTkButton(
-        actions_frame,
-        text="⚙️  Configurar AutoDeletar",
-        command=lambda: open_Windows_CFG_autoDell(root),
-        fg_color=COLORS["button_secondary"],
-        hover_color=COLORS["button_secondary_hover"],
-        border_width=0,
-        corner_radius=10,
-        font=customtkinter.CTkFont(family="Segoe UI", size=13, weight="bold"),
-        width=160,
-        height=48,
-    )
-    btn_config_autoDell.pack(side="left", padx=(29, 0))
 
 
 from utils import folder

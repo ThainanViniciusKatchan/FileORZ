@@ -1,20 +1,20 @@
 """
-    Copyright (C) 2026 Thainan Vinicius Katchan
+Copyright (C) 2026 Thainan Vinicius Katchan
 
-    This file is part of FileORZ.
+This file is part of FileORZ.
 
-    FileORZ is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+FileORZ is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
 
-    FileORZ is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+FileORZ is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with FileORZ.  If not, see <https://www.gnu.org/licenses/
+You should have received a copy of the GNU General Public License
+along with FileORZ.  If not, see <https://www.gnu.org/licenses/
 """
 
 import customtkinter
@@ -25,6 +25,7 @@ from utils import delete, timeVerification
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from utils.model import load_config, save_config
+
 row = 0
 col = 6
 
@@ -50,6 +51,7 @@ COLORS = {
     "dropdown_bg": "#1A1A2E",
 }
 
+
 def Header_Title(Windows_cfg_autoDell):
     # Título
     Title = customtkinter.CTkLabel(
@@ -58,14 +60,15 @@ def Header_Title(Windows_cfg_autoDell):
         font=customtkinter.CTkFont(family="Consolas", size=20, weight="bold"),
         text_color=COLORS["text_primary"],
         anchor="center",
-        justify="center"
+        justify="center",
     )
     Title.pack(side="top", fill="x", padx=10, pady=(10, 5))
+
 
 def Enable_Disable_AutoDelete(Windows_cfg_autoDell, ext_frame):
     # Cria a variável booleana associada ao estado da configuração
     value_var = customtkinter.BooleanVar(value=config["AutoDelete"])
-    
+
     def on_checkbox_toggle():
         # Quando o usuário clicar, pega o novo valor da variável e salva
         new_value = value_var.get()
@@ -82,23 +85,26 @@ def Enable_Disable_AutoDelete(Windows_cfg_autoDell, ext_frame):
             ext_frame.pack_forget()
 
     # Define o texto inicial dependendo da configuração atual
-    texto_inicial = "Auto Deletar Ativado" if config["AutoDelete"] else "Auto Deletar Desativado"
+    texto_inicial = (
+        "Auto Deletar Ativado" if config["AutoDelete"] else "Auto Deletar Desativado"
+    )
 
     checkbox = customtkinter.CTkCheckBox(
-            Windows_cfg_autoDell,
-            text=texto_inicial,
-            variable=value_var,
-            font=customtkinter.CTkFont(family="Consolas", size=11),
-            fg_color=COLORS["checkbox_fg"],
-            hover_color=COLORS["checkbox_hover"],
-            border_color=COLORS["border"],
-            checkmark_color=COLORS["text_primary"],
-            text_color=COLORS["text_primary"],
-            width=120,
-            corner_radius=4,
-            command=on_checkbox_toggle
-        )
+        Windows_cfg_autoDell,
+        text=texto_inicial,
+        variable=value_var,
+        font=customtkinter.CTkFont(family="Consolas", size=11),
+        fg_color=COLORS["checkbox_fg"],
+        hover_color=COLORS["checkbox_hover"],
+        border_color=COLORS["border"],
+        checkmark_color=COLORS["text_primary"],
+        text_color=COLORS["text_primary"],
+        width=120,
+        corner_radius=4,
+        command=on_checkbox_toggle,
+    )
     checkbox.pack(side="top", padx=10, pady=8)
+
 
 def save_filter_choice(selected_filter):
     # Reseta todos para false primeiro e true apenas pro selecionado
@@ -111,6 +117,7 @@ def save_filter_choice(selected_filter):
     config["AutoDeleteConfig"][selected_filter] = True
     save_config("dist", "config", config)
 
+
 def Select_Filter(ext_frame):
     filter_obj = delete.AutoDeleFilter().GetFilters()
     # Título da seção "Filtros de Exclusão"
@@ -118,9 +125,11 @@ def Select_Filter(ext_frame):
         ext_frame,
         text="Filtros de Exclusão:",
         font=customtkinter.CTkFont(family="Consolas", size=15, weight="bold"),
-        text_color=COLORS["accent_primary"]
+        text_color=COLORS["accent_primary"],
     )
-    lbl_title_filter.grid(row=0, column=0, columnspan=6, padx=10, pady=(15, 5), sticky="w")
+    lbl_title_filter.grid(
+        row=0, column=0, columnspan=6, padx=10, pady=(15, 5), sticky="w"
+    )
 
     for category, Filters in config.items():
         if category == "AutoDeleteConfig":
@@ -158,7 +167,9 @@ def Select_Filter(ext_frame):
                     hover_color=COLORS["checkbox_hover"],
                     border_color=COLORS["border"],
                     text_color=COLORS["text_primary"],
-                    command=lambda f=Filter: delete.AutoDeleFilter.SetFilters(None, f, True)
+                    command=lambda f=Filter: delete.AutoDeleFilter.SetFilters(
+                        None, f, True
+                    ),
                 )
                 radio.grid(row=row, column=col, padx=10, pady=2, sticky="w")
 
@@ -179,23 +190,41 @@ def Select_Filter(ext_frame):
     if config["AutoDelete"]:
         ext_frame.pack(fill="x", padx=22, pady=(10, 20))
 
+
 def Time_AutoDelete(ext_frame):
     # Título da seção de Dias
     lbl_title_time = customtkinter.CTkLabel(
         ext_frame,
         text="Prazo para Exclusão:",
         font=customtkinter.CTkFont(family="Consolas", size=15, weight="bold"),
-        text_color=COLORS["accent_primary"]
+        text_color=COLORS["accent_primary"],
     )
     # A linha base começa depois das opções de rádio
-    lbl_title_time.grid(row=4, column=0, columnspan=2, padx=10, pady=(35, 5), sticky="w")
+    lbl_title_time.grid(
+        row=4, column=0, columnspan=2, padx=10, pady=(35, 5), sticky="w"
+    )
 
     # Adicionando um sub-container para o campo e texto de dias
     time_container = customtkinter.CTkFrame(ext_frame, fg_color="transparent")
-    time_container.grid(row=5, column=0, columnspan=6, padx=10, pady=(10, 15), sticky="w")
+    time_container.grid(
+        row=5, column=0, columnspan=6, padx=10, pady=(10, 15), sticky="w"
+    )
 
     time_value = config["AutoDeleteConfig"].get("Dias para Auto Deletar", "15")
-    if time_value not in ["5", "10", "15", "20", "25", "30", "60", "120", "180", "240", "300", "360"]:
+    if time_value not in [
+        "5",
+        "10",
+        "15",
+        "20",
+        "25",
+        "30",
+        "60",
+        "120",
+        "180",
+        "240",
+        "300",
+        "360",
+    ]:
         DropDownTimeValue = customtkinter.StringVar(value="15")
     else:
         DropDownTimeValue = customtkinter.StringVar(value=time_value)
@@ -214,9 +243,22 @@ def Time_AutoDelete(ext_frame):
         dropdown_hover_color=COLORS["accent_hover"],
         variable=DropDownTimeValue,
         command=lambda x: timeVerification.DaysAutoDelete(x).Setdays(),
-        values=["5", "10", "15", "20", "25", "30", "60", "120", "180", "240", "300", "360"],
+        values=[
+            "5",
+            "10",
+            "15",
+            "20",
+            "25",
+            "30",
+            "60",
+            "120",
+            "180",
+            "240",
+            "300",
+            "360",
+        ],
         dynamic_resizing=False,
-        corner_radius=8
+        corner_radius=8,
     )
     DropDown_time.pack(side="left")
 
@@ -224,9 +266,10 @@ def Time_AutoDelete(ext_frame):
         time_container,
         text="Dias para excluir o arquivo.",
         font=customtkinter.CTkFont(family="Segoe UI", size=12),
-        text_color=COLORS["text_secondary"]
+        text_color=COLORS["text_secondary"],
     )
     description_time.pack(side="left", padx=(10, 0))
+
 
 def type_of_delete(ext_frame):
     row = 4
@@ -236,13 +279,15 @@ def type_of_delete(ext_frame):
         ext_frame,
         text=f"Tipo de exclusão",
         font=customtkinter.CTkFont(family="Consolas", size=15, weight="bold"),
-        text_color=COLORS["accent_primary"]
+        text_color=COLORS["accent_primary"],
     )
     Title_section.grid(row=3, column=0, padx=(10, 5), pady=5, sticky="sw")
 
     selected_option_str = ""
     for Filter_name, is_enabled in filters_obj.items():
-        if Filter_name.startswith("Enviar Para Lixeira") or Filter_name.startswith("Excluir permanentemente"):
+        if Filter_name.startswith("Enviar Para Lixeira") or Filter_name.startswith(
+            "Excluir permanentemente"
+        ):
             print(is_enabled)
             if is_enabled:
                 selected_option_str = Filter_name
@@ -260,11 +305,12 @@ def type_of_delete(ext_frame):
             hover_color=COLORS["checkbox_hover"],
             border_color=COLORS["border"],
             text_color=COLORS["text_primary"],
-            command=lambda f=tipo: delete.AutoDelete.SetFilters(None, f, True)
+            command=lambda f=tipo: delete.AutoDelete.SetFilters(None, f, True),
         )
         radio.grid(row=row, column=col, padx=(10, 5), pady=5, sticky="nw")
 
         col += 1
+
 
 def open_Windows_CFG_autoDell(parent):
     global config
@@ -283,33 +329,38 @@ def open_Windows_CFG_autoDell(parent):
     Header_Title(Windows_cfg_autoDell)
 
     # Checkbox que ativa/desativa auto deletar
-    cmd_frame = customtkinter.CTkFrame(master=Windows_cfg_autoDell, fg_color="transparent")
+    cmd_frame = customtkinter.CTkFrame(
+        master=Windows_cfg_autoDell, fg_color="transparent"
+    )
     cmd_frame.pack(fill="x", padx=40, pady=(10, 0))
 
     # Criamos o Frame onde as opções moram
-    ext_frame = customtkinter.CTkFrame(master=Windows_cfg_autoDell,
+    ext_frame = customtkinter.CTkFrame(
+        master=Windows_cfg_autoDell,
         fg_color=COLORS["bg_secondary"],
         corner_radius=10,
         width=600,
         height=600,
     )
-    
+
     # Passamos os frames apropriados para não empurrar a grid errada
     Enable_Disable_AutoDelete(cmd_frame, ext_frame)
     Select_Filter(ext_frame)
     type_of_delete(ext_frame)
     Time_AutoDelete(ext_frame)
-    
+
     Windows_cfg_autoDell.mainloop()
 
     try:
         if os.path.exists(icon_path):
-            Windows_cfg_autoDell.after(200, lambda: Windows_cfg_autoDell.iconbitmap(icon_path))
+            Windows_cfg_autoDell.after(
+                200, lambda: Windows_cfg_autoDell.iconbitmap(icon_path)
+            )
     except Exception:
         pass
 
     config = load_config("dist", "config")
 
+
 if __name__ == "__main__":
     open_Windows_CFG_autoDell(None)
- 

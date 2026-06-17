@@ -114,16 +114,22 @@ def on_app():
         close_app()
     else:
         root.mainloop()
-        root.deiconify()
-        root.lift()
-        root.attributes("-topmost", True)
+        try:
+            if root.winfo_exists():
+                root.deiconify()
+                root.lift()
+                root.attributes("-topmost", True)
+        except Exception:
+            pass
 
 
 def close_process():  # Fecha o app quando clicar no X
     try:
         meu_icone.stop()
         root.destroy()
-        subprocess.run(["taskkill", "/f", "/im", "FL_ORZ.exe"], capture_output=True)
+        subprocess.run(
+            ["taskkill", "/f", "/im", "wm", "FL_ORZ.exe"], capture_output=True
+        )
     except Exception as Error:
         print(f"Aviso - Erro ao matar o processo FL_ORZ: {Error}")
 
