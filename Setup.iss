@@ -3,7 +3,7 @@
 ; Non-commercial use only
 
 #define MyAppName "FileORZ"
-#define MyAppVersion "1.2.4"
+#define MyAppVersion "1.2.5"
 #define MyAppPublisher "Dev: Katchan"
 #define MyAppURL "https://thainanviniciuskatchan.github.io/FileORZ/"
 #define MyAppExeName "FL_ORZ.exe"
@@ -32,9 +32,9 @@ ArchitecturesInstallIn64BitMode=x64compatible
 DisableProgramGroupPage=yes
 ; Remove the following line to run in administrative install mode (install for all users).
 PrivilegesRequired=lowest
-OutputDir=C:\Users\Thayn\OneDrive\Área de Trabalho\FileORZ
+OutputDir={#GetEnv('USERPROFILE')}\Desktop
 OutputBaseFilename=FileORZ_install
-SetupIconFile=C:\Users\Thayn\OneDrive\Área de Trabalho\FileORZ\ui\icon\IconApp.ico
+SetupIconFile={#GetEnv('USERPROFILE')}\Desktop\FileORZ\ui\icon\IconApp.ico
 SolidCompression=yes
 WizardStyle=modern dark
 
@@ -47,8 +47,12 @@ Name: "portuguese"; MessagesFile: "compiler:Languages\Portuguese.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: "C:\Users\Thayn\OneDrive\Área de Trabalho\FileORZ\FileORZ\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\Thayn\OneDrive\Área de Trabalho\FileORZ\FileORZ\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+[Files]
+Source: "dist\config.json"; DestDir: "{app}\dist"; Flags: uninsneveruninstall onlyifdoesntexist
+Source: "dist\Key_Words.json"; DestDir: "{app}\dist"; Flags: uninsneveruninstall onlyifdoesntexist
+
+Source: "{#GetEnv('USERPROFILE')}\Desktop\FileORZ\FileORZ\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#GetEnv('USERPROFILE')}\Desktop\FileORZ\FileORZ\*"; DestDir: "{app}"; Excludes: "dist\config.json,dist\Key_Words.json"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
@@ -58,3 +62,35 @@ Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: de
 [Run]
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
 
+
+[Code]
+procedure CurStepChanged(CurStep: TSetupStep);
+var
+  ConfigOrigem, KeyWordsOrigem, ConfigBackup, KeyWordsBackup: string;
+begin
+  { Mapeia os caminhos originais e os caminhos do backup na pasta temporária }
+  ConfigOrigem := ExpandConstant('{app}\dist\config.json');
+  KeyWordsOrigem := ExpandConstant('{app}\dist\Key_Words.json');
+  ConfigBackup := ExpandConstant('{tmp}\config.json');
+  KeyWordsBackup := ExpandConstant('{tmp}\Key_Words.json');
+
+  { Ocorre ANTES de começar a extrair os arquivos novos }
+  if CurStep = ssInstall then
+  begin
+    if FileExists(ConfigOrigem) then 
+      FileCopy(ConfigOrigem, ConfigBackup, False);
+      
+    if FileExists(KeyWordsOrigem) then 
+      FileCopy(KeyWordsOrigem, KeyWordsBackup, False);
+  end
+  
+  { Ocorre DEPOIS que tudo foi instalado }
+  else if CurStep = ssPostInstall then
+  begin
+    if FileExists(ConfigBackup) then 
+      FileCopy(ConfigBackup, ConfigOrigem, False);
+      
+    if FileExists(KeyWordsBackup) then 
+      FileCopy(KeyWordsBackup, KeyWordsOrigem, False);
+  end;
+end;

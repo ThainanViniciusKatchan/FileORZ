@@ -25,7 +25,7 @@ def start_task():
     try:
         print("Iniciando FileORZ Organizer...")
         organize_files()
-        
+
         try:
             with open(CONFIG_PATH, "r", encoding="utf-8") as f:
                 data = json.load(f)
@@ -36,7 +36,7 @@ def start_task():
             time_verification = float(data.get("timeverification", 5))
 
         threading.Timer(time_verification, start_task).start()
-        
+
         rtn = True
     except Exception as Error:
         print(f"Erro ao iniciar o Organizador: {Error}")

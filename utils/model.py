@@ -17,6 +17,7 @@ You should have received a copy of the GNU General Public License
 along with FileORZ.  If not, see <https://www.gnu.org/licenses/
 """
 
+from ast import arguments
 import os
 import json
 import sys
@@ -24,7 +25,7 @@ import winreg
 import shutil
 
 # Local installation path
-INSTALL_DIR = os.path.join(os.getenv("LOCALAPPDATA"), "FileORZ")
+INSTALL_DIR = os.path.join(os.getenv("LOCALAPPDATA"), "Programs", "FileORZ")
 
 
 def script_dir():  # find the path of the script
@@ -120,7 +121,6 @@ def get_app_path():
 
 # Cria a chave do script no registro do Windows
 def is_startup_enabled():
-    """Checks if the program is already configured to start with the Windows."""
     try:
         key = winreg.OpenKey(
             winreg.HKEY_CURRENT_USER,
@@ -128,16 +128,15 @@ def is_startup_enabled():
             0,
             winreg.KEY_READ,
         )
-        value, _ = winreg.QueryValueEx(key, "FileORZ")
+        valor_atual, _ = winreg.QueryValueEx(key, "FileORZ")
         winreg.CloseKey(key)
-        target_exe = os.path.join(INSTALL_DIR, ".\\dist\\FileORZ.exe")
-        return os.path.normpath(value) == os.path.normpath(target_exe)
+        return "--tray" in valor_atual and "FL_ORZ.exe" in valor_atual
     except FileNotFoundError:
         return False
 
 
 def toggle_startup(enable):
-    """Enables or disables automatic startup, moving files to AppData."""
+    """Habilita ou desabilita o programa de iniciar com o windows"""
     key_path = r"Software\Microsoft\Windows\CurrentVersion\Run"
     app_name = "FileORZ"
 
@@ -147,24 +146,17 @@ def toggle_startup(enable):
         )
 
         if enable:
-            # 1. Cria a pasta local (FileORZ) caso não exista
-            if not os.path.exists(INSTALL_DIR):
-                os.makedirs(INSTALL_DIR)
-
-            # 2. Definir a origem da pasta dist
+            # Definir a origem da pasta dist
             if getattr(sys, "frozen", False):
                 # Se for compilado, script_dir() retorna a pasta onde o executável está
                 source_dir = script_dir()
-                if os.path.basename(source_dir).lower() == "dist":
-                    source_dist = source_dir
-                else:
-                    source_dist = os.path.join(source_dir, "dist")
+                source_dist = os.path.join(source_dir)
             else:
                 # Se for script (.py), a pasta dist estará no diretório base
-                source_dist = os.path.join(script_dir(), "dist")
+                source_dist = os.path.join(script_dir())
 
-            target_dist = os.path.join(INSTALL_DIR, "dist")
-            target_exe = os.path.join(target_dist, "FileORZ.exe")
+            target_dist = os.path.join(INSTALL_DIR)
+            target_exe = os.path.join(target_dist, "FL_ORZ.exe")
 
             if not os.path.exists(source_dist):
                 print(f"Erro: Pasta dist não encontrada em {source_dist}")
