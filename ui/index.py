@@ -110,13 +110,9 @@ def restore_windows():
 
 
 def on_app():
-    # O sys.argv sempre contém o caminho do exe como primeiro item (índice 0)
-    # Então verificamos se o argumento --tray está presente no resto da lista
     if "--tray" in sys.argv:
-        # Se veio --tray, apenas fecha a janela (ou chama sua função de hide)
         close_app()
     else:
-        # Se não, inicia o loop normalmente e ajusta a interface
         root.mainloop()
         root.deiconify()
         root.lift()
