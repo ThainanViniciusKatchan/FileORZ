@@ -576,16 +576,11 @@ if __name__ == "__main__":
         ("Criando a tag e release no GitHub", git_comands),
     ]
 
-    from utils import version
-
     vertion = version.__version__
     major = int(vertion[0])
     minor = int(vertion[2])
     patch = int(vertion[4])
     for nome, func in ETAPAS:
-        if type_version == 0 or nome == "Criando o Setup de Instação":
-            func(version.__version__)
-            continue
         print(f"\n>>> {nome}")
         try:
             if nome == "Criando a tag e release no GitHub":
@@ -612,8 +607,12 @@ if __name__ == "__main__":
                     print(f"Versão Nova: {new_vertion}")
                     gravar_nova_versao(vertion)
             else:
-                func()
-                continue
+                if nome == "Criando o Setup de Instação":
+                    func(version.__version__)
+                    continue
+                else:
+                    func()
+                    continue
             print(f"--- {nome} concluído ---")
         except Exception as e:
             print(f"🛑 ERRO FATAL em {nome}: {e}")
