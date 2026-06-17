@@ -516,7 +516,7 @@ def git_comands(v):
     try:
         comandos = [
             ["git", "tag", "-a", f"v{v}", "-m", f"versão {v}"],
-            ["git", "push", "origin", f"v{v}"],
+            ["git", "push", "GH", f"v{v}"],
             [
                 "gh",
                 "release",
@@ -544,82 +544,84 @@ def gravar_nova_versao(v):
 if __name__ == "__main__":
     from utils import version
 
-    type_version = int(
-        input(
-            "Qual o tipo de versão: \n"
-            "[0] Teste \n"
-            "[1] major \n"
-            "[2] minor \n"
-            "[3] Patch:\n"
-        )
-    )
-    if type_version == 0:
-        pass
-    print("\n" + "=" * 50)
-    print("INICIANDO BUILD: FileORZ")
-    print("=" * 50)
-    sleep(1)
+    git_comands(version.__version__)
 
-    ETAPAS = [
-        ("Matar processos existentes", matar_processos),
-        ("Limpar builds anteriores", limpar_builds_anteriores),
-        ("Criar pasta de build", criar_pasta_build),
-        ("Compilar UI", compilar_ui),
-        ("Compilar Organizador", compilar_organizador),
-        ("Reorganizar estrutura", reorganizar_estrutura),
-        ("Criar Key_Words padrão", criar_keywords_padrao),
-        ("Criar config padrão", criar_config_padrao),
-        ("Ajustar configurações", alterar_config_build),
-        ("Limpar arquivos temporários", limpar_temporarios),
-        ("Assinar binários", assinar_binarios),
-        ("Criando o Setup de Instação", setup_compiler),
-        ("Criando a tag e release no GitHub", git_comands),
-    ]
+    # type_version = int(
+    #     input(
+    #         "Qual o tipo de versão: \n"
+    #         "[0] Teste \n"
+    #         "[1] major \n"
+    #         "[2] minor \n"
+    #         "[3] Patch:\n"
+    #     )
+    # )
+    # if type_version == 0:
+    #     pass
+    # print("\n" + "=" * 50)
+    # print("INICIANDO BUILD: FileORZ")
+    # print("=" * 50)
+    # sleep(1)
 
-    from utils import version
+    # ETAPAS = [
+    #     ("Matar processos existentes", matar_processos),
+    #     ("Limpar builds anteriores", limpar_builds_anteriores),
+    #     ("Criar pasta de build", criar_pasta_build),
+    #     ("Compilar UI", compilar_ui),
+    #     ("Compilar Organizador", compilar_organizador),
+    #     ("Reorganizar estrutura", reorganizar_estrutura),
+    #     ("Criar Key_Words padrão", criar_keywords_padrao),
+    #     ("Criar config padrão", criar_config_padrao),
+    #     ("Ajustar configurações", alterar_config_build),
+    #     ("Limpar arquivos temporários", limpar_temporarios),
+    #     ("Assinar binários", assinar_binarios),
+    #     ("Criando o Setup de Instação", setup_compiler),
+    #     ("Criando a tag e release no GitHub", git_comands),
+    # ]
 
-    vertion = version.__version__
-    major = int(vertion[0])
-    minor = int(vertion[2])
-    patch = int(vertion[4])
-    for nome, func in ETAPAS:
-        if type_version == 0 or nome == "Criando o Setup de Instação":
-            func(version.__version__)
-            continue
-        print(f"\n>>> {nome}")
-        try:
-            if nome == "Criando a tag e release no GitHub":
-                if type_version == 1:
-                    print(f"Versão Atual: {vertion}")
-                    major += 1
-                    new_vertion = f"{major}.{minor}.{patch}"
-                    func(new_vertion)
-                    vertion = new_vertion
-                    gravar_nova_versao(vertion)
-                    print(f"Versão Nova: {new_vertion}")
-                elif type_version == 2:
-                    minor += 1
-                    new_vertion = f"{major}.{minor}.{patch}"
-                    func(new_vertion)
-                    vertion = new_vertion
-                    print(f"Versão Nova: {new_vertion}")
-                    gravar_nova_versao(vertion)
-                elif type_version == 3:
-                    patch += 1
-                    new_vertion = f"{major}.{minor}.{patch}"
-                    func(new_vertion)
-                    vertion = new_vertion
-                    print(f"Versão Nova: {new_vertion}")
-                    gravar_nova_versao(vertion)
-            else:
-                func()
-                continue
-            print(f"--- {nome} concluído ---")
-        except Exception as e:
-            print(f"🛑 ERRO FATAL em {nome}: {e}")
-            sys.exit(1)
-        sleep(1)
+    # from utils import version
 
-    print("\n" + "=" * 50)
-    print("✅ COMPILAÇÃO CONCLUÍDA COM SUCESSO!")
-    print("=" * 50)
+    # vertion = version.__version__
+    # major = int(vertion[0])
+    # minor = int(vertion[2])
+    # patch = int(vertion[4])
+    # for nome, func in ETAPAS:
+    #     if type_version == 0 or nome == "Criando o Setup de Instação":
+    #         func(version.__version__)
+    #         continue
+    #     print(f"\n>>> {nome}")
+    #     try:
+    #         if nome == "Criando a tag e release no GitHub":
+    #             if type_version == 1:
+    #                 print(f"Versão Atual: {vertion}")
+    #                 major += 1
+    #                 new_vertion = f"{major}.{minor}.{patch}"
+    #                 func(new_vertion)
+    #                 vertion = new_vertion
+    #                 gravar_nova_versao(vertion)
+    #                 print(f"Versão Nova: {new_vertion}")
+    #             elif type_version == 2:
+    #                 minor += 1
+    #                 new_vertion = f"{major}.{minor}.{patch}"
+    #                 func(new_vertion)
+    #                 vertion = new_vertion
+    #                 print(f"Versão Nova: {new_vertion}")
+    #                 gravar_nova_versao(vertion)
+    #             elif type_version == 3:
+    #                 patch += 1
+    #                 new_vertion = f"{major}.{minor}.{patch}"
+    #                 func(new_vertion)
+    #                 vertion = new_vertion
+    #                 print(f"Versão Nova: {new_vertion}")
+    #                 gravar_nova_versao(vertion)
+    #         else:
+    #             func()
+    #             continue
+    #         print(f"--- {nome} concluído ---")
+    #     except Exception as e:
+    #         print(f"🛑 ERRO FATAL em {nome}: {e}")
+    #         sys.exit(1)
+    #     sleep(1)
+
+    # print("\n" + "=" * 50)
+    # print("✅ COMPILAÇÃO CONCLUÍDA COM SUCESSO!")
+    # print("=" * 50)
