@@ -1,5 +1,4 @@
 from os import path, listdir, rmdir
-import json
 import sys
 import os
 
@@ -7,6 +6,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from utils import folder
 
 main_folder = folder.Folder().Getfolder
+
 
 def delete_folder():
     if not main_folder or not path.exists(main_folder):
@@ -32,6 +32,7 @@ def delete_folder():
 
     if not has_deleted:
         print("Sem pastas vazias para excluir")
+
 
 if __name__ == "__main__":
     delete_folder()

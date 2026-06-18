@@ -414,6 +414,13 @@ def criar_config_padrao():
             "Por Data de Modificação": False,
             "Dias para Auto Deletar": "15",
         },
+        "folder_delete": {
+            "ativado": False,
+            "lixeira": False,
+            "excluir_permanentemente": False,
+            "pastas_ORZ": False,
+            "tudo": False,
+        },
     }
 
     # Salva na pasta do projeto para referência (opcional, mantido conforme original)
