@@ -22,6 +22,7 @@ utils/watchdo_file.py
 key_base64.txt
 ui/LiveReload.py
 .idea
+Modfile.md
 *.iss
 Setup.iss
 <<<<<<< HEAD
