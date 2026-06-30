@@ -31,6 +31,8 @@ import ctypes
 
 from utils import folder, timeVerification
 
+Aplication_patch = os.path.dirname(sys.executable)
+
 # Padrão de cores
 COLORS = {
     "bg_primary": "#0D0D0D",
@@ -110,17 +112,24 @@ def restore_windows():
 
 
 def on_app():
-    if "--tray" in sys.argv:
-        close_app()
-    else:
+    try:
+        if "--tray" in sys.argv:
+            root.withdraw()
+        else:
+            try:
+                if root.winfo_exists():
+                    root.deiconify()
+                    root.lift()
+                    root.attributes("-topmost", True)
+            except Exception:
+                pass
         root.mainloop()
-        try:
-            if root.winfo_exists():
-                root.deiconify()
-                root.lift()
-                root.attributes("-topmost", True)
-        except Exception:
-            pass
+    except Exception as Error:
+        with open(Aplication_patch, "StartSys_Error.log", "W") as f:
+            f.write(str(Error))
+            f.write("\n\n")
+            f.write(f"{Error.__traceback__}")
+            f.close()
 
 
 def close_process():  # Fecha o app quando clicar no X

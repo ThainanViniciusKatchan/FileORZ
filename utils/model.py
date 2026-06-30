@@ -24,8 +24,14 @@ import sys
 import winreg
 import shutil
 
+if getattr(sys, "frozen", False):
+    INSTALL_DIR = os.path.dirname(sys.executable)
+else:
+    INSTALL_DIR = os.path.dirname(os.path.abspath(__file__))
+
 # Local installation path
 INSTALL_DIR = os.path.join(os.getenv("LOCALAPPDATA"), "Programs", "FileORZ")
+os.chdir(INSTALL_DIR)
 
 
 def script_dir():  # find the path of the script
@@ -171,8 +177,9 @@ def toggle_startup(enable):
                 shutil.copytree(source_dist, target_dist)
 
             # 4. Registra no Windows apontando para o executável dentro da nova pasta dist copiada
-            winreg.SetValueEx(key, app_name, 0, winreg.REG_SZ, target_exe)
-            print(f"Instalado e registrado em: {target_exe}")
+            registro_valor = f'"{target_exe}" --tray'
+            winreg.SetValueEx(key, app_name, 0, winreg.REG_SZ, registro_valor)
+            print(f"Instalado e registrado em: {registro_valor}")
 
         else:
             # Remove a chave do registro no Windows

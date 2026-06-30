@@ -1,3 +1,7 @@
+import sys
+import os
+
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from utils.model import load_config, save_config
 
 
@@ -135,6 +139,106 @@ class AutoDeleFilter:
         save_config("dist", "config", CONFIG)
 
 
+class Folder_Delete:
+    def __init__(self):
+        self.CONFIG = load_config("dist", "config")
+
+    @property
+    def Ativado(self):
+        return self.CONFIG["folder_delete"]["ativado"]
+
+    @property
+    def Lixeira(self):
+        return self.CONFIG["folder_delete"]["lixeira"]
+
+    @property
+    def Permanente(self):
+        return self.CONFIG["folder_delete"]["excluir_permanentemente"]
+
+    @property
+    def PastaORZ(self):
+        return self.CONFIG["folder_delete"]["pastas_ORZ"]
+
+    @property
+    def Tudo(self):
+        return self.CONFIG["folder_delete"]["tudo"]
+
+    @Ativado.getter
+    def GetAtivado(self):
+        return self.CONFIG["folder_delete"]["ativado"]
+
+    @Ativado.setter
+    def Ativado(self, ativado: bool):
+        self.CONFIG["folder_delete"]["ativado"] = ativado
+        save_config("dist", "config", self.CONFIG)
+
+    @Lixeira.getter
+    def GetLixeira(self):
+        return self.CONFIG["folder_delete"]["lixeira"]
+
+    @Lixeira.setter
+    def Lixeira(self, lixeira: bool):
+        self.CONFIG["folder_delete"]["lixeira"] = lixeira
+        save_config("dist", "config", self.CONFIG)
+
+    @Permanente.getter
+    def GetPermanente(self):
+        return self.CONFIG["folder_delete"]["excluir_permanentemente"]
+
+    @Permanente.setter
+    def Permanente(self, perma: bool):
+        self.CONFIG["folder_delete"]["excluir_permanentemente"] = perma
+        save_config("dist", "config", self.CONFIG)
+
+    @PastaORZ.getter
+    def GetPastaORZ(self):
+        return self.CONFIG["folder_delete"]["pastas_ORZ"]
+
+    @PastaORZ.setter
+    def PastaORZ(self, pastaORZ: bool):
+        self.CONFIG["folder_delete"]["pastas_ORZ"] = pastaORZ
+        save_config("dist", "config", self.CONFIG)
+
+    @Tudo.getter
+    def GetTudo(self):
+        return self.CONFIG["folder_delete"]["tudo"]
+
+    @Tudo.setter
+    def Tudo(self, tudo: bool):
+        self.CONFIG["folder_delete"]["tudo"] = tudo
+        save_config("dist", "config", self.CONFIG)
+
+    def GetFilters(self):
+        CONFIG = load_config("dist", "config")
+        items = dict()
+        for k, v in CONFIG["folder_delete"].items():
+            if (
+                k == "ativado"
+                or k == "lixeira"
+                or k == "excluir_permanentemente"
+                or k == "pastas_ORZ"
+                or k == "tudo"
+            ):
+                items[k] = v
+        return items
+
+    def SetFilters(self, filter: str, value: bool):
+        CONFIG = load_config("dist", "config")
+        for F in CONFIG["folder_delete"]:
+            if F == "ativado":
+                continue
+            if F in Folder_Delete.GetFilters(None).keys():
+                if filter == "excluir_permanentemente" or filter == "lixeira":
+                    CONFIG["folder_delete"][filter] = value
+                    if filter != F:
+                        CONFIG["folder_delete"][F] = False
+                else:
+                    CONFIG["folder_delete"][filter] = value
+        save_config("dist", "config", CONFIG)
+
+
 if __name__ == "__main__":
-    filters = AutoDeleFilter()
-    filters.SetFilters("Por Data de Modificação", True)
+    Folder_Delete().SetFilters("ativado", True)
+    Folder_Delete().SetFilters("lixeira", True)
+    Folder_Delete().SetFilters("pastas_ORZ", True)
+    print(Folder_Delete().GetFilters())
