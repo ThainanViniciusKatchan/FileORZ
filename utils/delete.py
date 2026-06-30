@@ -1,7 +1,10 @@
 from utils.model import load_config, save_config
 
+
 class AutoDelete:
-    def __init__(self, AutoDell: bool = bool, Trash: bool = bool, Permanently: bool = bool):
+    def __init__(
+        self, AutoDell: bool = bool, Trash: bool = bool, Permanently: bool = bool
+    ):
         self._AutoDell = AutoDell
         self._Trash = Trash
         self._Permanently = Permanently
@@ -61,15 +64,18 @@ class AutoDelete:
 
     def SetFilters(self, filter: str, value: bool):
         CONFIG = load_config("dist", "config")
-        for C in  CONFIG:
+        for C in CONFIG:
             if C in AutoDelete.GetFilters(None).keys():
                 if filter == C:
                     CONFIG[filter] = value
                 else:
                     CONFIG[C] = False
                 if filter == True and C == True:
-                    raise ValueError("Ambos os filtros não podem ser ativados ao mesmo tempo")
+                    raise ValueError(
+                        "Ambos os filtros não podem ser ativados ao mesmo tempo"
+                    )
         save_config("dist", "config", CONFIG)
+
 
 class AutoDeleFilter:
     def __init__(self, datacriacao: bool = False, datamodificacao: bool = False):
@@ -116,15 +122,18 @@ class AutoDeleFilter:
 
     def SetFilters(self, filter: str, value: bool):
         CONFIG = load_config("dist", "config")
-        for F in  CONFIG["AutoDeleteConfig"]:
+        for F in CONFIG["AutoDeleteConfig"]:
             if F in AutoDeleFilter.GetFilters(None).keys():
                 if filter == F:
                     CONFIG["AutoDeleteConfig"][filter] = value
                 else:
                     CONFIG["AutoDeleteConfig"][F] = False
                 if filter == True and F == True:
-                    raise ValueError("Ambos os filtros não podem ser ativados ao mesmo tempo")
+                    raise ValueError(
+                        "Ambos os filtros não podem ser ativados ao mesmo tempo"
+                    )
         save_config("dist", "config", CONFIG)
+
 
 if __name__ == "__main__":
     filters = AutoDeleFilter()

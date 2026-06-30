@@ -1,45 +1,58 @@
 import os
-import ctypes
 import psutil
 import customtkinter
-from tkinter import messagebox
-from utils import StartUp
+import subprocess
+import sys
+
+SCRIPT_DIR = os.path.dirname(os.path.realpath(__file__))
+sys.path.append(os.path.dirname(SCRIPT_DIR))
+from FileORZ import organize_files
 
 
 def check_if_running(taskname):
-    for proc in psutil.process_iter(['name']):
-        if proc.info['name'] == taskname:
+    for proc in psutil.process_iter(["name"]):
+        if proc.info["name"] == taskname:
             return True
     return False
 
+
 def start_task():
-    Startup = StartUp.StartUpSys().GetEnabled
+    import json
+    from utils.model import json_path
+    import threading
 
-    STATUS = check_if_running("FileORZ.exe")
+    CONFIG_PATH = json_path("dist", "config")
+    try:
+        print("Iniciando FileORZ Organizer...")
+        organize_files()
 
-    if not Startup:
-       SCRIPT_DIR = os.path.join(os.getcwd(), "dist", "FileORZ.exe")
-    elif Startup:
-        SCRIPT_DIR = os.path.join(str(os.getenv('LOCALAPPDATA')), 'FileORZ', 'dist', 'FileORZ.exe')
+        try:
+            with open(CONFIG_PATH, "r", encoding="utf-8") as f:
+                data = json.load(f)
+                time_verification = float(data.get("timeverification", 5))
+                time_verification = time_verification * 60
+        except Exception as Error:
+            print("Erro ao obter o tempo de verificação: ", Error)
+            time_verification = float(data.get("timeverification", 5))
 
-    if not STATUS:
-        if os.path.exists(SCRIPT_DIR):
-            ctypes.windll.shell32.ShellExecuteW(
-                None,
-                'open',
-                SCRIPT_DIR,
-            None,
-            None,
-            1
-            )
-            return True
-        return None
-    else:
-        messagebox.showinfo("Erro", "FileORZ.exe ja esta em execução")
-        return False
+        threading.Timer(time_verification, start_task).start()
+
+        rtn = True
+    except Exception as Error:
+        print(f"Erro ao iniciar o Organizador: {Error}")
+        rtn = False
+
+    return rtn
+
+
+def close_task():
+    STATUS = check_if_running("FL_ORZ.exe")
+    if STATUS:
+        subprocess.run(["taskkill", "/f", "/im", "FileORZ.exe"], check=True)
+
 
 # Iniciar a organização
-def start_organizer(main_container, root, folder , feedback_label):
+def start_organizer(main_container, root, folder, feedback_label):
     # Remove label anterior se existir
     if feedback_label is not None:
         feedback_label.destroy()
@@ -50,29 +63,44 @@ def start_organizer(main_container, root, folder , feedback_label):
             main_container,
             text="Selecione uma pasta primeiro!",
             font=customtkinter.CTkFont(family="Segoe UI", size=13, weight="bold"),
-            text_color="red"
+            text_color="red",
         )
         feedback_label.pack(pady=(15, 0))
-        root.after(3000, lambda: feedback_label.destroy() if feedback_label.winfo_exists() else None)
+        root.after(
+            3000,
+            lambda: feedback_label.destroy() if feedback_label.winfo_exists() else None,
+        )
         return
     else:
-        if start_task():
+        if start_task() is True:
             feedback_label = customtkinter.CTkLabel(
                 main_container,
                 text="Organização concluída com sucesso!",
                 font=customtkinter.CTkFont(family="Segoe UI", size=13, weight="bold"),
-                text_color="green"
+                text_color="green",
             )
             feedback_label.pack(pady=(15, 0))
-            root.after(3000, lambda: feedback_label.destroy() if feedback_label.winfo_exists() else None)
+            root.after(
+                3000,
+                lambda: (
+                    feedback_label.destroy() if feedback_label.winfo_exists() else None
+                ),
+            )
         else:
             feedback_label = customtkinter.CTkLabel(
                 main_container,
                 text="Erro ao iniciar o organizador!",
                 font=customtkinter.CTkFont(family="Segoe UI", size=13, weight="bold"),
-                text_color="red"
+                text_color="red",
             )
             feedback_label.pack(pady=(15, 0))
-            root.after(3000, lambda: feedback_label.destroy() if feedback_label.winfo_exists() else None)
+            root.after(
+                3000,
+                lambda: (
+                    feedback_label.destroy() if feedback_label.winfo_exists() else None
+                ),
+            )
 
-    # verifica se o processo do organizador já está funcionando
+
+if __name__ == "__main__":
+    start_task()

@@ -1,22 +1,23 @@
 """
-    Copyright (C) 2026 Thainan Vinicius Katchan
+Copyright (C) 2026 Thainan Vinicius Katchan
 
-    This file is part of FileORZ.
+This file is part of FileORZ.
 
-    FileORZ is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+FileORZ is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
 
-    FileORZ is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+FileORZ is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with FileORZ.  If not, see <https://www.gnu.org/licenses/
+You should have received a copy of the GNU General Public License
+along with FileORZ.  If not, see <https://www.gnu.org/licenses/
 """
 
+from ast import arguments
 import os
 import json
 import sys
@@ -24,10 +25,11 @@ import winreg
 import shutil
 
 # Local installation path
-INSTALL_DIR = os.path.join(os.getenv('LOCALAPPDATA'), 'FileORZ')
+INSTALL_DIR = os.path.join(os.getenv("LOCALAPPDATA"), "Programs", "FileORZ")
 
-def script_dir(): # find the path of the script 
-    if getattr(sys, 'frozen', False):
+
+def script_dir():  # find the path of the script
+    if getattr(sys, "frozen", False):
         # Compiled
         BASE_DIR = os.path.dirname(sys.executable)
         print("BASE_DIR Comp: " + BASE_DIR)
@@ -37,9 +39,13 @@ def script_dir(): # find the path of the script
         print("BASE_DIR Dev: " + BASE_DIR)
     return BASE_DIR
 
-NoInstallDir = os.path.join(script_dir()) # Receives the path of the current script 
 
-def json_path(folder, file): # Performs a search to find the config.json file regardless of location
+NoInstallDir = os.path.join(script_dir())  # Receives the path of the current script
+
+
+def json_path(
+    folder, file
+):  # Performs a search to find the config.json file regardless of location
     """
     Precisa passar os parametrso folder e file:
     folder = pasta onde o json está
@@ -59,16 +65,18 @@ def json_path(folder, file): # Performs a search to find the config.json file re
         f"\n{search_path}"
     )
 
-def load_config(folder, file): # Function that loads the settings
+
+def load_config(folder, file):  # Function that loads the settings
     """
     Precisa passar os parametrso folder e file:
     folder = pasta onde o json está
     file = nome do json, não precisa do .json
     """
-    with open(json_path(folder, file), 'r', encoding='utf-8') as f:
+    with open(json_path(folder, file), "r", encoding="utf-8") as f:
         return json.load(f)
 
-def save_config(folder, file ,config): # Function that saves the settings
+
+def save_config(folder, file, config):  # Function that saves the settings
     """
     Precisa passar os seguintes parametros na seguinte ordem:
     folder, file, config
@@ -77,76 +85,78 @@ def save_config(folder, file ,config): # Function that saves the settings
     config = Qual configuração será alterada
     """
     from utils import StartUp
+
     Start = StartUp.StartUpSys()
-    with open(json_path("dist", "config"), 'w', encoding='utf-8') as f:
+    with open(json_path("dist", "config"), "w", encoding="utf-8") as f:
         json.dump(config, f, indent=4, ensure_ascii=False)
-    
+
     # If installed in AppData, sync the config there too
     # so the background service receives the updates
-    local_config_path = os.path.join(INSTALL_DIR, folder ,f"{file}.json")
+    local_config_path = os.path.join(INSTALL_DIR, folder, f"{file}.json")
     local_config_path_no_install = os.path.join(NoInstallDir, f"{folder}\\{file}.json")
     if os.path.exists(INSTALL_DIR) and Start.GetEnabled == True:
         try:
-            with open(local_config_path, 'w', encoding='utf-8') as f:
+            with open(local_config_path, "w", encoding="utf-8") as f:
                 json.dump(config, f, indent=4, ensure_ascii=False)
         except Exception as e:
             print(f"Erro ao sincronizar config: {e}")
     if os.path.exists(NoInstallDir):
         try:
-            with open(local_config_path_no_install, 'w', encoding='utf-8') as f:
+            with open(local_config_path_no_install, "w", encoding="utf-8") as f:
                 json.dump(config, f, indent=4, ensure_ascii=False)
         except Exception as e:
             print(f"Erro ao sincronizar config: {e}")
 
+
 # Controla se o script está sendo executado como .exe ou .py
 def get_app_path():
     """Returns the correct path of the executable or the python script."""
-    if getattr(sys, 'frozen', False):
+    if getattr(sys, "frozen", False):
         # If running as .exe (PyInstaller)
         return sys.executable
     else:
         # If running as .py script
         return os.path.abspath(__file__)
 
+
 # Cria a chave do script no registro do Windows
 def is_startup_enabled():
-    """Checks if the program is already configured to start with the Windows."""
     try:
-        key = winreg.OpenKey(winreg.HKEY_CURRENT_USER, r"Software\Microsoft\Windows\CurrentVersion\Run", 0, winreg.KEY_READ)
-        value, _ = winreg.QueryValueEx(key, "FileORZ")
+        key = winreg.OpenKey(
+            winreg.HKEY_CURRENT_USER,
+            r"Software\Microsoft\Windows\CurrentVersion\Run",
+            0,
+            winreg.KEY_READ,
+        )
+        valor_atual, _ = winreg.QueryValueEx(key, "FileORZ")
         winreg.CloseKey(key)
-        target_exe = os.path.join(INSTALL_DIR, ".\\dist\\FileORZ.exe")
-        return os.path.normpath(value) == os.path.normpath(target_exe)
+        return "--tray" in valor_atual and "FL_ORZ.exe" in valor_atual
     except FileNotFoundError:
         return False
 
+
 def toggle_startup(enable):
-    """Enables or disables automatic startup, moving files to AppData."""
+    """Habilita ou desabilita o programa de iniciar com o windows"""
     key_path = r"Software\Microsoft\Windows\CurrentVersion\Run"
     app_name = "FileORZ"
 
     try:
-        key = winreg.OpenKey(winreg.HKEY_CURRENT_USER, key_path, 0, winreg.KEY_ALL_ACCESS)
+        key = winreg.OpenKey(
+            winreg.HKEY_CURRENT_USER, key_path, 0, winreg.KEY_ALL_ACCESS
+        )
 
         if enable:
-            # 1. Cria a pasta local (FileORZ) caso não exista
-            if not os.path.exists(INSTALL_DIR):
-                os.makedirs(INSTALL_DIR)
-
-            # 2. Definir a origem da pasta dist
-            if getattr(sys, 'frozen', False):
+            # Definir a origem da pasta dist
+            if getattr(sys, "frozen", False):
                 # Se for compilado, script_dir() retorna a pasta onde o executável está
                 source_dir = script_dir()
-                if os.path.basename(source_dir).lower() == "dist":
-                    source_dist = source_dir
-                else:
-                    source_dist = os.path.join(source_dir, "dist")
+                source_dist = os.path.join(source_dir)
             else:
                 # Se for script (.py), a pasta dist estará no diretório base
-                source_dist = os.path.join(script_dir(), "dist")
+                source_dist = os.path.join(script_dir())
 
-            target_dist = os.path.join(INSTALL_DIR, "dist")
-            target_exe = os.path.join(target_dist, "FileORZ.exe")
+            target_dist = os.path.join(INSTALL_DIR)
+            target_exe = os.path.join(target_dist, "FL_ORZ.exe")
 
             if not os.path.exists(source_dist):
                 print(f"Erro: Pasta dist não encontrada em {source_dist}")
@@ -155,7 +165,9 @@ def toggle_startup(enable):
             # 3. Copia a pasta inteira
             if os.path.normpath(source_dist) != os.path.normpath(target_dist):
                 if os.path.exists(target_dist):
-                    shutil.rmtree(target_dist)  # Remove para substituir por versão atualizada
+                    shutil.rmtree(
+                        target_dist
+                    )  # Remove para substituir por versão atualizada
                 shutil.copytree(source_dist, target_dist)
 
             # 4. Registra no Windows apontando para o executável dentro da nova pasta dist copiada
@@ -181,6 +193,7 @@ def toggle_startup(enable):
         winreg.CloseKey(key)
     except Exception as e:
         print(f"Erro ao alterar registro/arquivos: {e}")
+
 
 if __name__ == "__main__":
     ...
