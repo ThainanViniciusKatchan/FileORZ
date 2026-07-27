@@ -470,6 +470,7 @@ def limpar_temporarios():
         "FileORZ.build",
         "FileORZ.dist",
         "FileORZ.onefile-build",
+        "setup_temp.iss",
     ]
 
     for pasta in pastas_temp:

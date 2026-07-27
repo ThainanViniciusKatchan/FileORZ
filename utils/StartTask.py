@@ -6,7 +6,7 @@ import sys
 
 SCRIPT_DIR = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(os.path.dirname(SCRIPT_DIR))
-from FileORZ import organize_files
+from FileORZ import organize_files, loop_verification
 
 
 def check_if_running(taskname):
@@ -23,19 +23,9 @@ def start_task():
 
     CONFIG_PATH = json_path("dist", "config")
     try:
-        print("Iniciando FileORZ Organizer...")
-        organize_files()
-
-        try:
-            with open(CONFIG_PATH, "r", encoding="utf-8") as f:
-                data = json.load(f)
-                time_verification = float(data.get("timeverification", 5))
-                time_verification = time_verification * 60
-        except Exception as Error:
-            print("Erro ao obter o tempo de verificação: ", Error)
-            time_verification = float(data.get("timeverification", 5))
-
-        threading.Timer(time_verification, start_task).start()
+        print("Iniciando a organização...")
+        thread = threading.Thread(target=loop_verification, daemon=True)
+        thread.start()
 
         rtn = True
     except Exception as Error:

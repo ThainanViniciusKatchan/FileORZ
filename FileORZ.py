@@ -165,8 +165,7 @@ def organize_files():
         print(f"Erro ao ler diretório: {e}")
 
 
-# verificar a pasta com o tempo determinado pelo usuário
-if __name__ == "__main__":
+def loop_verification():
     print("Iniciando FileORZ Organizer...")
     while True:
         organize_files()
