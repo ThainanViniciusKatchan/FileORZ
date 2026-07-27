@@ -20,10 +20,11 @@ along with FileORZ.  If not, see <https://www.gnu.org/licenses/
 import customtkinter
 import os
 import sys
-from ui.Centralizar_Janela import Centralizar_Janela
-from utils import delete, timeVerification
+
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from ui.Centralizar_Janela import Centralizar_Janela
+from utils import delete, timeVerification
 from utils.model import load_config, save_config
 
 row = 0

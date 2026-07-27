@@ -49,9 +49,7 @@ def script_dir():  # find the path of the script
 NoInstallDir = os.path.join(script_dir())  # Receives the path of the current script
 
 
-def json_path(
-    folder, file
-):  # Performs a search to find the config.json file regardless of location
+def json_path(folder, file):
     """
     Precisa passar os parametrso folder e file:
     folder = pasta onde o json está
@@ -72,7 +70,7 @@ def json_path(
     )
 
 
-def load_config(folder, file):  # Function that loads the settings
+def load_config(folder, file):
     """
     Precisa passar os parametrso folder e file:
     folder = pasta onde o json está
@@ -82,7 +80,7 @@ def load_config(folder, file):  # Function that loads the settings
         return json.load(f)
 
 
-def save_config(folder, file, config):  # Function that saves the settings
+def save_config(folder, file, config):
     """
     Precisa passar os seguintes parametros na seguinte ordem:
     folder, file, config
@@ -96,8 +94,6 @@ def save_config(folder, file, config):  # Function that saves the settings
     with open(json_path("dist", "config"), "w", encoding="utf-8") as f:
         json.dump(config, f, indent=4, ensure_ascii=False)
 
-    # If installed in AppData, sync the config there too
-    # so the background service receives the updates
     local_config_path = os.path.join(INSTALL_DIR, folder, f"{file}.json")
     local_config_path_no_install = os.path.join(NoInstallDir, f"{folder}\\{file}.json")
     if os.path.exists(INSTALL_DIR) and Start.GetEnabled == True:
@@ -116,12 +112,9 @@ def save_config(folder, file, config):  # Function that saves the settings
 
 # Controla se o script está sendo executado como .exe ou .py
 def get_app_path():
-    """Returns the correct path of the executable or the python script."""
     if getattr(sys, "frozen", False):
-        # If running as .exe (PyInstaller)
         return sys.executable
     else:
-        # If running as .py script
         return os.path.abspath(__file__)
 
 

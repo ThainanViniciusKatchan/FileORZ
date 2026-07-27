@@ -111,10 +111,14 @@ def restore_windows():
     root.after(0, root.deiconify)
 
 
+from utils.StartTask import start_task
+
+
 def on_app():
     try:
         if "--tray" in sys.argv:
             root.withdraw()
+            start_task()
         else:
             try:
                 if root.winfo_exists():
