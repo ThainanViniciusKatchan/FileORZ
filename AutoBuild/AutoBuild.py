@@ -508,7 +508,7 @@ def setup_compiler(v):
         comando = [
             r"C:\Program Files (x86)\Inno Setup 6\ISCC.exe",
             f"/dMyAppVersion={v}",
-            r"Setup.iss",
+            r"Setup_temp.iss",
         ]
         subprocess.run(comando, check=True)
         print("  [OK] Setup criado com sucesso")
@@ -546,6 +546,14 @@ def git_comands(v):
 def gravar_nova_versao(v):
     with open(os.path.join(os.getcwd(), "utils", "version.py"), "w") as file:
         file.write(f'__version__ = "{v}"')
+
+    with open(os.path.join(os.getcwd(), "Setup.iss"), "r") as file:
+        content = file.read()
+
+    content = content.replace("{{VERSION}}", v)
+
+    with open(os.path.join(os.getcwd(), "setup_temp.iss"), "w") as file:
+        file.write(content)
 
 
 if __name__ == "__main__":

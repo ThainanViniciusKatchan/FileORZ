@@ -1,3 +1,4 @@
+# Project Files
 .gitignore
 .venv
 .Venv
@@ -27,6 +28,7 @@ key_base64.txt
 ui/LiveReload.py
 .idea
 *.iss
+*.exe
 Setup.iss
 .vscode
 debug_app.py
