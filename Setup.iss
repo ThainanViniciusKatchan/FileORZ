@@ -3,7 +3,7 @@
 ; Non-commercial use only
 
 #define MyAppName "FileORZ"
-#define MyAppVersion "1.2.5"
+#define MyAppVersion "{{VERSION}}"
 #define MyAppPublisher "Dev: Katchan"
 #define MyAppURL "https://thainanviniciuskatchan.github.io/FileORZ/"
 #define MyAppExeName "FL_ORZ.exe"
