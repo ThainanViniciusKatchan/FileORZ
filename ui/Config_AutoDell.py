@@ -321,12 +321,19 @@ def open_Windows_CFG_autoDell(parent):
 
     # Configurações Auto Deletar
     Windows_cfg_autoDell = customtkinter.CTkToplevel(parent)
+    if parent:
+        Windows_cfg_autoDell.transient(parent)
     Windows_cfg_autoDell.title("Configurações Auto Deletar")
     Windows_cfg_autoDell.geometry("600x480")
     Windows_cfg_autoDell.resizable(False, False)
     Windows_cfg_autoDell.configure(bg_color=COLORS["bg_primary"])
     Windows_cfg_autoDell.grab_set()
     Centralizar_Janela(Windows_cfg_autoDell, 645, 370)
+    Windows_cfg_autoDell.lift()
+    Windows_cfg_autoDell.focus_force()
+    Windows_cfg_autoDell.after(
+        100, lambda: (Windows_cfg_autoDell.lift(), Windows_cfg_autoDell.focus_force())
+    )
     Header_Title(Windows_cfg_autoDell)
 
     # Checkbox que ativa/desativa auto deletar
@@ -350,7 +357,8 @@ def open_Windows_CFG_autoDell(parent):
     type_of_delete(ext_frame)
     Time_AutoDelete(ext_frame)
 
-    Windows_cfg_autoDell.mainloop()
+    if parent is None:
+        Windows_cfg_autoDell.mainloop()
 
     try:
         if os.path.exists(icon_path):

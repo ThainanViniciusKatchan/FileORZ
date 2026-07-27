@@ -56,12 +56,17 @@ def open_config_window(parent):
     icon_path = os.path.join(icon_dir, "IconApp.ico")
 
     window = customtkinter.CTkToplevel(parent)
+    if parent:
+        window.transient(parent)
     window.title("Configurações Gerais - FileORZ")
     window.geometry("900x520")
     window.configure(fg_color=COLORS["bg_primary"])
     window.resizable(False, False)
     window.grab_set()
     Centralizar_Janela(window, 900, 520)
+    window.lift()
+    window.focus_force()
+    window.after(100, lambda: (window.lift(), window.focus_force()))
 
     try:
         if os.path.exists(icon_path):
@@ -249,7 +254,8 @@ def open_config_window(parent):
     )
     btn_auto.pack(side="bottom", pady=30)
 
-    window.mainloop()
+    if parent is None:
+        window.mainloop()
 
 
 if __name__ == "__main__":

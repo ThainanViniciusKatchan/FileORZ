@@ -39,12 +39,17 @@ def ext_config_window(parent=None):
     icon_path = os.path.join(icon_dir, "IconApp.ico")
 
     window = customtkinter.CTkToplevel(parent)
+    if parent:
+        window.transient(parent)
     window.title("Categorias e Extensões - FileORZ")
     window.geometry("900x700")
     window.configure(fg_color=COLORS["bg_primary"])
     window.resizable(False, False)
     window.grab_set()
     Centralizar_Janela(window, 900, 700)
+    window.lift()
+    window.focus_force()
+    window.after(100, lambda: (window.lift(), window.focus_force()))
 
     try:
         if os.path.exists(icon_path):

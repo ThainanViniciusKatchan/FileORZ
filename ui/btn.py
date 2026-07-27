@@ -18,6 +18,11 @@ along with FileORZ.  If not, see <https://www.gnu.org/licenses/
 """
 
 import customtkinter
+
+import sys
+import os
+
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from ui.config import open_config_window
 
 

@@ -19,10 +19,10 @@ along with FileORZ.  If not, see <https://www.gnu.org/licenses/
 
 import customtkinter
 import os
-from Centralizar_Janela import Centralizar_Janela
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from ui.Centralizar_Janela import Centralizar_Janela
 from utils.AdvancedConfig import AdvancedConfig
 
 COLORS = {
@@ -54,12 +54,17 @@ def open_advanced_config_window(parent):
     icon_path = os.path.join(icon_dir, "IconApp.ico")
 
     window = customtkinter.CTkToplevel(parent)
+    if parent:
+        window.transient(parent)
     window.title("Configurações Avançadas - FileORZ (BETA)")
     window.geometry("800x650")
     window.configure(fg_color=COLORS["bg_primary"])
     window.resizable(False, False)
     window.grab_set()
     Centralizar_Janela(window, 800, 650)
+    window.lift()
+    window.focus_force()
+    window.after(100, lambda: (window.lift(), window.focus_force()))
 
     try:
         if os.path.exists(icon_path):
@@ -287,7 +292,8 @@ def open_advanced_config_window(parent):
     # Carrega os dados inicialmente
     refresh_keywords()
 
-    window.mainloop()
+    if parent is None:
+        window.mainloop()
 
 
 if __name__ == "__main__":

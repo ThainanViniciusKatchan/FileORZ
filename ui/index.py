@@ -21,14 +21,15 @@ import customtkinter
 import os
 import sys
 import subprocess
+import ctypes
+
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from ui.header import header
 from ui.Centralizar_Janela import Centralizar_Janela
 from ui.Select_Folder import folder_select
 from ui.Time_Select import time_select
 from ui.btn import config_btn, start_btn
-import ctypes
-
 from utils import folder, timeVerification
 
 Aplication_patch = os.path.dirname(sys.executable)
