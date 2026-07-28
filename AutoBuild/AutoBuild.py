@@ -565,7 +565,9 @@ def gravar_nova_versao(type_version):
     new_version = f"{major}.{minor}.{patch}"
     print(f"Versão Nova: {new_version}")
 
-    with open(os.path.join(os.getcwd(), "utils", "version.py"), "w", encoding="utf-8") as file:
+    with open(
+        os.path.join(os.getcwd(), "utils", "version.py"), "w", encoding="utf-8"
+    ) as file:
         file.write(f'__version__ = "{new_version}"\n')
 
     return new_version
@@ -584,17 +586,17 @@ def criar_iss_temp(v):
 if __name__ == "__main__":
 
     ETAPAS = [
-        # ("Matar processos existentes", matar_processos),
-        # ("Limpar builds anteriores", limpar_builds_anteriores),
-        # ("Criar pasta de build", criar_pasta_build),
-        # ("Compilar UI", compilar_ui),
-        # ("Compilar Organizador", compilar_organizador),
-        # ("Reorganizar estrutura", reorganizar_estrutura),
-        # ("Criar Key_Words padrão", criar_keywords_padrao),
-        # ("Criar config padrão", criar_config_padrao),
-        # ("Ajustar configurações", alterar_config_build),
-        # ("Limpar arquivos temporários", limpar_temporarios),
-        # ("Assinar binários", assinar_binarios),
+        ("Matar processos existentes", matar_processos),
+        ("Limpar builds anteriores", limpar_builds_anteriores),
+        ("Criar pasta de build", criar_pasta_build),
+        ("Compilar UI", compilar_ui),
+        ("Compilar Organizador", compilar_organizador),
+        ("Reorganizar estrutura", reorganizar_estrutura),
+        ("Criar Key_Words padrão", criar_keywords_padrao),
+        ("Criar config padrão", criar_config_padrao),
+        ("Ajustar configurações", alterar_config_build),
+        ("Limpar arquivos temporários", limpar_temporarios),
+        ("Assinar binários", assinar_binarios),
         ("Criando arquivo setup_temp.iss", criar_iss_temp),
         ("Criando o Setup de Instação", setup_compiler),
         ("Criando a tag e release no GitHub", git_comands),
