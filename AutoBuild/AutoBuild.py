@@ -548,6 +548,8 @@ def gravar_nova_versao(v):
     with open(os.path.join(os.getcwd(), "utils", "version.py"), "w") as file:
         file.write(f'__version__ = "{v}"')
 
+
+def criar_iss_temp(v):
     with open(os.path.join(os.getcwd(), "Setup.iss"), "r") as file:
         content = file.read()
 
@@ -588,42 +590,46 @@ if __name__ == "__main__":
         ("Ajustar configurações", alterar_config_build),
         ("Limpar arquivos temporários", limpar_temporarios),
         ("Assinar binários", assinar_binarios),
+        ("Criando arquivo setup_temp.iss", criar_iss_temp),
         ("Criando o Setup de Instação", setup_compiler),
         ("Criando a tag e release no GitHub", git_comands),
     ]
 
-    vertion = version.__version__
-    major = int(vertion[0])
-    minor = int(vertion[2])
-    patch = int(vertion[4])
+    Version = version.__version__
+    major = int(Version[0])
+    minor = int(Version[2])
+    patch = int(Version[4])
     for nome, func in ETAPAS:
         print(f"\n>>> {nome}")
         try:
             if nome == "Criando a tag e release no GitHub":
                 if type_version == 1:
-                    print(f"Versão Atual: {vertion}")
+                    print(f"Versão Atual: {version}")
                     major += 1
-                    new_vertion = f"{major}.{minor}.{patch}"
-                    func(new_vertion)
-                    vertion = new_vertion
+                    new_version = f"{major}.{minor}.{patch}"
+                    func(new_version)
+                    vertion = new_version
                     gravar_nova_versao(vertion)
-                    print(f"Versão Nova: {new_vertion}")
+                    print(f"Versão Nova: {new_version}")
                 elif type_version == 2:
                     minor += 1
-                    new_vertion = f"{major}.{minor}.{patch}"
-                    func(new_vertion)
-                    vertion = new_vertion
-                    print(f"Versão Nova: {new_vertion}")
+                    new_version = f"{major}.{minor}.{patch}"
+                    func(new_version)
+                    vertion = new_version
+                    print(f"Versão Nova: {new_version}")
                     gravar_nova_versao(vertion)
                 elif type_version == 3:
                     patch += 1
-                    new_vertion = f"{major}.{minor}.{patch}"
-                    func(new_vertion)
-                    vertion = new_vertion
-                    print(f"Versão Nova: {new_vertion}")
+                    new_version = f"{major}.{minor}.{patch}"
+                    func(new_version)
+                    vertion = new_version
+                    print(f"Versão Nova: {new_version}")
                     gravar_nova_versao(vertion)
             else:
-                if nome == "Criando o Setup de Instação":
+                if (
+                    nome == "Criando arquivo setup_temp.iss"
+                    or nome == "Criando o Setup de Instação"
+                ):
                     func(version.__version__)
                     continue
                 else:
