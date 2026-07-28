@@ -33,7 +33,7 @@ DisableProgramGroupPage=yes
 ; Remove the following line to run in administrative install mode (install for all users).
 PrivilegesRequired=lowest
 OutputDir={#GetEnv('USERPROFILE')}\Desktop
-OutputBaseFilename=FileORZ_install
+OutputBaseFilename=FileORZ_install_{{VERSION}}
 SetupIconFile={#GetEnv('USERPROFILE')}\Desktop\FileORZ\ui\icon\IconApp.ico
 SolidCompression=yes
 WizardStyle=modern dark
