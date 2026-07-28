@@ -7,35 +7,28 @@
 ### 🚀 Organizador Automático de Arquivos
 
 [![Python](https://img.shields.io/badge/Python-3.12+-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://python.org)
-[![License](https://img.shields.io/badge/Licença-Open%20Source-green?style=for-the-badge)](LICENSE)
+[![License](https://img.shields.io/badge/Licença-GNU%20GPL-green?style=for-the-badge)](LICENSE)
+![OpenSource](https://img.shields.io/badge/OpenSource%20-20B2AA?style=for-the-badge)
 
-**Desenvolvido por Thainan Vinicius Katchan** 💚💛
 
----
+**Desenvolvido por Thainan Vinicius Katchan**
+# DESENVOLVIDO NO BRASIL 💚💛
 
 ### 🌐 Idiomas | Languages
 
 [🇧🇷 Português](#-português) • [🇺🇸 English](#-english)
 
----
-
 </div>
 
-> ⚠️ **Nota:** Atualmente o projeto só tem suporte para o idioma português-br. Caso queira traduzir para outro idioma, faça um fork do projeto e crie um pull request.
+> ⚠️ **Nota:** Atualmente o projeto só tem suporte para o idioma português-br, estou trabalhando internamente na padronização dos textos, para facilitar a tradução, mas no momento não está disponível para tradução. Obrigado pela compreensão!
 
-> ⚠️ **Note:** Currently the project only supports the portuguese-br language. If you want to translate to another language, fork the project and create a pull request.
-
----
+> ⚠️ **Note:** Currently, the project only supports Brazilian Portuguese. I am working internally on standardizing the text to facilitate translation, but it is not available for translation at the moment. Thank you for your understanding!
 
 # 🇧🇷 Português
 
-## 📋 Descrição
+### 📋 Descrição
 
 O **FileORZ** surgiu para solucionar um problema comum: a desorganização de arquivos em pastas. Quantas vezes você teve dificuldade para encontrar um arquivo em meio a dezenas de arquivos soltos? O FileORZ resolve isso automaticamente!
-
-![Configurações FileORZ](assets/Configurações_FileORZ.png)
-
----
 
 ## ⚙️ Como Executar
 
@@ -49,8 +42,6 @@ pip install -r requirements.txt
 # 3. Execute o aplicativo
 python ui/index.py
 ```
-
----
 
 ## ✨ Funcionalidades
 
@@ -98,8 +89,6 @@ python ui/index.py
 ## 📋 Description
 
 **FileORZ** was created to solve a common problem: file disorganization in folders. How many times have you struggled to find a file among dozens of loose files? FileORZ solves this automatically!
-
-![FileORZ Settings](assets/Configurações_FileORZ.png)
 
 ---
 
