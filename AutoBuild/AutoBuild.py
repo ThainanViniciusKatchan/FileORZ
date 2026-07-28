@@ -504,11 +504,10 @@ def assinar_binarios():
         print("  [AVISO] Executável não encontrado para assinatura")
 
 
-def setup_compiler(v):
+def setup_compiler():
     try:
         comando = [
             r"C:\Program Files (x86)\Inno Setup 6\ISCC.exe",
-            f"/dMyAppVersion={v}",
             r"Setup_temp.iss",
         ]
         subprocess.run(comando, check=True)
@@ -517,10 +516,9 @@ def setup_compiler(v):
         print(f"Erro ao Cria o Setup: {Error}")
 
 
-from pathlib import Path
-
-
 def git_comands(v):
+    from pathlib import Path
+
     try:
         comandos = [
             ["git", "tag", "-a", f"v{v}", "-m", f"versão {v}"],
@@ -544,15 +542,39 @@ def git_comands(v):
         print(f"Erro ao Cria a tag ou release: {Error}")
 
 
-def gravar_nova_versao(v):
-    with open(os.path.join(os.getcwd(), "utils", "version.py"), "w") as file:
-        file.write(f'__version__ = "{v}"')
+def gravar_nova_versao(type_version):
+    from utils import version
+
+    vertion = version.__version__
+
+    parts = vertion.split(".")
+    major = int(parts[0])
+    minor = int(parts[1])
+    patch = int(parts[2])
+
+    if type_version == 1:
+        major += 1
+        minor = 0
+        patch = 0
+    elif type_version == 2:
+        minor += 1
+        patch = 0
+    elif type_version == 3:
+        patch += 1
+
+    new_version = f"{major}.{minor}.{patch}"
+    print(f"Versão Nova: {new_version}")
+
+    with open(os.path.join(os.getcwd(), "utils", "version.py"), "w", encoding="utf-8") as file:
+        file.write(f'__version__ = "{new_version}"\n')
+
+    return new_version
 
 
 def criar_iss_temp(v):
+
     with open(os.path.join(os.getcwd(), "Setup.iss"), "r") as file:
         content = file.read()
-
     content = content.replace("{{VERSION}}", v)
 
     with open(os.path.join(os.getcwd(), "setup_temp.iss"), "w") as file:
@@ -560,7 +582,23 @@ def criar_iss_temp(v):
 
 
 if __name__ == "__main__":
-    from utils import version
+
+    ETAPAS = [
+        # ("Matar processos existentes", matar_processos),
+        # ("Limpar builds anteriores", limpar_builds_anteriores),
+        # ("Criar pasta de build", criar_pasta_build),
+        # ("Compilar UI", compilar_ui),
+        # ("Compilar Organizador", compilar_organizador),
+        # ("Reorganizar estrutura", reorganizar_estrutura),
+        # ("Criar Key_Words padrão", criar_keywords_padrao),
+        # ("Criar config padrão", criar_config_padrao),
+        # ("Ajustar configurações", alterar_config_build),
+        # ("Limpar arquivos temporários", limpar_temporarios),
+        # ("Assinar binários", assinar_binarios),
+        ("Criando arquivo setup_temp.iss", criar_iss_temp),
+        ("Criando o Setup de Instação", setup_compiler),
+        ("Criando a tag e release no GitHub", git_comands),
+    ]
 
     type_version = int(
         input(
@@ -571,71 +609,31 @@ if __name__ == "__main__":
             "[3] Patch:\n"
         )
     )
-    if type_version == 0:
-        pass
     print("\n" + "=" * 50)
     print("INICIANDO BUILD: FileORZ")
     print("=" * 50)
     sleep(1)
 
-    ETAPAS = [
-        ("Matar processos existentes", matar_processos),
-        ("Limpar builds anteriores", limpar_builds_anteriores),
-        ("Criar pasta de build", criar_pasta_build),
-        ("Compilar UI", compilar_ui),
-        ("Compilar Organizador", compilar_organizador),
-        ("Reorganizar estrutura", reorganizar_estrutura),
-        ("Criar Key_Words padrão", criar_keywords_padrao),
-        ("Criar config padrão", criar_config_padrao),
-        ("Ajustar configurações", alterar_config_build),
-        ("Limpar arquivos temporários", limpar_temporarios),
-        ("Assinar binários", assinar_binarios),
-        ("Criando arquivo setup_temp.iss", criar_iss_temp),
-        ("Criando o Setup de Instação", setup_compiler),
-        ("Criando a tag e release no GitHub", git_comands),
-    ]
+    if type_version > 0:
+        v = gravar_nova_versao(type_version)
+        print("Nova versão gravada com sucesso!")
+    else:
+        from utils.version import __version__ as v
 
-    Version = version.__version__
-    major = int(Version[0])
-    minor = int(Version[2])
-    patch = int(Version[4])
     for nome, func in ETAPAS:
-        print(f"\n>>> {nome}")
+        print(f"\n>>> ETAPA: {nome}")
+        sleep(2)
         try:
-            if nome == "Criando a tag e release no GitHub":
-                if type_version == 1:
-                    print(f"Versão Atual: {version}")
-                    major += 1
-                    new_version = f"{major}.{minor}.{patch}"
-                    func(new_version)
-                    vertion = new_version
-                    gravar_nova_versao(vertion)
-                    print(f"Versão Nova: {new_version}")
-                elif type_version == 2:
-                    minor += 1
-                    new_version = f"{major}.{minor}.{patch}"
-                    func(new_version)
-                    vertion = new_version
-                    print(f"Versão Nova: {new_version}")
-                    gravar_nova_versao(vertion)
-                elif type_version == 3:
-                    patch += 1
-                    new_version = f"{major}.{minor}.{patch}"
-                    func(new_version)
-                    vertion = new_version
-                    print(f"Versão Nova: {new_version}")
-                    gravar_nova_versao(vertion)
+            if nome in (
+                "Criando arquivo setup_temp.iss",
+                "Criando a tag e release no GitHub",
+            ):
+                func(v)
+                print(f"--- {nome} concluído ---")
             else:
-                if (
-                    nome == "Criando arquivo setup_temp.iss"
-                    or nome == "Criando o Setup de Instação"
-                ):
-                    func(version.__version__)
-                    continue
-                else:
-                    func()
-                    continue
-            print(f"--- {nome} concluído ---")
+                func()
+                sleep(1)
+                print(f"--- {nome} concluído ---")
         except Exception as e:
             print(f"🛑 ERRO FATAL em {nome}: {e}")
             sys.exit(1)
