@@ -521,6 +521,7 @@ def git_comands(v):
 
     try:
         comandos = [
+            ["git", "lfs", "track", "*.exe"],
             ["git", "tag", "-a", f"v{v}", "-m", f"versão {v}"],
             ["git", "push", "GH", f"v{v}"],
             [
@@ -528,7 +529,7 @@ def git_comands(v):
                 "release",
                 "create",
                 f"v{v}",
-                Path.home() / "Desktop" / "FileORZ_install.exe",
+                Path.home() / "Desktop" / f"FileORZ_install_{v}.exe",
                 "--title",
                 f"Versão {v}",
                 "--notes",
