@@ -439,6 +439,143 @@ def criar_config_padrao():
             print(f"  [ERRO] Falha ao criar config em {path}: {Error}")
 
 
+def criar_ext_padrao():
+    print("\nCriando ext.json padrão...")
+    config = {
+        "Desenvolvimento": {
+            ".bin": True,
+            ".htm": True,
+            ".html": True,
+            ".cfg": True,
+            ".alg": True,
+            ".md": True,
+            ".ftl": True,
+            ".json": True,
+            ".py": True,
+            ".bat": True,
+            ".cmd": True,
+            ".ps1": True,
+            ".sh": True,
+            ".ini": True,
+            ".js": True,
+            ".ts": True,
+            ".css": True,
+            ".java": True,
+            ".cpp": True,
+            ".cs": True,
+            ".php": True,
+            ".c": True,
+            ".net": True,
+            ".pyd": True,
+            ".lexical": True,
+            ".dll": True,
+        },
+        "documentos": {
+            ".pdf": True,
+            ".doc": True,
+            ".txt": True,
+            ".pptx": True,
+            ".docx": True,
+            ".xlsx": True,
+            ".xlsm": True,
+            ".csv": True,
+            ".xls": True,
+            ".dotm": True,
+            ".ponto": True,
+            ".dotx": True,
+            ".htm": True,
+            ".html": True,
+            ".cfg": True,
+            ".alg": True,
+            ".ftl": True,
+            ".ppt": True,
+            ".md": True,
+        },
+        "videos": {
+            ".mov": True,
+            ".mp4": True,
+            ".avi": True,
+            ".av1": True,
+            ".mpeg-2": True,
+            ".avchd": True,
+            ".aac": True,
+            ".mkv": True,
+            ".divx": True,
+            ".h.264": True,
+            ".mpeg-1": True,
+            ".wmv": True,
+        },
+        "audios": {
+            ".mp3": True,
+            ".wav": True,
+            ".flac": True,
+            ".3GP": True,
+            ".M4A": True,
+            ".ogg": True,
+            ".wma": True,
+            ".m4a": True,
+            ".webm": True,
+        },
+        "compactos": {
+            ".rar": True,
+            ".zip": True,
+            ".zpix": True,
+            ".7z": True,
+            ".rar5": True,
+            ".iso": True,
+            ".gzip": True,
+            ".7-zip": True,
+            ".tar": True,
+        },
+        "fontes": {".ttf": True, ".eot": True, ".woff": True, ".woff2": True},
+        "setups": {
+            ".exe": True,
+            ".msi": True,
+            ".appx": True,
+            ".appxbundle": True,
+            ".msix": True,
+            ".apk": True,
+            ".Msixbundle": True,
+        },
+        "imagens": {
+            ".jpg": True,
+            ".jpeg": True,
+            ".png": True,
+            ".bmp": True,
+            ".tiff": True,
+            ".gif": True,
+            ".cr3": True,
+            ".cr2": True,
+            ".exif": True,
+            ".psd": True,
+            ".af": True,
+            ".eps": True,
+            ".ai": True,
+            ".svg": True,
+            ".webp": True,
+            ".heic": True,
+            ".heif": True,
+            ".raw": True,
+            ".img": True,
+        },
+    }
+
+    # Salva na pasta do projeto para referência (opcional, mantido conforme original)
+    dist_proj_config = os.path.join(BASE_DIR, "dist", "category.json")
+    os.makedirs(os.path.dirname(dist_proj_config), exist_ok=True)
+
+    # Salva na pasta da build
+    build_config_path = os.path.join(BASE_DIR, OUTPUT_DIR, "dist", "category.json")
+
+    for path in [dist_proj_config, build_config_path]:
+        try:
+            with open(path, "w", encoding="utf-8") as f:
+                json.dump(config, f, indent=4, ensure_ascii=False)
+            print(f"  [OK] config.json criado em: {path}")
+        except Exception as Error:
+            print(f"  [ERRO] Falha ao criar config em {path}: {Error}")
+
+
 def alterar_config_build():
     print("\nAjustando configurações da build...")
     try:
@@ -595,6 +732,7 @@ if __name__ == "__main__":
         ("Reorganizar estrutura", reorganizar_estrutura),
         ("Criar Key_Words padrão", criar_keywords_padrao),
         ("Criar config padrão", criar_config_padrao),
+        ("Criar ext padrão", criar_ext_padrao),
         ("Ajustar configurações", alterar_config_build),
         ("Limpar arquivos temporários", limpar_temporarios),
         ("Assinar binários", assinar_binarios),

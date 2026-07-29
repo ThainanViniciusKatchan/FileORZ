@@ -91,7 +91,7 @@ def save_config(folder, file, config):
     from utils import StartUp
 
     Start = StartUp.StartUpSys()
-    with open(json_path("dist", "config"), "w", encoding="utf-8") as f:
+    with open(json_path(folder, file), "w", encoding="utf-8") as f:
         json.dump(config, f, indent=4, ensure_ascii=False)
 
     local_config_path = os.path.join(INSTALL_DIR, folder, f"{file}.json")

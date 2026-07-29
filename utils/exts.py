@@ -1,10 +1,16 @@
+import sys
+import os
+
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 from utils.model import json_path, load_config, save_config
 
-JSON_PATH = json_path("dist", "config")
-CONFIG = load_config("dist", "config")
+JSON_PATH = json_path("dist", "category")
+CONFIG = load_config("dist", "category")
+
 
 class Extensions:
-    def __init__(self, category: str = "" ,name: str = "", value: bool = bool):
+    def __init__(self, category: str = "", name: str = "", value: bool = bool):
         self._name = name
         self._value = value
         self._category = category
@@ -30,11 +36,16 @@ class Extensions:
     def category(self, category: str):
         self._category = category
 
+    @category.getter
+    def all_category(self):
+        CONFIG = load_config("dist", "category")
+        return CONFIG.keys()
+
     @value.setter
     def value(self, value: bool):
-            CONFIG[self._category][self._name] = value
-            save_config("dist", "config", CONFIG)
-            return f" [✔] {self._name} foi {self._value} com sucesso!"
+        CONFIG[self._category][self._name] = value
+        save_config("dist", "category", CONFIG)
+        return f" [✔] {self._name} foi {self._value} com sucesso!"
 
     # def add_ext(self, name: str, category: str, value: bool = bool):
     #     self._name = name
@@ -47,11 +58,12 @@ class Extensions:
         for ext in CONFIG[category]:
             try:
                 CONFIG[category][ext] = value
-                save_config("dist", "config", CONFIG)
+                save_config("dist", "category", CONFIG)
             except Exception as e:
                 print(f"[X] Erro ao mudar a Chave {ext}: {e}")
         return f"Todas as chaves Foram Alteradas com Sucesso!"
 
+
 if __name__ == "__main__":
     EXT = Extensions()
-    print(EXT.replace_all_value(True, "documentos"))
+    print(EXT.all_category)

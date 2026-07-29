@@ -111,18 +111,10 @@ def ext_config_window(parent=None):
     )
     scroll_frame.pack(pady=10, padx=15, fill="both", expand=True)
 
-    config = load_config("dist", "config")
+    config = load_config("dist", "category")
     extension_vars = {}
 
     for category, extensions in config.items():
-        if (
-            category == "Folder"
-            or category == "AutoDelete"
-            or category == "AutoDeleteConfig"
-            or category == "folder_delete"
-        ):
-            continue
-
         if not isinstance(extensions, dict):
             continue
 
@@ -242,14 +234,14 @@ def ext_config_window(parent=None):
                 spacer.grid(row=row_idx, column=empty_col)
 
     def save_changes():
-        config_data = load_config("dist", "config")
+        config_data = load_config("dist", "category")
 
         for category, exts in extension_vars.items():
             if category in config_data:
                 for ext, var in exts.items():
                     config_data[category][ext] = var.get()
 
-        save_config("dist", "config", config_data)
+        save_config("dist", "category", config_data)
 
         for widget in feedback_container.winfo_children():
             widget.destroy()

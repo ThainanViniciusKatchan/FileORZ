@@ -7,6 +7,8 @@ from utils import folder
 
 main_folder = folder.Folder().Getfolder
 
+Delete_folder = folder.Delete_Folde()
+
 
 def delete_folder():
     if not main_folder or not path.exists(main_folder):
@@ -14,24 +16,25 @@ def delete_folder():
         return
 
     has_deleted = False
-    try:
-        for root, dirs, files in os.walk(main_folder, topdown=False):
-            for d in dirs:
-                dir_path = path.join(root, d)
-                try:
-                    # Verifica se a pasta está vazia
-                    if listdir(dir_path) == []:
-                        print(f"Pasta {dir_path} foi excluida!")
-                        rmdir(dir_path)
-                        has_deleted = True
-                except Exception as Error:
-                    print(f"Erro ao excluir a pasta {dir_path}: {Error}")
-    except Exception as e:
-        print(f"Erro ao acessar a pasta {main_folder}: {e}")
-        return
+    if Delete_folder.ativado is True:
+        try:
+            for root, dirs, files in os.walk(main_folder, topdown=False):
+                for d in dirs:
+                    dir_path = path.join(root, d)
+                    try:
+                        # Verifica se a pasta está vazia
+                        if listdir(dir_path) == []:
+                            print(f"Pasta {dir_path} foi excluida!")
+                            rmdir(dir_path)
+                            has_deleted = True
+                    except Exception as Error:
+                        print(f"Erro ao excluir a pasta {dir_path}: {Error}")
+        except Exception as e:
+            print(f"Erro ao acessar a pasta {main_folder}: {e}")
+            return
 
-    if not has_deleted:
-        print("Sem pastas vazias para excluir")
+        if not has_deleted:
+            print("Sem pastas vazias para excluir")
 
 
 if __name__ == "__main__":

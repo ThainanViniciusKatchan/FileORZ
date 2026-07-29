@@ -1,3 +1,7 @@
+import sys
+import os
+
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from utils.model import load_config, save_config
 
 
@@ -28,8 +32,97 @@ class Folder:
         else:
             pass
 
+
+class Delete_Folde:
+    def __init__(
+        self,
+        ativado: bool = False,
+        lixeira: bool = False,
+        excluir_permanentemente: bool = False,
+        pasta_orz: bool = False,
+        todas: bool = False,
+    ):
+        self._ativado = ativado
+        self._lixeira = lixeira
+        self._excluir_permanentemente = excluir_permanentemente
+        self._pasta_orz = pasta_orz
+        self._todas = todas
+
+    @property
+    def ativado(self) -> bool:
+        return self._ativado
+
+    @ativado.setter
+    def ativado(self, ativado: bool):
+        CONFIG = load_config("dist", "config")
+        CONFIG["folder_delete"]["ativado"] = ativado
+        save_config("dist", "config", CONFIG)
+
+    @ativado.getter
+    def Getativado(self) -> bool:
+        CONFIG = load_config("dist", "config")
+        return CONFIG["folder_delete"]["ativado"]
+
+    @property
+    def lixeira(self) -> bool:
+        return self._lixeira
+
+    @lixeira.setter
+    def lixeira(self, lixeira: bool):
+        CONFIG = load_config("dist", "config")
+        CONFIG["folder_delete"]["lixeira"] = lixeira
+        save_config("dist", "config", CONFIG)
+
+    @lixeira.getter
+    def Getlixeira(self) -> bool:
+        CONFIG = load_config("dist", "config")
+        return CONFIG["folder_delete"]["lixeira"]
+
+    @property
+    def excluir_permanentemente(self) -> bool:
+        return self._excluir_permanentemente
+
+    @excluir_permanentemente.setter
+    def excluir_permanentemente(self, excluir_permanentemente: bool):
+        CONFIG = load_config("dist", "config")
+        CONFIG["folder_delete"]["excluir_permanentemente"] = excluir_permanentemente
+        save_config("dist", "config", CONFIG)
+
+    @excluir_permanentemente.getter
+    def Getexcluir_permanentemente(self) -> bool:
+        CONFIG = load_config("dist", "config")
+        return CONFIG["folder_delete"]["excluir_permanentemente"]
+
+    @property
+    def pasta_orz(self) -> bool:
+        return self._pasta_orz
+
+    @pasta_orz.setter
+    def pasta_orz(self, pasta_orz: bool):
+        CONFIG = load_config("dist", "config")
+        CONFIG["folder_delete"]["pasta_orz"] = pasta_orz
+        save_config("dist", "config", CONFIG)
+
+    @pasta_orz.getter
+    def Getpasta_orz(self) -> bool:
+        CONFIG = load_config("dist", "config")
+        return CONFIG["folder_delete"]["pasta_orz"]
+
+    @property
+    def todas(self) -> bool:
+        return self._todas
+
+    @todas.setter
+    def todas(self, todas: bool):
+        CONFIG = load_config("dist", "config")
+        CONFIG["folder_delete"]["todas"] = todas
+        save_config("dist", "config", CONFIG)
+
+    @todas.getter
+    def Gettodas(self) -> bool:
+        CONFIG = load_config("dist", "config")
+        return CONFIG["folder_delete"]["todas"]
+
+
 if __name__ == "__main__":
-    # folder = Folder()
-    # folder.folder = "c:/users/Thayn/downloads"
-    # print(folder.Getfolder)
     ...
