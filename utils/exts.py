@@ -41,6 +41,11 @@ class Extensions:
         CONFIG = load_config("dist", "category")
         return CONFIG.keys()
 
+    @category.getter
+    def select_exts(self):
+        CONFIG = load_config("dist", "category")
+        return CONFIG[self._category]
+
     @value.setter
     def value(self, value: bool):
         CONFIG[self._category][self._name] = value
@@ -65,5 +70,4 @@ class Extensions:
 
 
 if __name__ == "__main__":
-    EXT = Extensions()
-    print(EXT.all_category)
+    ...
