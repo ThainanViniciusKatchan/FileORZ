@@ -70,4 +70,5 @@ class Extensions:
 
 
 if __name__ == "__main__":
-    ...
+    for i in Extensions("Desenvolvimento").select_exts:
+        print(i)

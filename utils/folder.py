@@ -106,7 +106,7 @@ class Delete_Folde:
     @pasta_orz.getter
     def Getpasta_orz(self) -> bool:
         CONFIG = load_config("dist", "config")
-        return CONFIG["folder_delete"]["pasta_orz"]
+        return CONFIG["folder_delete"]["pastas_ORZ"]
 
     @property
     def todas(self) -> bool:
