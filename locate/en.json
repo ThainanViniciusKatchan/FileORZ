@@ -1,0 +1,68 @@
+{
+    "header": {
+        "title": "File ORZ",
+        "subtitle": "File Organizer",
+        "github_title": "GitHub",
+        "changelog_title": "Changelog",
+        "startup": "Start with Windows"
+    },
+    "index_window": {
+        "title": "File ORZ - Organize your files",
+        "Select_folder": "Select Folder to Organize",
+        "Select_folder_btn": "Select",
+        "Select_folder_placeholder": "No folder selected",
+        "Select_folder_success": "Folder selected successfully",
+        "config_btn": "⚙️  Settings",
+        "start_btn": "🚀  Start Organization"
+    },
+    "time_selection": {
+        "time_title": "Check Interval (Minutes)",
+        "time_subtitle": "Time in minutes between each automatic check for new files"
+    },
+    "Config_Window": {
+        "tittle_ext_config": "General Settings - FileORZ",
+        "header": "Settings - FileORZ",
+        "header_subtitle": "Adjust organizer preferences",
+        "lbl_ext_title": "Categories &\nExtensions",
+        "lbl_ext_desc": "Manage and customize file extensions organized by category.",
+        "lbl_adv_title": "Advanced\nOrganization (BETA)",
+        "lbl_adv_desc": "Smart rules with keywords to group and organize PDFs.",
+        "lbl_auto_title": "Auto\nDelete",
+        "lbl_auto_desc": "Set automatic deletion intervals and rules for periodic cleanup.",
+        "btn_config": "⚙️ Configure"
+    },
+    "ext_config": {
+        "tittle_ext_config": "Categories and Extensions - FileORZ",
+        "header": "Categories and Extensions",
+        "header_subtitle": "Manage extensions by category",
+        "enabled_count": "{enabled_count}/{total_count} selected",
+        "btn_select_all": "✓ All",
+        "btn_select_all_hover": "Select All",
+        "btn_deselect_all": "✗ None",
+        "btn_deselect_all_hover": "Deselect All",
+        "btn_save": "💾 Save Categories",
+        "btn_save_hover": "Save Settings",
+        "success_label": "Settings saved successfully!"
+    },
+    "auto_delete": {
+        "title": "Configure Auto Delete",
+        "enabled": "Auto Delete Enabled",
+        "disabled": "Auto Delete Disabled",
+        "filters_title": "Deletion Filters:",
+        "days": "Days to delete the file.",
+        "type_of_delete": "Deletion type",
+        "type_1": "Delete permanently",
+        "type_2": "Send to recycle bin",
+        "Window_tittle": "Auto Delete Settings"
+    },
+    "Adivanced_config": {
+        "tittle": "Advanced Settings - FileORZ (BETA)",
+        "header": "Advanced Document Organization (BETA)",
+        "mode_adv_enable": "Advanced Mode Enabled",
+        "mode_adv_disable": "Advanced Mode Disabled",
+        "btn_add": "+ Add Group",
+        "description": "Define the group name and keywords (comma-separated) to organize your PDFs.\n\nClick the save icon on each card to apply changes.",
+        "empty_label": "No groups registered. Click + Add Group.",
+        "words_entry": "Words or phrases separated by comma."
+    }
+}

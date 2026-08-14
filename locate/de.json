@@ -1,0 +1,68 @@
+{
+    "header": {
+        "title": "File ORZ",
+        "subtitle": "Datei-Organizer",
+        "github_title": "GitHub",
+        "changelog_title": "Änderungsprotokoll",
+        "startup": "Mit Windows starten"
+    },
+    "index_window": {
+        "title": "File ORZ - Organisieren Sie Ihre Dateien",
+        "Select_folder": "Ordner zum Organisieren auswählen",
+        "Select_folder_btn": "Auswählen",
+        "Select_folder_placeholder": "Kein Ordner ausgewählt",
+        "Select_folder_success": "Ordner erfolgreich ausgewählt",
+        "config_btn": "⚙️  Einstellungen",
+        "start_btn": "🚀  Organisation starten"
+    },
+    "time_selection": {
+        "time_title": "Prüfintervall (Minuten)",
+        "time_subtitle": "Zeit in Minuten zwischen jeder automatischen Überprüfung auf neue Dateien"
+    },
+    "Config_Window": {
+        "tittle_ext_config": "Allgemeine Einstellungen - FileORZ",
+        "header": "Einstellungen - FileORZ",
+        "header_subtitle": "Passen Sie die Einstellungen des Organizers an",
+        "lbl_ext_title": "Kategorien &\nErweiterungen",
+        "lbl_ext_desc": "Verwalten und passen Sie die nach Kategorien organisierten Dateierweiterungen an.",
+        "lbl_adv_title": "Erweiterte\nOrganisation (BETA)",
+        "lbl_adv_desc": "Intelligente Regeln mit Schlüsselwörtern zum Gruppieren und Organisieren von PDFs.",
+        "lbl_auto_title": "Automatisches\nLöschen",
+        "lbl_auto_desc": "Legen Sie Intervalle und automatische Löschregeln für die regelmäßige Bereinigung fest.",
+        "btn_config": "⚙️ Konfigurieren"
+    },
+    "ext_config": {
+        "tittle_ext_config": "Kategorien und Erweiterungen - FileORZ",
+        "header": "Kategorien und Erweiterungen",
+        "header_subtitle": "Dateierweiterungen nach Kategorie verwalten",
+        "enabled_count": "{enabled_count}/{total_count} ausgewählt",
+        "btn_select_all": "✓ Alle",
+        "btn_select_all_hover": "Alle auswählen",
+        "btn_deselect_all": "✗ Keine",
+        "btn_deselect_all_hover": "Alle abwählen",
+        "btn_save": "💾 Kategorien speichern",
+        "btn_save_hover": "Einstellungen speichern",
+        "success_label": "Einstellungen erfolgreich gespeichert!"
+    },
+    "auto_delete": {
+        "title": "Automatisches Löschen konfigurieren",
+        "enabled": "Automatisches Löschen aktiviert",
+        "disabled": "Automatisches Löschen deaktiviert",
+        "filters_title": "Löschfilter:",
+        "days": "Tage bis zum Löschen der Datei.",
+        "type_of_delete": "Löschart",
+        "type_1": "Dauerhaft löschen",
+        "type_2": "In den Papierkorb verschieben",
+        "Window_tittle": "Einstellungen für automatisches Löschen"
+    },
+    "Adivanced_config": {
+        "tittle": "Erweiterte Einstellungen - FileORZ (BETA)",
+        "header": "Erweiterte Dokumentenorganisation (BETA)",
+        "mode_adv_enable": "Erweiterter Modus aktiviert",
+        "mode_adv_disable": "Erweiterter Modus deaktiviert",
+        "btn_add": "+ Gruppe hinzufügen",
+        "description": "Definieren Sie den Gruppennamen und Schlüsselwörter (durch Kommas getrennt), um Ihre PDFs zu organisieren.\n\nKlicken Sie auf das Speichern-Symbol auf jeder Karte, um die Änderungen zu übernehmen.",
+        "empty_label": "Keine Gruppen registriert. Klicken Sie auf + Gruppe hinzufügen.",
+        "words_entry": "Wörter oder Ausdrücke, durch Kommas getrennt."
+    }
+}

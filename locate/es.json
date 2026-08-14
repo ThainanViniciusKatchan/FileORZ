@@ -1,0 +1,68 @@
+{
+    "header": {
+        "title": "File ORZ",
+        "subtitle": "Organizador de Archivos",
+        "github_title": "GitHub",
+        "changelog_title": "Registro de cambios",
+        "startup": "Iniciar con Windows"
+    },
+    "index_window": {
+        "title": "File ORZ - Organiza tus archivos",
+        "Select_folder": "Seleccionar Carpeta para Organizar",
+        "Select_folder_btn": "Seleccionar",
+        "Select_folder_placeholder": "Ninguna carpeta seleccionada",
+        "Select_folder_success": "Carpeta seleccionada con éxito",
+        "config_btn": "⚙️  Configuraciones",
+        "start_btn": "🚀  Iniciar Organización"
+    },
+    "time_selection": {
+        "time_title": "Intervalo de Verificación (Minutos)",
+        "time_subtitle": "Tiempo en minutos entre cada verificación automática de nuevos archivos"
+    },
+    "Config_Window": {
+        "tittle_ext_config": "Configuraciones Generales - FileORZ",
+        "header": "Configuración - FileORZ",
+        "header_subtitle": "Ajusta las preferencias del organizador",
+        "lbl_ext_title": "Categorías y\nExtensiones",
+        "lbl_ext_desc": "Administra y personaliza las extensiones de archivos organizadas por categoría.",
+        "lbl_adv_title": "Organización\nAvanzada (BETA)",
+        "lbl_adv_desc": "Reglas inteligentes con palabras clave para agrupar y organizar PDFs.",
+        "lbl_auto_title": "Auto\nEliminar",
+        "lbl_auto_desc": "Define intervalos y reglas automáticas de eliminación para limpieza periódica.",
+        "btn_config": "⚙️ Configurar"
+    },
+    "ext_config": {
+        "tittle_ext_config": "Categorías y Extensiones - FileORZ",
+        "header": "Categorías y Extensiones",
+        "header_subtitle": "Administra las extensiones por categoría",
+        "enabled_count": "{enabled_count}/{total_count} seleccionadas",
+        "btn_select_all": "✓ Todos",
+        "btn_select_all_hover": "Seleccionar Todos",
+        "btn_deselect_all": "✗ Ninguno",
+        "btn_deselect_all_hover": "Deseleccionar Todos",
+        "btn_save": "💾 Guardar Categorías",
+        "btn_save_hover": "Guardar Configuraciones",
+        "success_label": "¡Configuraciones guardadas con éxito!"
+    },
+    "auto_delete": {
+        "title": "Configurar Auto Eliminación",
+        "enabled": "Auto Eliminación Activada",
+        "disabled": "Auto Eliminación Desactivada",
+        "filters_title": "Filtros de Eliminación:",
+        "days": "Días para eliminar el archivo.",
+        "type_of_delete": "Tipo de eliminación",
+        "type_1": "Eliminar permanentemente",
+        "type_2": "Enviar a la papelera",
+        "Window_tittle": "Configuraciones de Auto Eliminación"
+    },
+    "Adivanced_config": {
+        "tittle": "Configuraciones Avanzadas - FileORZ (BETA)",
+        "header": "Organización Avanzada de Documentos (BETA)",
+        "mode_adv_enable": "Modo Avanzado Activado",
+        "mode_adv_disable": "Modo Avanzado Desactivado",
+        "btn_add": "+ Agregar Grupo",
+        "description": "Define el nombre del grupo y las palabras clave (separadas por comas) para organizar tus PDFs.\n\nHaz clic en el icono de guardar en cada tarjeta para aplicar los cambios.",
+        "empty_label": "Ningún grupo registrado. Haz clic en + Agregar Grupo.",
+        "words_entry": "Palabras o frases separadas por comas."
+    }
+}

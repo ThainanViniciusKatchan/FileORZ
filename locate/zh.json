@@ -1,0 +1,68 @@
+{
+    "header": {
+        "title": "File ORZ",
+        "subtitle": "文件整理器",
+        "github_title": "GitHub",
+        "changelog_title": "更新日志",
+        "startup": "随 Windows 启动"
+    },
+    "index_window": {
+        "title": "File ORZ - 整理您的文件",
+        "Select_folder": "选择要整理的文件夹",
+        "Select_folder_btn": "选择",
+        "Select_folder_placeholder": "未选择任何文件夹",
+        "Select_folder_success": "文件夹选择成功",
+        "config_btn": "⚙️  设置",
+        "start_btn": "🚀  开始整理"
+    },
+    "time_selection": {
+        "time_title": "检查间隔（分钟）",
+        "time_subtitle": "每次自动检查新文件的时间间隔（以分钟为单位）"
+    },
+    "Config_Window": {
+        "tittle_ext_config": "常规设置 - FileORZ",
+        "header": "设置 - FileORZ",
+        "header_subtitle": "调整整理器偏好设置",
+        "lbl_ext_title": "类别与\n扩展名",
+        "lbl_ext_desc": "按类别管理和自定义组织的文件扩展名。",
+        "lbl_adv_title": "高级\n整理 (BETA)",
+        "lbl_adv_desc": "基于关键词的智能规则，用于分组和整理 PDF 文件。",
+        "lbl_auto_title": "自动\n删除",
+        "lbl_auto_desc": "设置自动删除间隔和规则以进行定期清理。",
+        "btn_config": "⚙️ 配置"
+    },
+    "ext_config": {
+        "tittle_ext_config": "类别与扩展名 - FileORZ",
+        "header": "类别与扩展名",
+        "header_subtitle": "按类别管理扩展名",
+        "enabled_count": "已选择 {enabled_count}/{total_count}",
+        "btn_select_all": "✓ 全选",
+        "btn_select_all_hover": "选择全部",
+        "btn_deselect_all": "✗ 全不选",
+        "btn_deselect_all_hover": "取消全选",
+        "btn_save": "💾 保存类别",
+        "btn_save_hover": "保存设置",
+        "success_label": "设置保存成功！"
+    },
+    "auto_delete": {
+        "title": "配置自动删除",
+        "enabled": "自动删除已启用",
+        "disabled": "自动删除已禁用",
+        "filters_title": "删除过滤条件：",
+        "days": "删除文件前的天数。",
+        "type_of_delete": "删除类型",
+        "type_1": "永久删除",
+        "type_2": "移至回收站",
+        "Window_tittle": "自动删除设置"
+    },
+    "Adivanced_config": {
+        "tittle": "高级设置 - FileORZ (BETA)",
+        "header": "高级文档整理 (BETA)",
+        "mode_adv_enable": "高级模式已启用",
+        "mode_adv_disable": "高级模式已禁用",
+        "btn_add": "+ 添加分组",
+        "description": "定义分组名称和关键词（以逗号分隔）以整理您的 PDF。\n\n点击每个卡片上的保存图标以应用更改。",
+        "empty_label": "未注册任何分组。点击 + 添加分组。",
+        "words_entry": "以逗号分隔的单词或短语。"
+    }
+}
