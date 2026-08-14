@@ -1,20 +1,20 @@
 """
-    Copyright (C) 2026 Thainan Vinicius Katchan
+Copyright (C) 2026 Thainan Vinicius Katchan
 
-    This file is part of FileORZ.
+This file is part of FileORZ.
 
-    FileORZ is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+FileORZ is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
 
-    FileORZ is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+FileORZ is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with FileORZ.  If not, see <https://www.gnu.org/licenses/
+You should have received a copy of the GNU General Public License
+along with FileORZ.  If not, see <https://www.gnu.org/licenses/
 """
 
 import customtkinter
@@ -24,13 +24,17 @@ import os
 
 Folder = folder.Folder
 
-def folder_select(main_container, COLORS,  ):
+
+def folder_select(
+    main_container,
+    COLORS,
+):
     folder_card = customtkinter.CTkFrame(
         main_container,
         fg_color=COLORS["bg_secondary"],
         corner_radius=12,
         border_width=1,
-        border_color=COLORS["border"]
+        border_color=COLORS["border"],
     )
     folder_card.pack(fill="x", pady=(0, 15))
 
@@ -42,9 +46,7 @@ def folder_select(main_container, COLORS,  ):
     folder_header.pack(fill="x")
 
     folder_icon = customtkinter.CTkLabel(
-        folder_header,
-        text="📂",
-        font=customtkinter.CTkFont(size=18)
+        folder_header, text="📂", font=customtkinter.CTkFont(size=18)
     )
     folder_icon.pack(side="left")
 
@@ -52,7 +54,7 @@ def folder_select(main_container, COLORS,  ):
         folder_header,
         text="Selecionar Pasta para Organizar",
         font=customtkinter.CTkFont(family="Segoe UI", size=14, weight="bold"),
-        text_color=COLORS["text_primary"]
+        text_color=COLORS["text_primary"],
     )
     folder_title.pack(side="left", padx=(8, 0))
 
@@ -62,15 +64,17 @@ def folder_select(main_container, COLORS,  ):
         current_folder = Folder().Getfolder
         initial_dir = current_folder if os.path.exists(current_folder) else os.getcwd()
 
-        selected_folder = filedialog.askdirectory(title="Selecione a pasta", initialdir=initial_dir)
+        selected_folder = filedialog.askdirectory(
+            title="Selecione a pasta", initialdir=initial_dir
+        )
 
         if selected_folder:
             Folder().folder = selected_folder
             # Atualiza o label com o caminho
             folder_path_label.configure(text=selected_folder)
-            print(f'Pasta salva com sucesso: {selected_folder}')
+            print(f"Pasta salva com sucesso: {selected_folder}")
         else:
-            print('Nenhuma pasta selecionada')
+            print("Nenhuma pasta selecionada")
 
     btn_Select_folder = customtkinter.CTkButton(
         folder_header,
@@ -82,7 +86,7 @@ def folder_select(main_container, COLORS,  ):
         corner_radius=8,
         font=customtkinter.CTkFont(family="Segoe UI", size=12, weight="bold"),
         width=120,
-        height=32
+        height=32,
     )
     btn_Select_folder.pack(side="right")
 
@@ -93,6 +97,6 @@ def folder_select(main_container, COLORS,  ):
         text=current_folder if current_folder else "Nenhuma pasta selecionada",
         font=customtkinter.CTkFont(family="Segoe UI", size=11),
         text_color=COLORS["text_secondary"],
-        anchor="w"
+        anchor="w",
     )
     folder_path_label.pack(fill="x", pady=(10, 0))
