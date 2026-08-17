@@ -4,6 +4,9 @@ from PIL import Image
 from pystray import MenuItem as item, Icon as icon_class, Menu as menu
 import queue
 from os import path
+from utils import translate
+
+Translate = translate.Translate()
 
 fila_comandos = queue.Queue()
 
@@ -24,5 +27,8 @@ meu_icone = icon_class(
     "File_ORZ",
     image_icon,
     "FileORZ",
-    menu=menu(item("Abrir", open_condfig), item("Fechar", open_autodell)),
+    menu=menu(
+        item(Translate.get_text("Sys_tray", "open"), open_condfig),
+        item(Translate.get_text("Sys_tray", "close"), open_autodell),
+    ),
 )
