@@ -1,28 +1,31 @@
-from model import json_path
-import json
+from model import load_config, save_config
 
 
 class Translate:
-    def __init__(self, lang: str = "pt-br", local: str = "", name: str = ""):
+    def __init__(self, lang: str = "", local: str = "", name: str = ""):
         self.lang = lang
         self.local = local
         self.name = name
 
-    def get_json(self, local: str) -> str:
+    def set_locate(self, lang: str = "") -> None:
+        config = load_config("dist", "config")
+        config["lang"] = lang
+        save_config("dist", "config", config)
+        self.lang = lang
 
-        JSON_PATH = json_path("locate", self.lang)
-
-        json_data = ""
-        with open(JSON_PATH, "r", encoding="utf-8") as f:
-            json_data = json.load(f)
-
-        return json_data
+    def get_locate(self) -> str:
+        file = load_config("dist", "config")
+        self.lang = file["lang"]
+        return self.lang
 
     def get_text(self, local: str, name: str) -> str:
-        json_data = self.get_json(local)
-        text_load = json_data.get(local, {}).get(name, {})
-        return text_load
+        lang = self.get_locate()
+        file = load_config("locate", lang)
+        json_data = file.get(local, {}).get(name, {})
+        return json_data
 
 
 if __name__ == "__main__":
+    Translate().set_locate(lang="pt-br")
+    print(Translate().get_locate())
     print(f"Text: {Translate().get_text('index_window', 'title')}")

@@ -88,6 +88,7 @@ def save_config(folder, file, config):
     file = nome do json, não precisa do .json
     config = Qual configuração será alterada
     """
+    sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
     from utils import StartUp
 
     Start = StartUp.StartUpSys()

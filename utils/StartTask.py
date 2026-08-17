@@ -38,7 +38,17 @@ def start_task():
 def close_task():
     STATUS = check_if_running("FL_ORZ.exe")
     if STATUS:
-        subprocess.run(["taskkill", "/f", "/im", "FileORZ.exe"], check=True)
+        subprocess.run(
+            [
+                "taskkill",
+                "/f",
+                "/im",
+                "FileORZ.exe",
+                "/fi",
+                "WINDOWTITLE eq FL_ORZ.exe",
+            ],
+            check=True,
+        )
 
 
 # Iniciar a organização
