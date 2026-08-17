@@ -64,5 +64,10 @@
         "description": "Definieren Sie den Gruppennamen und Schlüsselwörter (durch Kommas getrennt), um Ihre PDFs zu organisieren.\n\nKlicken Sie auf das Speichern-Symbol auf jeder Karte, um die Änderungen zu übernehmen.",
         "empty_label": "Keine Gruppen registriert. Klicken Sie auf + Gruppe hinzufügen.",
         "words_entry": "Wörter oder Ausdrücke, durch Kommas getrennt."
+    },
+    "Sys_tray": {
+        "open": "Öffnen",
+        "close": "Beenden"
     }
 }
+

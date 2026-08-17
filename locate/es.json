@@ -64,5 +64,10 @@
         "description": "Define el nombre del grupo y las palabras clave (separadas por comas) para organizar tus PDFs.\n\nHaz clic en el icono de guardar en cada tarjeta para aplicar los cambios.",
         "empty_label": "Ningún grupo registrado. Haz clic en + Agregar Grupo.",
         "words_entry": "Palabras o frases separadas por comas."
+    },
+    "Sys_tray": {
+        "open": "Abrir",
+        "close": "Salir"
     }
 }
+

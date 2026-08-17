@@ -64,5 +64,9 @@
         "description": "Defina o nome do grupo e as palavras-chave (separadas por vírgula) para organizar seus PDFs.\n\nClique no ícone de salvar em cada card para aplicar as alterações.",
         "empty_label": "Nenhum grupo cadastrado. Clique em + Adicionar Grupo.",
         "words_entry": "Palavras ou frases separadas por vírgula."
+    },
+    "Sys_tray": {
+        "open": "Abrir",
+        "close": "Sair"
     }
 }

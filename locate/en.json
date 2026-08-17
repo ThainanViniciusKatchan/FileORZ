@@ -64,5 +64,10 @@
         "description": "Define the group name and keywords (comma-separated) to organize your PDFs.\n\nClick the save icon on each card to apply changes.",
         "empty_label": "No groups registered. Click + Add Group.",
         "words_entry": "Words or phrases separated by comma."
+    },
+    "Sys_tray": {
+        "open": "Open",
+        "close": "Exit"
     }
 }
+
