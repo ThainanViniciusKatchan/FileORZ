@@ -19,10 +19,12 @@
 
 import customtkinter
 from utils import timeVerification
+from utils.translate import Translate
 
 Time = timeVerification
 
 def time_select(main_container, COLORS):
+    t = Translate()
     time_card = customtkinter.CTkFrame(
         main_container,
         fg_color=COLORS["bg_secondary"],
@@ -48,7 +50,7 @@ def time_select(main_container, COLORS):
 
     time_title = customtkinter.CTkLabel(
         time_header,
-        text="Intervalo de Verificação (Minutos)",
+        text=t.get_text("time_selection", "time_title") or "Intervalo de Verificação (Minutos)",
         font=customtkinter.CTkFont(family="Segoe UI", size=14, weight="bold"),
         text_color=COLORS["text_primary"]
     )
@@ -87,9 +89,20 @@ def time_select(main_container, COLORS):
     # Descrição
     time_desc = customtkinter.CTkLabel(
         time_inner,
-        text="Tempo em minutos entre cada verificação automática de novos arquivos",
+        text=t.get_text("time_selection", "time_subtitle") or "Tempo em minutos entre cada verificação automática de novos arquivos",
         font=customtkinter.CTkFont(family="Segoe UI", size=11),
         text_color=COLORS["text_secondary"],
         anchor="w"
     )
     time_desc.pack(fill="x", pady=(10, 0))
+
+    def update_time_select_texts():
+        tr = Translate()
+        time_title.configure(
+            text=tr.get_text("time_selection", "time_title") or "Intervalo de Verificação (Minutos)"
+        )
+        time_desc.configure(
+            text=tr.get_text("time_selection", "time_subtitle") or "Tempo em minutos entre cada verificação automática de novos arquivos"
+        )
+
+    Translate.register_listener(update_time_select_texts)

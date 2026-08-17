@@ -20,6 +20,7 @@ along with FileORZ.  If not, see <https://www.gnu.org/licenses/
 import customtkinter
 from customtkinter import filedialog
 from utils import folder
+from utils.translate import Translate
 import os
 
 Folder = folder.Folder
@@ -29,6 +30,7 @@ def folder_select(
     main_container,
     COLORS,
 ):
+    t = Translate()
     folder_card = customtkinter.CTkFrame(
         main_container,
         fg_color=COLORS["bg_secondary"],
@@ -52,7 +54,7 @@ def folder_select(
 
     folder_title = customtkinter.CTkLabel(
         folder_header,
-        text="Selecionar Pasta para Organizar",
+        text=t.get_text("index_window", "Select_folder") or "Selecionar Pasta para Organizar",
         font=customtkinter.CTkFont(family="Segoe UI", size=14, weight="bold"),
         text_color=COLORS["text_primary"],
     )
@@ -78,7 +80,7 @@ def folder_select(
 
     btn_Select_folder = customtkinter.CTkButton(
         folder_header,
-        text="Selecionar",
+        text=t.get_text("index_window", "Select_folder_btn") or "Selecionar",
         command=select_path,
         fg_color=COLORS["button_secondary"],
         hover_color=COLORS["button_secondary_hover"],
@@ -92,11 +94,27 @@ def folder_select(
 
     # Label mostrando caminho atual
     current_folder = Folder().Getfolder
+    placeholder_text = t.get_text("index_window", "Select_folder_placeholder") or "Nenhuma pasta selecionada"
     folder_path_label = customtkinter.CTkLabel(
         folder_inner,
-        text=current_folder if current_folder else "Nenhuma pasta selecionada",
+        text=current_folder if current_folder else placeholder_text,
         font=customtkinter.CTkFont(family="Segoe UI", size=11),
         text_color=COLORS["text_secondary"],
         anchor="w",
     )
     folder_path_label.pack(fill="x", pady=(10, 0))
+
+    def update_folder_select_texts():
+        tr = Translate()
+        folder_title.configure(
+            text=tr.get_text("index_window", "Select_folder") or "Selecionar Pasta para Organizar"
+        )
+        btn_Select_folder.configure(
+            text=tr.get_text("index_window", "Select_folder_btn") or "Selecionar"
+        )
+        if not Folder().Getfolder:
+            folder_path_label.configure(
+                text=tr.get_text("index_window", "Select_folder_placeholder") or "Nenhuma pasta selecionada"
+            )
+
+    Translate.register_listener(update_folder_select_texts)

@@ -24,12 +24,14 @@ import os
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from ui.config import open_config_window
+from utils.translate import Translate
 
 
 def config_btn(COLORS, actions_frame, root):
+    t = Translate()
     btn_config = customtkinter.CTkButton(
         actions_frame,
-        text="⚙️  Configurações",
+        text=t.get_text("index_window", "config_btn") or "⚙️  Configurações",
         command=lambda: open_config_window(root),
         fg_color=COLORS["button_secondary"],
         hover_color=COLORS["button_secondary_hover"],
@@ -40,6 +42,14 @@ def config_btn(COLORS, actions_frame, root):
         height=48,
     )
     btn_config.pack(side="left")
+
+    def update_config_btn_text():
+        tr = Translate()
+        btn_config.configure(
+            text=tr.get_text("index_window", "config_btn") or "⚙️  Configurações"
+        )
+
+    Translate.register_listener(update_config_btn_text)
 
 
 from utils import folder
@@ -52,11 +62,12 @@ def start_btn(COLORS, actions_frame):
     main_container = main_container
     root = root
     feedback_label = feedback_label
+    t = Translate()
 
     # Botão para iniciar a organização
     btn_Start_Organizer = customtkinter.CTkButton(
         actions_frame,
-        text="🚀  Iniciar Organização",
+        text=t.get_text("index_window", "start_btn") or "🚀  Iniciar Organização",
         command=lambda: start_organizer(
             main_container, root, folder.Folder().Getfolder, feedback_label
         ),
@@ -69,3 +80,12 @@ def start_btn(COLORS, actions_frame):
         height=48,
     )
     btn_Start_Organizer.pack(side="right")
+
+    def update_start_btn_text():
+        tr = Translate()
+        btn_Start_Organizer.configure(
+            text=tr.get_text("index_window", "start_btn") or "🚀  Iniciar Organização"
+        )
+
+    Translate.register_listener(update_start_btn_text)
+

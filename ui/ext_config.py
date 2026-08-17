@@ -10,6 +10,7 @@ except ImportError:
     from Centralizar_Janela import Centralizar_Janela
 
 from utils.model import load_config, save_config
+from utils.translate import Translate
 
 COLORS = {
     "bg_primary": "#0D0D0D",
@@ -35,13 +36,14 @@ COLORS = {
 
 
 def ext_config_window(parent=None):
+    t = Translate()
     icon_dir = os.path.join(os.path.dirname(__file__), "icon")
     icon_path = os.path.join(icon_dir, "IconApp.ico")
 
     window = customtkinter.CTkToplevel(parent)
     if parent:
         window.transient(parent)
-    window.title("Categorias e Extensões - FileORZ")
+    window.title(t.get_text("ext_config", "tittle_ext_config") or "Categorias e Extensões - FileORZ")
     window.geometry("900x700")
     window.configure(fg_color=COLORS["bg_primary"])
     window.resizable(False, False)
@@ -74,7 +76,7 @@ def ext_config_window(parent=None):
 
     header_title = customtkinter.CTkLabel(
         header_inner,
-        text="Categorias e Extensões",
+        text=t.get_text("ext_config", "header") or "Categorias e Extensões",
         font=customtkinter.CTkFont(family="Segoe UI", size=18, weight="bold"),
         text_color=COLORS["text_primary"],
     )
@@ -82,7 +84,7 @@ def ext_config_window(parent=None):
 
     header_subtitle = customtkinter.CTkLabel(
         header_inner,
-        text="Gerencie as extensões por categoria",
+        text=t.get_text("ext_config", "header_subtitle") or "Gerencie as extensões por categoria",
         font=customtkinter.CTkFont(family="Segoe UI", size=11),
         text_color=COLORS["text_secondary"],
     )
@@ -171,7 +173,7 @@ def ext_config_window(parent=None):
 
         btn_select_all = customtkinter.CTkButton(
             cat_right,
-            text="✓ Todos",
+            text=t.get_text("ext_config", "btn_select_all") or "✓ Todos",
             command=select_all,
             fg_color=COLORS["accent_success"],
             hover_color=COLORS["accent_success_hover"],
@@ -184,7 +186,7 @@ def ext_config_window(parent=None):
 
         btn_deselect_all = customtkinter.CTkButton(
             cat_right,
-            text="✗ Nenhum",
+            text=t.get_text("ext_config", "btn_deselect_all") or "✗ Nenhum",
             command=deselect_all,
             fg_color=COLORS["accent_danger"],
             hover_color=COLORS["accent_danger_hover"],
@@ -246,9 +248,10 @@ def ext_config_window(parent=None):
         for widget in feedback_container.winfo_children():
             widget.destroy()
 
+        success_msg = Translate().get_text("ext_config", "success_label") or "✓  Configurações salvas com sucesso!"
         success_label = customtkinter.CTkLabel(
             feedback_container,
-            text="✓  Configurações salvas com sucesso!",
+            text=success_msg,
             font=customtkinter.CTkFont(family="Segoe UI", size=12, weight="bold"),
             text_color=COLORS["accent_success"],
         )
@@ -257,7 +260,7 @@ def ext_config_window(parent=None):
 
     save_button = customtkinter.CTkButton(
         footer_inner,
-        text="💾  Salvar Categorias",
+        text=t.get_text("ext_config", "btn_save") or "💾  Salvar Categorias",
         command=save_changes,
         fg_color=COLORS["accent_primary"],
         hover_color=COLORS["accent_hover"],
@@ -267,6 +270,23 @@ def ext_config_window(parent=None):
         corner_radius=8,
     )
     save_button.pack(side="right")
+
+    def update_ext_config_texts():
+        tr = Translate()
+        if not window.winfo_exists():
+            return
+        window.title(tr.get_text("ext_config", "tittle_ext_config") or "Categorias e Extensões - FileORZ")
+        header_title.configure(text=tr.get_text("ext_config", "header") or "Categorias e Extensões")
+        header_subtitle.configure(text=tr.get_text("ext_config", "header_subtitle") or "Gerencie as extensões por categoria")
+        save_button.configure(text=tr.get_text("ext_config", "btn_save") or "💾  Salvar Categorias")
+
+    Translate.register_listener(update_ext_config_texts)
+
+    def on_close():
+        Translate.unregister_listener(update_ext_config_texts)
+        window.destroy()
+
+    window.protocol("WM_DELETE_WINDOW", on_close)
 
     if parent is None:
         window.mainloop()

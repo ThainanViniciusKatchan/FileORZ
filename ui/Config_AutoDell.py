@@ -26,6 +26,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from ui.Centralizar_Janela import Centralizar_Janela
 from utils import delete, timeVerification
 from utils.model import load_config, save_config
+from utils.translate import Translate
 
 row = 0
 col = 6
@@ -54,10 +55,12 @@ COLORS = {
 
 
 def Header_Title(Windows_cfg_autoDell):
+    t = Translate()
     # Título
+    title_text = t.get_text("auto_delete", "title") or "Configurar Auto Deletar"
     Title = customtkinter.CTkLabel(
         Windows_cfg_autoDell,
-        text="Configurar Auto Deletar".upper(),
+        text=title_text.upper(),
         font=customtkinter.CTkFont(family="Consolas", size=20, weight="bold"),
         text_color=COLORS["text_primary"],
         anchor="center",
@@ -67,27 +70,31 @@ def Header_Title(Windows_cfg_autoDell):
 
 
 def Enable_Disable_AutoDelete(Windows_cfg_autoDell, ext_frame):
+    t = Translate()
     # Cria a variável booleana associada ao estado da configuração
     value_var = customtkinter.BooleanVar(value=config["AutoDelete"])
 
     def on_checkbox_toggle():
         # Quando o usuário clicar, pega o novo valor da variável e salva
+        tr = Translate()
         new_value = value_var.get()
         enable_obj = delete.AutoDelete(AutoDell=new_value)
         enable_obj.AutoDelete = enable_obj.AutoDelete
         # Altera de forma Dinâmica o texto de ativado e desativado
         if new_value:
-            checkbox.configure(text="Auto Deletar Ativado")
+            checkbox.configure(text=tr.get_text("auto_delete", "enabled") or "Auto Deletar Ativado")
             # Se ativou, mostra as opções
             ext_frame.pack(fill="x", padx=22, pady=(20, 20))
         else:
-            checkbox.configure(text="Auto Deletar Desativado")
+            checkbox.configure(text=tr.get_text("auto_delete", "disabled") or "Auto Deletar Desativado")
             # Se desativou, esconde as opções
             ext_frame.pack_forget()
 
     # Define o texto inicial dependendo da configuração atual
+    texto_ativo = t.get_text("auto_delete", "enabled") or "Auto Deletar Ativado"
+    texto_inativo = t.get_text("auto_delete", "disabled") or "Auto Deletar Desativado"
     texto_inicial = (
-        "Auto Deletar Ativado" if config["AutoDelete"] else "Auto Deletar Desativado"
+        texto_ativo if config["AutoDelete"] else texto_inativo
     )
 
     checkbox = customtkinter.CTkCheckBox(
@@ -120,11 +127,12 @@ def save_filter_choice(selected_filter):
 
 
 def Select_Filter(ext_frame):
+    t = Translate()
     filter_obj = delete.AutoDeleFilter().GetFilters()
     # Título da seção "Filtros de Exclusão"
     lbl_title_filter = customtkinter.CTkLabel(
         ext_frame,
-        text="Filtros de Exclusão:",
+        text=t.get_text("auto_delete", "filters_title") or "Filtros de Exclusão:",
         font=customtkinter.CTkFont(family="Consolas", size=15, weight="bold"),
         text_color=COLORS["accent_primary"],
     )
@@ -193,6 +201,7 @@ def Select_Filter(ext_frame):
 
 
 def Time_AutoDelete(ext_frame):
+    t = Translate()
     # Título da seção de Dias
     lbl_title_time = customtkinter.CTkLabel(
         ext_frame,
@@ -265,7 +274,7 @@ def Time_AutoDelete(ext_frame):
 
     description_time = customtkinter.CTkLabel(
         time_container,
-        text="Dias para excluir o arquivo.",
+        text=t.get_text("auto_delete", "days") or "Dias para excluir o arquivo.",
         font=customtkinter.CTkFont(family="Segoe UI", size=12),
         text_color=COLORS["text_secondary"],
     )
@@ -273,12 +282,13 @@ def Time_AutoDelete(ext_frame):
 
 
 def type_of_delete(ext_frame):
+    t = Translate()
     row = 4
     col = 0
     filters_obj = delete.AutoDelete.GetFilters(None)
     Title_section = customtkinter.CTkLabel(
         ext_frame,
-        text=f"Tipo de exclusão",
+        text=t.get_text("auto_delete", "type_of_delete") or "Tipo de exclusão",
         font=customtkinter.CTkFont(family="Consolas", size=15, weight="bold"),
         text_color=COLORS["accent_primary"],
     )
@@ -315,6 +325,7 @@ def type_of_delete(ext_frame):
 
 def open_Windows_CFG_autoDell(parent):
     global config
+    t = Translate()
     config = load_config("dist", "config")
     icon_dir = os.path.join(os.path.dirname(__file__), "icon")
     icon_path = os.path.join(icon_dir, "IconApp.ico")
@@ -323,7 +334,7 @@ def open_Windows_CFG_autoDell(parent):
     Windows_cfg_autoDell = customtkinter.CTkToplevel(parent)
     if parent:
         Windows_cfg_autoDell.transient(parent)
-    Windows_cfg_autoDell.title("Configurações Auto Deletar")
+    Windows_cfg_autoDell.title(t.get_text("auto_delete", "Window_tittle") or "Configurações Auto Deletar")
     Windows_cfg_autoDell.geometry("600x480")
     Windows_cfg_autoDell.resizable(False, False)
     Windows_cfg_autoDell.configure(bg_color=COLORS["bg_primary"])

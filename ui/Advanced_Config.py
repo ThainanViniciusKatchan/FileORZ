@@ -24,6 +24,7 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from ui.Centralizar_Janela import Centralizar_Janela
 from utils.AdvancedConfig import AdvancedConfig
+from utils.translate import Translate
 
 COLORS = {
     "bg_primary": "#0D0D0D",
@@ -49,14 +50,14 @@ keywords_data = adv_config.load_keywords()
 
 
 def open_advanced_config_window(parent):
-
+    t = Translate()
     icon_dir = os.path.join(str(os.path.dirname(__file__)), "icon")
     icon_path = os.path.join(icon_dir, "IconApp.ico")
 
     window = customtkinter.CTkToplevel(parent)
     if parent:
         window.transient(parent)
-    window.title("Configurações Avançadas - FileORZ (BETA)")
+    window.title(t.get_text("Adivanced_config", "tittle") or "Configurações Avançadas - FileORZ (BETA)")
     window.geometry("800x650")
     window.configure(fg_color=COLORS["bg_primary"])
     window.resizable(False, False)
@@ -89,7 +90,7 @@ def open_advanced_config_window(parent):
 
     header_title = customtkinter.CTkLabel(
         header_inner,
-        text="Organização Avançada de Documentos (BETA)",
+        text=t.get_text("Adivanced_config", "header") or "Organização Avançada de Documentos (BETA)",
         font=customtkinter.CTkFont(family="Segoe UI", size=18, weight="bold"),
         text_color=COLORS["text_primary"],
     )
@@ -103,14 +104,21 @@ def open_advanced_config_window(parent):
     advanced_var = customtkinter.BooleanVar(value=adv_config.get_enabled())
 
     def toggle_advanced():
+        tr = Translate()
         adv_config.set_enabled(advanced_var.get())
         if advanced_var.get():
-            checkbox.configure(text="Modo Avançado Ativado")
+            checkbox.configure(
+                text=tr.get_text("Adivanced_config", "mode_adv_enable") or "Modo Avançado Ativado"
+            )
         else:
-            checkbox.configure(text="Modo Avançado Desativado")
+            checkbox.configure(
+                text=tr.get_text("Adivanced_config", "mode_adv_disable") or "Modo Avançado Desativado"
+            )
 
+    texto_ativado = t.get_text("Adivanced_config", "mode_adv_enable") or "Modo Avançado Ativado"
+    texto_desativado = t.get_text("Adivanced_config", "mode_adv_disable") or "Modo Avançado Desativado"
     checkbox_text = (
-        "Modo Avançado Ativado" if advanced_var.get() else "Modo Avançado Desativado"
+        texto_ativado if advanced_var.get() else texto_desativado
     )
     checkbox = customtkinter.CTkCheckBox(
         control_frame,
@@ -137,7 +145,7 @@ def open_advanced_config_window(parent):
 
     btn_add = customtkinter.CTkButton(
         control_frame,
-        text="+ Adicionar Grupo",
+        text=t.get_text("Adivanced_config", "btn_add") or "+ Adicionar Grupo",
         command=add_group,
         fg_color=COLORS["accent_success"],
         hover_color=COLORS["accent_success_hover"],
@@ -149,10 +157,14 @@ def open_advanced_config_window(parent):
     btn_add.pack(side="right")
 
     # Descrição
+    description_text = (
+        t.get_text("Adivanced_config", "description")
+        or "Defina o nome do grupo e as palavras-chave (separadas por vírgula) para organizar seus PDFs.\n"
+        "Clique no ícone de salvar em cada card para aplicar as alterações."
+    )
     description = customtkinter.CTkLabel(
         window,
-        text="Defina o nome do grupo e as palavras-chave (separadas por vírgula) para organizar seus PDFs.\n"
-        "Clique no ícone de salvar em cada card para aplicar as alterações.",
+        text=description_text,
         font=customtkinter.CTkFont(family="Segoe UI", size=12),
         text_color=COLORS["text_secondary"],
         justify="left",

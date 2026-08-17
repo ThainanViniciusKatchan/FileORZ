@@ -31,6 +31,7 @@ from ui.Select_Folder import folder_select
 from ui.Time_Select import time_select
 from ui.btn import config_btn, start_btn
 from utils import folder, timeVerification
+from utils.translate import Translate
 
 Aplication_patch = os.path.dirname(sys.executable)
 
@@ -57,6 +58,7 @@ ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(ORZ)
 
 Time = timeVerification
 Folder = folder.Folder()
+t = Translate()
 
 # Busca a pasta de execução da aplicação
 if getattr(sys, "frozen", False):
@@ -67,7 +69,7 @@ else:
 icon_path = os.path.join(base_path, "icon", "IconApp.ico")
 
 root = customtkinter.CTk()
-root.title("File ORZ")
+root.title(t.get_text("header", "title") or "File ORZ")
 
 # Busca o Icone da aplicação
 if os.path.exists(icon_path):
@@ -101,11 +103,22 @@ start_btn(COLORS, actions_frame)  # Start btn
 # Rodapé
 footer = customtkinter.CTkLabel(
     root,
-    text="File ORZ - Organize seus arquivos",
+    text=t.get_text("index_window", "title") or "File ORZ - Organize seus arquivos",
     font=customtkinter.CTkFont(family="Segoe UI", size=10),
     text_color=COLORS["text_muted"],
 )
 footer.pack(side="bottom", pady=10)
+
+
+def update_index_texts():
+    tr = Translate()
+    root.title(tr.get_text("header", "title") or "File ORZ")
+    footer.configure(
+        text=tr.get_text("index_window", "title") or "File ORZ - Organize seus arquivos"
+    )
+
+
+Translate.register_listener(update_index_texts)
 
 
 def restore_windows():
