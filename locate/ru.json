@@ -4,7 +4,11 @@
         "subtitle": "Организатор файлов",
         "github_title": "GitHub",
         "changelog_title": "Список изменений",
-        "startup": "Запускать вместе с Windows"
+        "startup": "Запускать вместе с Windows",
+        "about_btn": "О программе",
+        "about_title": "О программе - FileORZ",
+        "about_pride": "С гордостью разработано в Бразилии 💚💛",
+        "about_dev_by": "Разработчик: Thainan Vinicius Katchan"
     },
     "index_window": {
         "title": "File ORZ - Организуйте ваши файлы",

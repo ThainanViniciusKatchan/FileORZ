@@ -4,7 +4,11 @@
         "subtitle": "Datei-Organizer",
         "github_title": "GitHub",
         "changelog_title": "Änderungsprotokoll",
-        "startup": "Mit Windows starten"
+        "startup": "Mit Windows starten",
+        "about_btn": "Über",
+        "about_title": "Über - FileORZ",
+        "about_pride": "Mit Stolz in Brasilien entwickelt 💚💛",
+        "about_dev_by": "Entwickelt von: Thainan Vinicius Katchan"
     },
     "index_window": {
         "title": "File ORZ - Organisieren Sie Ihre Dateien",

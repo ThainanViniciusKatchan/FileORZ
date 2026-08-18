@@ -26,6 +26,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from utils.model import toggle_startup as toggle_startup_registry, script_dir
 from utils import StartUp
 from utils.translate import Translate
+from ui.Centralizar_Janela import Centralizar_Janela
 
 COLORS = {
     "header_gradient_start": "#667eea",
@@ -39,6 +40,8 @@ COLORS = {
     "accent_hover": "#7B2CBF",
     "switch_progress": "#9D4EDD",
     "switch_bg": "#2D2D44",
+    "bg_primary": "#0D0D0D",
+    "bg_secondary": "#1A1A2E",
 }
 
 def get_language_options():
@@ -137,6 +140,147 @@ def git_button(parent):
     btn.bind("<Button-1>", lambda event: webbrowser.open("https://github.com/ThainanViniciusKatchan/FileORZ"))
     return btn
 
+def open_about_window(parent=None):
+    t = Translate()
+    icon_dir = os.path.join(os.path.dirname(__file__), "icon")
+    icon_path = os.path.join(icon_dir, "IconApp.ico")
+
+    window = customtkinter.CTkToplevel(parent)
+    if parent:
+        window.transient(parent)
+    window.title(t.get_text("header", "about_title") or "Sobre - FileORZ")
+    window.geometry("420x260")
+    window.configure(fg_color=COLORS["bg_primary"])
+    window.resizable(False, False)
+    window.grab_set()
+    Centralizar_Janela(window, 420, 260)
+    window.lift()
+    window.focus_force()
+    window.after(100, lambda: (window.lift(), window.focus_force()))
+
+    try:
+        if os.path.exists(icon_path):
+            window.after(200, lambda: window.iconbitmap(icon_path))
+    except Exception:
+        pass
+
+    # Header da janela Sobre
+    header_frame = customtkinter.CTkFrame(
+        window, fg_color=COLORS["header_bg"], corner_radius=0, height=55
+    )
+    header_frame.pack(fill="x", side="top")
+    header_frame.pack_propagate(False)
+
+    header_inner = customtkinter.CTkFrame(header_frame, fg_color="transparent")
+    header_inner.pack(fill="both", expand=True, padx=20, pady=10)
+
+    header_icon = customtkinter.CTkLabel(
+        header_inner, text="🗂️", font=customtkinter.CTkFont(size=20)
+    )
+    header_icon.pack(side="left", padx=(0, 6))
+
+    header_title = customtkinter.CTkLabel(
+        header_inner,
+        text="FileORZ",
+        font=customtkinter.CTkFont(family="Segoe UI", size=18, weight="bold"),
+        text_color=COLORS["text_primary"],
+    )
+    header_title.pack(side="left")
+
+    header_subtitle = customtkinter.CTkLabel(
+        header_inner,
+        text=t.get_text("header", "subtitle") or "Organizador de Arquivos",
+        font=customtkinter.CTkFont(family="Segoe UI", size=10),
+        text_color="#A0A0A0",
+    )
+    header_subtitle.pack(side="left", padx=(8, 0))
+
+    # Container de conteúdo
+    content_frame = customtkinter.CTkFrame(
+        window,
+        fg_color=COLORS["bg_secondary"],
+        corner_radius=12,
+        border_width=1,
+        border_color=COLORS["button_border"],
+    )
+    content_frame.pack(fill="both", expand=True, padx=20, pady=15)
+
+    # Frame para os botões Changelog e GitHub
+    buttons_frame = customtkinter.CTkFrame(content_frame, fg_color="transparent")
+    buttons_frame.pack(pady=(16, 12))
+
+    changelog = changelog_button(buttons_frame)
+    changelog.pack(side="left", padx=(0, 10))
+
+    git = git_button(buttons_frame)
+    git.pack(side="left")
+
+    # Frase "Desenvolvido com orgulho no Brasil 💚💛"
+    pride_label = customtkinter.CTkLabel(
+        content_frame,
+        text=t.get_text("header", "about_pride") or "Desenvolvido com orgulho no Brasil 💚💛",
+        font=customtkinter.CTkFont(family="Segoe UI", size=12, weight="bold"),
+        text_color=COLORS["text_primary"],
+    )
+    pride_label.pack(pady=(2, 2))
+
+    # "Desenvolvido por: Thainan Vinicius Katchan"
+    author_label = customtkinter.CTkLabel(
+        content_frame,
+        text=t.get_text("header", "about_dev_by") or "Desenvolvido por: Thainan Vinicius Katchan",
+        font=customtkinter.CTkFont(family="Segoe UI", size=11),
+        text_color="#A0A0A0",
+    )
+    author_label.pack(pady=(0, 10))
+
+    def update_about_texts():
+        tr = Translate()
+        if not window.winfo_exists():
+            return
+        window.title(tr.get_text("header", "about_title") or "Sobre - FileORZ")
+        header_subtitle.configure(
+            text=tr.get_text("header", "subtitle") or "Organizador de Arquivos"
+        )
+        git.configure(text=tr.get_text("header", "github_title") or "GitHub")
+        changelog.configure(
+            text=tr.get_text("header", "changelog_title") or "Changelog"
+        )
+        pride_label.configure(
+            text=tr.get_text("header", "about_pride") or "Desenvolvido com orgulho no Brasil 💚💛"
+        )
+        author_label.configure(
+            text=tr.get_text("header", "about_dev_by") or "Desenvolvido por: Thainan Vinicius Katchan"
+        )
+
+    Translate.register_listener(update_about_texts)
+
+    def on_close():
+        Translate.unregister_listener(update_about_texts)
+        window.destroy()
+
+    window.protocol("WM_DELETE_WINDOW", on_close)
+
+    if parent is None:
+        window.mainloop()
+
+def about_button(parent, root=None):
+    t = Translate()
+    btn = customtkinter.CTkButton(
+        parent,
+        text=t.get_text("header", "about_btn") or "Sobre",
+        font=customtkinter.CTkFont(family="Segoe UI", size=12, weight="bold"),
+        fg_color=COLORS["button_bg"],
+        border_width=1,
+        border_color=COLORS["button_border"],
+        corner_radius=8,
+        height=32,
+        width=80,
+        hover_color=COLORS["button_hover"],
+        text_color=COLORS["text_primary"],
+        command=lambda: open_about_window(root or parent),
+    )
+    return btn
+
 # Essa Função Controla a Inicialização da Aplicação no Windows, Alterando o Json de Configuração
 # e Criando o Registro de StartUp
 def startup_button(parent):
@@ -219,20 +363,15 @@ def header(root):
     lang_btn = language_button(controls_frame)
     lang_btn.pack(side="left", padx=(0, 12))
 
-    # Botão GitHub
-    git = git_button(controls_frame)
-    git.pack(side="left")
-
-    # Botão Changelog
-    changelog = changelog_button(controls_frame)
-    changelog.pack(side="left", padx=(12, 0))
+    # Botão Sobre
+    about_btn = about_button(controls_frame, root)
+    about_btn.pack(side="left")
 
     def update_header_texts():
         tr = Translate()
         subtitle_label.configure(text=tr.get_text("header", "subtitle") or "Organizador de Arquivos")
         switch_widget.configure(text=tr.get_text("header", "startup") or "Iniciar com Windows")
-        git.configure(text=tr.get_text("header", "github_title") or "GitHub")
-        changelog.configure(text=tr.get_text("header", "changelog_title") or "Changelog")
+        about_btn.configure(text=tr.get_text("header", "about_btn") or "Sobre")
 
     Translate.register_listener(update_header_texts)
 

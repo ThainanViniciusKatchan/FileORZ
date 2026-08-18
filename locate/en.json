@@ -4,7 +4,11 @@
         "subtitle": "File Organizer",
         "github_title": "GitHub",
         "changelog_title": "Changelog",
-        "startup": "Start with Windows"
+        "startup": "Start with Windows",
+        "about_btn": "About",
+        "about_title": "About - FileORZ",
+        "about_pride": "Proudly developed in Brazil 💚💛",
+        "about_dev_by": "Developed by: Thainan Vinicius Katchan"
     },
     "index_window": {
         "title": "File ORZ - Organize your files",
