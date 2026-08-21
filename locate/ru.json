@@ -53,11 +53,22 @@
         "enabled": "Автоудаление включено",
         "disabled": "Автоудаление выключено",
         "filters_title": "Фильтры удаления:",
+        "filter_create_date": "По дате создания",
+        "filter_modify_date": "По дате изменения",
+        "time_title": "Срок удаления:",
         "days": "Дней до удаления файла.",
         "type_of_delete": "Тип удаления",
         "type_1": "Удалить навсегда",
         "type_2": "Переместить в корзину",
-        "Window_tittle": "Настройки автоудаления"
+        "Window_tittle": "Настройки автоудаления",
+        "tab_files": "📄 Файлы",
+        "tab_folders": "📁 Папки",
+        "folder_enabled": "Автоудаление папок включено",
+        "folder_disabled": "Автоудаление папок выключено",
+        "folder_scope_title": "Область удаления папок:",
+        "folder_scope_all": "Все пустые папки",
+        "folder_scope_orz": "Только папки FileORZ",
+        "folder_desc": "Автоматически удаляет пустые папки в каталоге организации."
     },
     "Adivanced_config": {
         "tittle": "Продвинутые настройки - FileORZ (BETA)",

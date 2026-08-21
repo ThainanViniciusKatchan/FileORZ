@@ -1,4 +1,4 @@
-﻿"""
+"""
 Copyright (C) 2026 Thainan Vinicius Katchan
 
 This file is part of FileORZ.
@@ -32,6 +32,8 @@ if BASE_DIR not in sys.path:
 from utils.model import json_path
 from utils.AutoDelete import AutoDelete
 from utils.AdvancedConfig import AdvancedConfig
+from utils.Delete_folder import ORZ_folders, all_folders
+from utils.folder import Delete_Folde
 from AdvancedAlg import Alg
 
 CONFIG_PATH = json_path("dist", "config")
@@ -57,6 +59,8 @@ def load_extensions():
             "Excluir permanentemente",
             "AutoDeleteConfig",
             "AdvancedOrganize",
+            "folder_delete",
+            "lang",
         }
 
         for category, exts in data.items():
@@ -163,6 +167,16 @@ def organize_files():
                     print(f"[ERRO] {e}")
     except Exception as e:
         print(f"Erro ao ler diretório: {e}")
+
+    # 3. Executa auto exclusão de pastas vazias (se habilitada)
+    del_folder = Delete_Folde()
+    if del_folder.Getativado:
+        if del_folder.Getpasta_orz:
+            ORZ_folders()
+        elif del_folder.Gettodas:
+            all_folders()
+    else:
+        print("[INFO] Auto exclusão de pastas desabilitada.")
 
 
 def loop_verification():

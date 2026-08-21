@@ -53,11 +53,22 @@
         "enabled": "自动删除已启用",
         "disabled": "自动删除已禁用",
         "filters_title": "删除过滤条件：",
+        "filter_create_date": "按创建日期",
+        "filter_modify_date": "按修改日期",
+        "time_title": "删除期限：",
         "days": "删除文件前的天数。",
         "type_of_delete": "删除类型",
         "type_1": "永久删除",
         "type_2": "移至回收站",
-        "Window_tittle": "自动删除设置"
+        "Window_tittle": "自动删除设置",
+        "tab_files": "📄 文件",
+        "tab_folders": "📁 文件夹",
+        "folder_enabled": "自动删除文件夹已启用",
+        "folder_disabled": "自动删除文件夹已禁用",
+        "folder_scope_title": "文件夹删除范围：",
+        "folder_scope_all": "所有空文件夹",
+        "folder_scope_orz": "仅 FileORZ 文件夹",
+        "folder_desc": "自动删除整理目录中的空文件夹。"
     },
     "Adivanced_config": {
         "tittle": "高级设置 - FileORZ (BETA)",

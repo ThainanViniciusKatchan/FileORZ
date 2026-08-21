@@ -53,11 +53,22 @@
         "enabled": "Auto Eliminación Activada",
         "disabled": "Auto Eliminación Desactivada",
         "filters_title": "Filtros de Eliminación:",
+        "filter_create_date": "Por Fecha de Creación",
+        "filter_modify_date": "Por Fecha de Modificación",
+        "time_title": "Plazo de Eliminación:",
         "days": "Días para eliminar el archivo.",
         "type_of_delete": "Tipo de eliminación",
         "type_1": "Eliminar permanentemente",
         "type_2": "Enviar a la papelera",
-        "Window_tittle": "Configuraciones de Auto Eliminación"
+        "Window_tittle": "Configuraciones de Auto Eliminación",
+        "tab_files": "📄 Archivos",
+        "tab_folders": "📁 Carpetas",
+        "folder_enabled": "Auto Eliminación de Carpetas Activada",
+        "folder_disabled": "Auto Eliminación de Carpetas Desactivada",
+        "folder_scope_title": "Alcance de Eliminación de Carpetas:",
+        "folder_scope_all": "Todas las Carpetas Vacías",
+        "folder_scope_orz": "Solo Carpetas de FileORZ",
+        "folder_desc": "Elimina automáticamente las carpetas vacías en el directorio de organización."
     },
     "Adivanced_config": {
         "tittle": "Configuraciones Avanzadas - FileORZ (BETA)",

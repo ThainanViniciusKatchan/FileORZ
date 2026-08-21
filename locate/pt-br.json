@@ -53,11 +53,22 @@
         "enabled": "Auto Deletar Ativado",
         "disabled": "Auto Deletar Desativado",
         "filters_title": "Filtros de Exclusão:",
+        "filter_create_date": "Por Data de Criação",
+        "filter_modify_date": "Por Data de Modificação",
+        "time_title": "Prazo para Exclusão:",
         "days": "Dias para excluir o arquivo.",
         "type_of_delete": "Tipo de exclusão",
         "type_1": "Excluir permanentemente",
         "type_2": "Enviar para a lixeira",
-        "Window_tittle": "Configurações Auto Deletar"
+        "Window_tittle": "Configurações Auto Deletar",
+        "tab_files": "📄 Arquivos",
+        "tab_folders": "📁 Pastas",
+        "folder_enabled": "Auto Deletar Pastas Ativado",
+        "folder_disabled": "Auto Deletar Pastas Desativado",
+        "folder_scope_title": "Escopo de Exclusão de Pastas:",
+        "folder_scope_all": "Todas as Pastas Vazias",
+        "folder_scope_orz": "Apenas Pastas do FileORZ",
+        "folder_desc": "Remove automaticamente pastas vazias no diretório de organização."
     },
     "Adivanced_config": {
         "tittle": "Configurações Avançadas - FileORZ (BETA)",

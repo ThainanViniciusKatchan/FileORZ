@@ -53,11 +53,22 @@
         "enabled": "Automatisches Löschen aktiviert",
         "disabled": "Automatisches Löschen deaktiviert",
         "filters_title": "Löschfilter:",
+        "filter_create_date": "Nach Erstellungsdatum",
+        "filter_modify_date": "Nach Änderungsdatum",
+        "time_title": "Löschfrist:",
         "days": "Tage bis zum Löschen der Datei.",
         "type_of_delete": "Löschart",
         "type_1": "Dauerhaft löschen",
         "type_2": "In den Papierkorb verschieben",
-        "Window_tittle": "Einstellungen für automatisches Löschen"
+        "Window_tittle": "Einstellungen für automatisches Löschen",
+        "tab_files": "📄 Dateien",
+        "tab_folders": "📁 Ordner",
+        "folder_enabled": "Automatisches Löschen von Ordnern aktiviert",
+        "folder_disabled": "Automatisches Löschen von Ordnern deaktiviert",
+        "folder_scope_title": "Löschbereich für Ordner:",
+        "folder_scope_all": "Alle leeren Ordner",
+        "folder_scope_orz": "Nur FileORZ-Ordner",
+        "folder_desc": "Entfernt automatisch leere Ordner im Organisationsverzeichnis."
     },
     "Adivanced_config": {
         "tittle": "Erweiterte Einstellungen - FileORZ (BETA)",

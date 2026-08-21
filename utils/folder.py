@@ -55,13 +55,15 @@ class Delete_Folde:
     @ativado.setter
     def ativado(self, ativado: bool):
         CONFIG = load_config("dist", "config")
+        if "folder_delete" not in CONFIG:
+            CONFIG["folder_delete"] = {}
         CONFIG["folder_delete"]["ativado"] = ativado
         save_config("dist", "config", CONFIG)
 
     @ativado.getter
     def Getativado(self) -> bool:
         CONFIG = load_config("dist", "config")
-        return CONFIG["folder_delete"]["ativado"]
+        return CONFIG.get("folder_delete", {}).get("ativado", False)
 
     @property
     def lixeira(self) -> bool:
@@ -70,13 +72,15 @@ class Delete_Folde:
     @lixeira.setter
     def lixeira(self, lixeira: bool):
         CONFIG = load_config("dist", "config")
+        if "folder_delete" not in CONFIG:
+            CONFIG["folder_delete"] = {}
         CONFIG["folder_delete"]["lixeira"] = lixeira
         save_config("dist", "config", CONFIG)
 
     @lixeira.getter
     def Getlixeira(self) -> bool:
         CONFIG = load_config("dist", "config")
-        return CONFIG["folder_delete"]["lixeira"]
+        return CONFIG.get("folder_delete", {}).get("lixeira", False)
 
     @property
     def excluir_permanentemente(self) -> bool:
@@ -85,13 +89,15 @@ class Delete_Folde:
     @excluir_permanentemente.setter
     def excluir_permanentemente(self, excluir_permanentemente: bool):
         CONFIG = load_config("dist", "config")
+        if "folder_delete" not in CONFIG:
+            CONFIG["folder_delete"] = {}
         CONFIG["folder_delete"]["excluir_permanentemente"] = excluir_permanentemente
         save_config("dist", "config", CONFIG)
 
     @excluir_permanentemente.getter
     def Getexcluir_permanentemente(self) -> bool:
         CONFIG = load_config("dist", "config")
-        return CONFIG["folder_delete"]["excluir_permanentemente"]
+        return CONFIG.get("folder_delete", {}).get("excluir_permanentemente", False)
 
     @property
     def pasta_orz(self) -> bool:
@@ -100,13 +106,15 @@ class Delete_Folde:
     @pasta_orz.setter
     def pasta_orz(self, pasta_orz: bool):
         CONFIG = load_config("dist", "config")
-        CONFIG["folder_delete"]["pasta_orz"] = pasta_orz
+        if "folder_delete" not in CONFIG:
+            CONFIG["folder_delete"] = {}
+        CONFIG["folder_delete"]["pastas_ORZ"] = pasta_orz
         save_config("dist", "config", CONFIG)
 
     @pasta_orz.getter
     def Getpasta_orz(self) -> bool:
         CONFIG = load_config("dist", "config")
-        return CONFIG["folder_delete"]["pastas_ORZ"]
+        return CONFIG.get("folder_delete", {}).get("pastas_ORZ", False)
 
     @property
     def todas(self) -> bool:
@@ -115,13 +123,18 @@ class Delete_Folde:
     @todas.setter
     def todas(self, todas: bool):
         CONFIG = load_config("dist", "config")
+        if "folder_delete" not in CONFIG:
+            CONFIG["folder_delete"] = {}
         CONFIG["folder_delete"]["todas"] = todas
+        if "tudo" in CONFIG["folder_delete"]:
+            del CONFIG["folder_delete"]["tudo"]
         save_config("dist", "config", CONFIG)
 
     @todas.getter
     def Gettodas(self) -> bool:
         CONFIG = load_config("dist", "config")
-        return CONFIG["folder_delete"]["todas"]
+        fd = CONFIG.get("folder_delete", {})
+        return fd.get("todas", fd.get("tudo", False))
 
 
 if __name__ == "__main__":

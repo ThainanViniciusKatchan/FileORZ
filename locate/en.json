@@ -53,11 +53,22 @@
         "enabled": "Auto Delete Enabled",
         "disabled": "Auto Delete Disabled",
         "filters_title": "Deletion Filters:",
+        "filter_create_date": "By Creation Date",
+        "filter_modify_date": "By Modification Date",
+        "time_title": "Deadline for Deletion:",
         "days": "Days to delete the file.",
         "type_of_delete": "Deletion type",
         "type_1": "Delete permanently",
         "type_2": "Send to recycle bin",
-        "Window_tittle": "Auto Delete Settings"
+        "Window_tittle": "Auto Delete Settings",
+        "tab_files": "📄 Files",
+        "tab_folders": "📁 Folders",
+        "folder_enabled": "Folder Auto Delete Enabled",
+        "folder_disabled": "Folder Auto Delete Disabled",
+        "folder_scope_title": "Folder Deletion Scope:",
+        "folder_scope_all": "All Empty Folders",
+        "folder_scope_orz": "Only FileORZ Folders",
+        "folder_desc": "Automatically removes empty folders in the organization directory."
     },
     "Adivanced_config": {
         "tittle": "Advanced Settings - FileORZ (BETA)",
