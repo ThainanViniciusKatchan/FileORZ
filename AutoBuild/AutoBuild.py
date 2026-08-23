@@ -327,7 +327,7 @@ def criar_config_padrao():
 def criar_ext_padrao():
     print("\nCriando ext.json padrão...")
     config = {
-        "Desenvolvimento": {
+        "development": {
             ".bin": True,
             ".htm": True,
             ".html": True,
@@ -355,7 +355,7 @@ def criar_ext_padrao():
             ".lexical": True,
             ".dll": True,
         },
-        "documentos": {
+        "documents": {
             ".pdf": True,
             ".doc": True,
             ".txt": True,
@@ -401,7 +401,7 @@ def criar_ext_padrao():
             ".m4a": True,
             ".webm": True,
         },
-        "compactos": {
+        "compressed": {
             ".rar": True,
             ".zip": True,
             ".zpix": True,
@@ -412,7 +412,7 @@ def criar_ext_padrao():
             ".7-zip": True,
             ".tar": True,
         },
-        "fontes": {".ttf": True, ".eot": True, ".woff": True, ".woff2": True},
+        "fonts": {".ttf": True, ".eot": True, ".woff": True, ".woff2": True},
         "setups": {
             ".exe": True,
             ".msi": True,
@@ -422,7 +422,7 @@ def criar_ext_padrao():
             ".apk": True,
             ".Msixbundle": True,
         },
-        "imagens": {
+        "images": {
             ".jpg": True,
             ".jpeg": True,
             ".png": True,

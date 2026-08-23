@@ -83,6 +83,16 @@
     "Sys_tray": {
         "open": "Открыть",
         "close": "Выход"
+    },
+    "category": {
+        "development": "Разработка",
+        "documents": "Документы",
+        "videos": "Видео",
+        "audios": "Аудио",
+        "compressed": "Сжатые файлы",
+        "fonts": "Шрифты",
+        "setups": "Установщики",
+        "images": "Изображения",
+        "other": "Другое"
     }
 }
-

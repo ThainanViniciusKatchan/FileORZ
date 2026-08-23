@@ -83,6 +83,16 @@
     "Sys_tray": {
         "open": "Open",
         "close": "Exit"
+    },
+    "category": {
+        "development": "Development",
+        "documents": "Documents",
+        "videos": "Videos",
+        "audios": "Audios",
+        "compressed": "Compressed",
+        "fonts": "Fonts",
+        "setups": "Setups",
+        "images": "Images",
+        "other": "Other"
     }
 }
-

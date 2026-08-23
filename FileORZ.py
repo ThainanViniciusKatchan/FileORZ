@@ -29,7 +29,8 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 if BASE_DIR not in sys.path:
     sys.path.insert(0, BASE_DIR)
 
-from utils.model import json_path
+from utils.model import json_path, load_config
+from utils.translate import Translate
 from utils.AutoDelete import AutoDelete
 from utils.AdvancedConfig import AdvancedConfig
 from utils.Delete_folder import ORZ_folders, all_folders
@@ -40,41 +41,21 @@ CONFIG_PATH = json_path("dist", "config")
 WORKS_PATH = json_path("dist", "Key_Words")
 
 
-# Carregar as extensões do arquivo config.json
+# Carregar as extensões do arquivo category.json
 def load_extensions():
-    global f, data
-    # Lê o config.json e retorna dicionário com tratamento de erros.
     try:
-        with open(CONFIG_PATH, "r", encoding="utf-8") as f:
-            data = json.load(f)
-
+        data = load_config("dist", "category")
         extensions = {}
-        # Lista negra de chaves que não são categorias de arquivos
-        ignored_keys = {
-            "Folder",
-            "timeverification",
-            "Startup",
-            "AutoDelete",
-            "Enviar Para Lixeira",
-            "Excluir permanentemente",
-            "AutoDeleteConfig",
-            "AdvancedOrganize",
-            "folder_delete",
-            "lang",
-        }
 
         for category, exts in data.items():
-            if category not in ignored_keys:
-                # Normaliza o nome da categoria (ex: imAgens -> Imagens)
-                cat_name = category.capitalize()
-
-                if isinstance(exts, str):
-                    extensions[cat_name] = [exts]
-                elif isinstance(exts, dict):
-                    # Garante que só processa se for dicionário mesmo
-                    extensions[cat_name] = [
-                        ext for ext, enabled in exts.items() if enabled
-                    ]
+            if isinstance(exts, dict):
+                extensions[category] = [
+                    ext for ext, enabled in exts.items() if enabled
+                ]
+            elif isinstance(exts, list):
+                extensions[category] = exts
+            elif isinstance(exts, str):
+                extensions[category] = [exts]
 
         return extensions
     except Exception as e:
@@ -120,6 +101,7 @@ def organize_files():
         print("[INFO] Organização avançada desabilitada.")
 
     # 2. Executa organização padrão por extensão
+    translator = Translate()
     extensions_to_include = load_extensions()
     extension_map = {}
 
@@ -140,12 +122,21 @@ def organize_files():
                 file_extension_lower = file_extension.lower()
 
                 if file_extension_lower in extension_map:
-                    target_category = extension_map[file_extension_lower]
+                    raw_category = extension_map[file_extension_lower]
+                    target_category = (
+                        translator.get_text("category", raw_category)
+                        or raw_category.capitalize()
+                    )
                 else:
-                    target_category = "OUTROS"
+                    target_category = (
+                        translator.get_text("category", "other")
+                        or "OUTROS"
+                    )
 
                 sub_folder_name = (
-                    file_extension.upper()[1:] if len(file_extension) > 1 else "OUTROS"
+                    file_extension.upper()[1:]
+                    if len(file_extension) > 1
+                    else (translator.get_text("category", "other") or "OUTROS")
                 )
                 new_folder = os.path.join(
                     original_path, target_category, sub_folder_name

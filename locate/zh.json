@@ -83,6 +83,16 @@
     "Sys_tray": {
         "open": "打开",
         "close": "退出"
+    },
+    "category": {
+        "development": "开发",
+        "documents": "文档",
+        "videos": "视频",
+        "audios": "音频",
+        "compressed": "压缩包",
+        "fonts": "字体",
+        "setups": "安装程序",
+        "images": "图片",
+        "other": "其他"
     }
 }
-

@@ -10,6 +10,7 @@ ISCC.exe
 ./.agents
 .agents
 __pycache__
+pycache
 build_ui
 build
 FileORZ-UI.spec

@@ -115,6 +115,7 @@ def ext_config_window(parent=None):
 
     config = load_config("dist", "category")
     extension_vars = {}
+    category_ui_elements = {}
 
     for category, extensions in config.items():
         if not isinstance(extensions, dict):
@@ -142,9 +143,12 @@ def ext_config_window(parent=None):
         )
         cat_icon.pack(side="left")
 
+        cat_name_translated = (
+            t.get_text("category", category) or category.capitalize()
+        )
         cat_label = customtkinter.CTkLabel(
             cat_left,
-            text=category.upper(),
+            text=cat_name_translated.upper(),
             font=customtkinter.CTkFont(family="Segoe UI", size=14, weight="bold"),
             text_color=COLORS["text_category"],
         )
@@ -152,9 +156,13 @@ def ext_config_window(parent=None):
 
         enabled_count = sum(1 for v in extensions.values() if v)
         total_count = len(extensions)
+        count_format = (
+            t.get_text("ext_config", "enabled_count")
+            or "{enabled_count}/{total_count} selecionadas"
+        )
         count_label = customtkinter.CTkLabel(
             cat_left,
-            text=f"  •  {enabled_count}/{total_count} selecionadas",
+            text=f"  •  {count_format.format(enabled_count=enabled_count, total_count=total_count)}",
             font=customtkinter.CTkFont(family="Segoe UI", size=11),
             text_color=COLORS["text_secondary"],
         )
@@ -163,13 +171,35 @@ def ext_config_window(parent=None):
         cat_right = customtkinter.CTkFrame(header_container, fg_color="transparent")
         cat_right.pack(side="right")
 
+        category_ui_elements[category] = {
+            "label": cat_label,
+            "count_label": count_label,
+            "total_count": total_count,
+            "btn_select_all": None,
+            "btn_deselect_all": None,
+        }
+
+        def update_cat_count(cat=category):
+            cnt = sum(1 for v in extension_vars[cat].values() if v.get())
+            tot = category_ui_elements[cat]["total_count"]
+            tr = Translate()
+            fmt = (
+                tr.get_text("ext_config", "enabled_count")
+                or "{enabled_count}/{total_count} selecionadas"
+            )
+            category_ui_elements[cat]["count_label"].configure(
+                text=f"  •  {fmt.format(enabled_count=cnt, total_count=tot)}"
+            )
+
         def select_all(cat=category):
             for ext_var in extension_vars[cat].values():
                 ext_var.set(True)
+            update_cat_count(cat)
 
         def deselect_all(cat=category):
             for ext_var in extension_vars[cat].values():
                 ext_var.set(False)
+            update_cat_count(cat)
 
         btn_select_all = customtkinter.CTkButton(
             cat_right,
@@ -197,6 +227,9 @@ def ext_config_window(parent=None):
         )
         btn_deselect_all.pack(side="left")
 
+        category_ui_elements[category]["btn_select_all"] = btn_select_all
+        category_ui_elements[category]["btn_deselect_all"] = btn_deselect_all
+
         ext_frame = customtkinter.CTkFrame(
             cat_frame, fg_color=COLORS["bg_card_inner"], corner_radius=8
         )
@@ -214,6 +247,7 @@ def ext_config_window(parent=None):
                 ext_frame,
                 text=ext,
                 variable=var,
+                command=lambda cat=category: update_cat_count(cat),
                 font=customtkinter.CTkFont(family="Consolas", size=11),
                 fg_color=COLORS["checkbox_fg"],
                 hover_color=COLORS["checkbox_hover"],
@@ -279,6 +313,22 @@ def ext_config_window(parent=None):
         header_title.configure(text=tr.get_text("ext_config", "header") or "Categorias e Extensões")
         header_subtitle.configure(text=tr.get_text("ext_config", "header_subtitle") or "Gerencie as extensões por categoria")
         save_button.configure(text=tr.get_text("ext_config", "btn_save") or "💾  Salvar Categorias")
+
+        for cat, elems in category_ui_elements.items():
+            cat_text = (tr.get_text("category", cat) or cat.capitalize()).upper()
+            elems["label"].configure(text=cat_text)
+            cnt = sum(1 for v in extension_vars[cat].values() if v.get())
+            fmt = (
+                tr.get_text("ext_config", "enabled_count")
+                or "{enabled_count}/{total_count} selecionadas"
+            )
+            elems["count_label"].configure(
+                text=f"  •  {fmt.format(enabled_count=cnt, total_count=elems['total_count'])}"
+            )
+            if elems["btn_select_all"]:
+                elems["btn_select_all"].configure(text=tr.get_text("ext_config", "btn_select_all") or "✓ Todos")
+            if elems["btn_deselect_all"]:
+                elems["btn_deselect_all"].configure(text=tr.get_text("ext_config", "btn_deselect_all") or "✗ Nenhum")
 
     Translate.register_listener(update_ext_config_texts)
 
