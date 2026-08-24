@@ -86,21 +86,33 @@ def organize_files():
         print(f"Sem permissão de leitura/escrita em: {original_path}")
         return
 
+    # AutoDelete files
     autodelete = delete.AutoDelete().GetAutoDelete
-
+    
     if autodelete == True:
         AutoDelete()
     else:
         print("[INFO] AutoDelete desabilitado.")
         pass
 
-    # 1. Executa organização avançada primeiro (se habilitada)
+    # AutoDelete empty folders
+    del_folder = Delete_Folde()
+    if del_folder.Getativado == True:
+        if del_folder.Getpasta_orz == True:
+            ORZ_folders()
+        elif del_folder.Gettodas == True:
+            all_folders()
+    else:
+        print("[INFO] Auto exclusão de pastas desabilitada.")
+
+
+    # Advanced Organização
     if AdvancedConfig().get_enabled():
         Alg.processar_texto()
     else:
         print("[INFO] Organização avançada desabilitada.")
 
-    # 2. Executa organização padrão por extensão
+    # Organize by extension and translate folders 
     translator = Translate()
     extensions_to_include = load_extensions()
     extension_map = {}
@@ -158,16 +170,6 @@ def organize_files():
                     print(f"[ERRO] {e}")
     except Exception as e:
         print(f"Erro ao ler diretório: {e}")
-
-    # 3. Executa auto exclusão de pastas vazias (se habilitada)
-    del_folder = Delete_Folde()
-    if del_folder.Getativado:
-        if del_folder.Getpasta_orz:
-            ORZ_folders()
-        elif del_folder.Gettodas:
-            all_folders()
-    else:
-        print("[INFO] Auto exclusão de pastas desabilitada.")
 
 
 def loop_verification():

@@ -304,8 +304,8 @@ def criar_config_padrao():
             "lixeira": False,
             "excluir_permanentemente": False,
             "pastas_ORZ": False,
-            "tudo": False,
-        },
+            "tudo": False
+        }
     }
 
     # Salva na pasta do projeto para referência (opcional, mantido conforme original)
@@ -510,6 +510,19 @@ def limpar_temporarios():
             print(f"  [OK] {pasta} já não existe")
 
 
+def locales_build():
+    path_locales = ["*.json"]
+    path_dist = os.path.join(BASE_DIR, OUTPUT_DIR, "locate")
+    os.makedirs(path_dist, exist_ok=True)
+    print("\nCopiando locales para a build...")
+    for locale in path_locales:
+        path_locale = os.path.join(BASE_DIR, "locate", locale)
+        if os.path.exists(path_locale):
+            shutil.copy(path_locale, path_dist)
+            print(f"  [OK] {locale} copiado para a build")
+        else:
+            print(f"  [ERRO] {locale} não encontrado na build")
+    
 def assinar_binarios():
     print("\nAssinando binários...")
     exe_path = os.path.join(BASE_DIR, OUTPUT_DIR, "dist", "FileORZ.exe")
@@ -619,6 +632,7 @@ if __name__ == "__main__":
         ("Criar config padrão", criar_config_padrao),
         ("Criar ext padrão", criar_ext_padrao),
         ("Ajustar configurações", alterar_config_build),
+        ("Copiando as traduções e criando a pasta: Locale", locales_build),
         ("Limpar arquivos temporários", limpar_temporarios),
         ("Assinar binários", assinar_binarios),
         ("Criando arquivo setup_temp.iss", criar_iss_temp),
