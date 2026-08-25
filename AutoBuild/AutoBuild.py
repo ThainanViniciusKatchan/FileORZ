@@ -304,8 +304,8 @@ def criar_config_padrao():
             "lixeira": False,
             "excluir_permanentemente": False,
             "pastas_ORZ": False,
-            "tudo": False
-        }
+            "tudo": False,
+        },
     }
 
     # Salva na pasta do projeto para referência (opcional, mantido conforme original)
@@ -511,18 +511,28 @@ def limpar_temporarios():
 
 
 def locales_build():
-    path_locales = ["*.json"]
+    locate_origem = os.path.join(BASE_DIR, "locate")
     path_dist = os.path.join(BASE_DIR, OUTPUT_DIR, "locate")
     os.makedirs(path_dist, exist_ok=True)
     print("\nCopiando locales para a build...")
-    for locale in path_locales:
-        path_locale = os.path.join(BASE_DIR, "locate", locale)
-        if os.path.exists(path_locale):
-            shutil.copy(path_locale, path_dist)
-            print(f"  [OK] {locale} copiado para a build")
-        else:
-            print(f"  [ERRO] {locale} não encontrado na build")
-    
+    if os.path.exists(locate_origem):
+        for item in os.listdir(locate_origem):
+            origem_item = os.path.join(locate_origem, item)
+            destino_item = os.path.join(path_dist, item)
+            try:
+                if os.path.isfile(origem_item):
+                    shutil.copy2(origem_item, destino_item)
+                    print(f"  [OK] {item} copiado para a build")
+                elif os.path.isdir(origem_item):
+                    shutil.copytree(origem_item, destino_item, dirs_exist_ok=True)
+                    print(f"  [OK] Pasta {item} copiada para a build")
+            except Exception as Error:
+                print(f"  [ERRO] Falha ao copiar {item}: {Error}")
+    else:
+        print(f"  [ERRO] Pasta locate não encontrada em: {locate_origem}")
+
+
+
 def assinar_binarios():
     print("\nAssinando binários...")
     exe_path = os.path.join(BASE_DIR, OUTPUT_DIR, "dist", "FileORZ.exe")
