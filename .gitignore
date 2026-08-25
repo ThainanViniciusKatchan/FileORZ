@@ -37,10 +37,5 @@ ui/LiveReload.py
 Setup.iss
 .vscode
 debug_app.py
-ModFile.md
-<<<<<<< HEAD
 .github
-./AdvancedAlg/Key_Words.json
-=======
-.github
->>>>>>> 94584eb92e6849e8ef21489a014b9202786de970
+AdvancedAlg/Key_Words.json

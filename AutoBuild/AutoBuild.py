@@ -532,7 +532,6 @@ def locales_build():
         print(f"  [ERRO] Pasta locate não encontrada em: {locate_origem}")
 
 
-
 def assinar_binarios():
     print("\nAssinando binários...")
     exe_path = os.path.join(BASE_DIR, OUTPUT_DIR, "dist", "FileORZ.exe")
@@ -565,27 +564,43 @@ def git_comands(v):
     from pathlib import Path
 
     try:
-        comandos = [
-            ["git", "lfs", "track", "*.exe"],
-            ["git", "tag", "-a", f"v{v}", "-m", f"versão {v}"],
-            ["git", "push", "GH", f"v{v}"],
-            [
-                "gh",
-                "release",
-                "create",
-                f"v{v}",
-                Path.home() / "Desktop" / f"FileORZ_install_{v}.exe",
-                "--title",
-                f"Versão {v}",
-                "--notes",
-                f"Lançamento da versão {v}",
-            ],
-        ]
-        for cmd in comandos:
-            subprocess.run(cmd, check=True)
-        print("Git tag e Release criadas com sucesso!")
+        tag = f"v{v}"
+        installer_path = Path.home() / "Desktop" / f"FileORZ_install_{v}.exe"
+
+        print(f"\nCriando tag e release para a versão {tag}...")
+
+        # 1. Cria ou atualiza a tag anotada localmente
+        subprocess.run(["git", "tag", "-f", "-a", tag, "-m", f"versão {v}"], check=True)
+        print(f"  [OK] Tag {tag} criada localmente")
+
+        # 2. Faz o push da tag para o GitHub (remote GH)
+        subprocess.run(["git", "push", "GH", tag, "--force"], check=True)
+        print(f"  [OK] Tag {tag} enviada para o GitHub (GH)")
+
+        # 3. Cria a release no GitHub anexando o instalador gerado
+        if installer_path.exists():
+            subprocess.run(
+                [
+                    "gh",
+                    "release",
+                    "create",
+                    tag,
+                    str(installer_path),
+                    "--title",
+                    f"Versão {v}",
+                    "--notes",
+                    f"Lançamento da versão {v}",
+                    "--clobber",
+                ],
+                check=True,
+            )
+            print("  [OK] Release e instalador publicados no GitHub com sucesso!")
+        else:
+            print(f"  [ERRO] Instalador não encontrado no caminho: {installer_path}")
+
     except subprocess.CalledProcessError as Error:
-        print(f"Erro ao Cria a tag ou release: {Error}")
+        print(f"Erro ao Criar a tag ou release: {Error}")
+
 
 
 def gravar_nova_versao(type_version):
@@ -630,7 +645,6 @@ def criar_iss_temp(v):
 
 
 if __name__ == "__main__":
-
     ETAPAS = [
         ("Matar processos existentes", matar_processos),
         ("Limpar builds anteriores", limpar_builds_anteriores),
