@@ -285,7 +285,7 @@ def criar_keywords_padrao():
 
 def criar_config_padrao():
     print("\nCriando config.json padrão...")
-    {
+    config = {
         "lang": "pt-br",
         "timeverification": "5",
         "Startup": False,
@@ -577,24 +577,37 @@ def git_comands(v):
         subprocess.run(["git", "push", "GH", tag, "--force"], check=True)
         print(f"  [OK] Tag {tag} enviada para o GitHub (GH)")
 
-        # 3. Cria a release no GitHub anexando o instalador gerado
+        # 3. Cria a release ou faz upload do instalador no GitHub
         if installer_path.exists():
-            subprocess.run(
-                [
-                    "gh",
-                    "release",
-                    "create",
-                    tag,
-                    str(installer_path),
-                    "--title",
-                    f"Versão {v}",
-                    "--notes",
-                    f"Lançamento da versão {v}",
-                    "--clobber",
-                ],
-                check=True,
-            )
-            print("  [OK] Release e instalador publicados no GitHub com sucesso!")
+            try:
+                subprocess.run(
+                    [
+                        "gh",
+                        "release",
+                        "create",
+                        tag,
+                        str(installer_path),
+                        "--title",
+                        f"Versão {v}",
+                        "--notes",
+                        f"Lançamento da versão {v}",
+                    ],
+                    check=True,
+                )
+                print("  [OK] Release e instalador criados no GitHub com sucesso!")
+            except subprocess.CalledProcessError:
+                subprocess.run(
+                    [
+                        "gh",
+                        "release",
+                        "upload",
+                        tag,
+                        str(installer_path),
+                        "--clobber",
+                    ],
+                    check=True,
+                )
+                print("  [OK] Instalador atualizado na release existente no GitHub!")
         else:
             print(f"  [ERRO] Instalador não encontrado no caminho: {installer_path}")
 
