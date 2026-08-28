@@ -125,7 +125,7 @@ def restore_windows():
     root.after(0, root.deiconify)
 
 
-from utils.StartTask import start_task
+from utils.StartTask import start_task, close_task
 
 
 def on_app():
@@ -154,11 +154,11 @@ def close_process():  # Fecha o app quando clicar no X
     try:
         meu_icone.stop()
         root.destroy()
-        subprocess.run(
-            ["taskkill", "/f", "/im", "wm", "FL_ORZ.exe"], capture_output=True
-        )
+        close_task()
     except Exception as Error:
         print(f"Aviso - Erro ao matar o processo FL_ORZ: {Error}")
+    finally:
+        os._exit(0)
 
 
 def close_app():

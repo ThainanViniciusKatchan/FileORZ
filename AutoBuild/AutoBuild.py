@@ -573,47 +573,52 @@ def git_comands(v):
         subprocess.run(["git", "tag", "-f", "-a", tag, "-m", f"versão {v}"], check=True)
         print(f"  [OK] Tag {tag} criada localmente")
 
-        # 2. Faz o push da tag para o GitHub (remote GH)
-        subprocess.run(["git", "push", "GH", tag, "--force"], check=True)
-        print(f"  [OK] Tag {tag} enviada para o GitHub (GH)")
+        # 2. Faz o push da tag para o remoto (origin)
+        subprocess.run(["git", "push", "origin", tag, "--force"], check=True)
+        print(f"  [OK] Tag {tag} enviada com sucesso (origin)")
 
         # 3. Cria a release ou faz upload do instalador no GitHub
-        if installer_path.exists():
-            try:
-                subprocess.run(
-                    [
-                        "gh",
-                        "release",
-                        "create",
-                        tag,
-                        str(installer_path),
-                        "--title",
-                        f"Versão {v}",
-                        "--notes",
-                        f"Lançamento da versão {v}",
-                    ],
-                    check=True,
+        try_count = 0
+        while try_count < 3:
+            if installer_path.exists():
+                try:
+                    subprocess.run(
+                        [
+                            "origin",
+                            "release",
+                            "create",
+                            tag,
+                            str(installer_path),
+                            "--title",
+                            f"Versão {v}",
+                            "--notes",
+                            f"Lançamento da versão {v}",
+                        ],
+                        check=True,
+                    )
+                    print("  [OK] Release e instalador criados no GitHub com sucesso!")
+                except subprocess.CalledProcessError:
+                    subprocess.run(
+                        [
+                            "origin",
+                            "release",
+                            "upload",
+                            tag,
+                            str(installer_path),
+                            "--clobber",
+                        ],
+                        check=True,
+                    )
+                    print(
+                        "  [OK] Instalador atualizado na release existente no GitHub!"
+                    )
+            else:
+                print(
+                    f"  [ERRO] Instalador não encontrado no caminho: {installer_path}"
                 )
-                print("  [OK] Release e instalador criados no GitHub com sucesso!")
-            except subprocess.CalledProcessError:
-                subprocess.run(
-                    [
-                        "gh",
-                        "release",
-                        "upload",
-                        tag,
-                        str(installer_path),
-                        "--clobber",
-                    ],
-                    check=True,
-                )
-                print("  [OK] Instalador atualizado na release existente no GitHub!")
-        else:
-            print(f"  [ERRO] Instalador não encontrado no caminho: {installer_path}")
 
     except subprocess.CalledProcessError as Error:
         print(f"Erro ao Criar a tag ou release: {Error}")
-
 
 
 def gravar_nova_versao(type_version):

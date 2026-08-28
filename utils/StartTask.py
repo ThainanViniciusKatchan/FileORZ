@@ -10,9 +10,13 @@ from FileORZ import organize_files, loop_verification
 
 
 def check_if_running(taskname):
-    for proc in psutil.process_iter(["name"]):
-        if proc.info["name"] == taskname:
-            return True
+    try:
+        for proc in psutil.process_iter(["name"]):
+            name = proc.info.get("name")
+            if name and name.lower() == taskname.lower():
+                return True
+    except Exception:
+        pass
     return False
 
 
@@ -36,19 +40,17 @@ def start_task():
 
 
 def close_task():
-    STATUS = check_if_running("FL_ORZ.exe")
-    if STATUS:
-        subprocess.run(
-            [
-                "taskkill",
-                "/f",
-                "/im",
-                "FileORZ.exe",
-                "/fi",
-                "WINDOWTITLE eq FL_ORZ.exe",
-            ],
-            check=True,
-        )
+    processos = ["FL_ORZ.exe", "FileORZ.exe"]
+    for proc in processos:
+        if check_if_running(proc):
+            try:
+                subprocess.run(
+                    ["taskkill", "/F", "/IM", proc, "/T"],
+                    capture_output=True,
+                    check=False,
+                )
+            except Exception as Error:
+                print(f"Erro ao encerrar processo {proc}: {Error}")
 
 
 # Iniciar a organização
