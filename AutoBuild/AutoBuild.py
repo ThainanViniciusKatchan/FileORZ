@@ -105,7 +105,10 @@ def compilar_organizador():
         "--assume-yes-for-downloads",
         "--show-progress",
         "--show-memory",
-        "--plugin-enable=tk-inter",
+        "--enable-plugin=tk-inter",
+        "--include-package=utils",
+        "--include-package=AdvancedAlg",
+        "--include-package=pypdf",
         "FileORZ.py",
     ]
 
@@ -119,7 +122,7 @@ def compilar_organizador():
         return True
     else:
         print("  [ERRO] Falha ao compilar organizador")
-        return False
+        raise RuntimeError("Falha na compilação do organizador com Nuitka")
 
 
 def compilar_ui():
@@ -156,7 +159,7 @@ def compilar_ui():
         return True
     else:
         print("  [ERRO] Falha ao compilar UI")
-        return False
+        raise RuntimeError("Falha na compilação da UI com Nuitka")
 
 
 def reorganizar_estrutura():
@@ -271,16 +274,18 @@ def criar_keywords_padrao():
         ],
     }
 
-    # Salva na pasta da build/dist
-    keywords_path = os.path.join(str(BASE_DIR), OUTPUT_DIR, "dist", "Key_Words.json")
+    # Salva na pasta do projeto e na pasta da build/dist
+    dist_proj_kw = os.path.join(BASE_DIR, "dist", "Key_Words.json")
+    build_kw = os.path.join(BASE_DIR, OUTPUT_DIR, "dist", "Key_Words.json")
 
-    try:
-        os.makedirs(os.path.dirname(keywords_path), exist_ok=True)
-        with open(keywords_path, "w", encoding="utf-8") as f:
-            json.dump(keywords, f, indent=4, ensure_ascii=False)
-        print(f"  [OK] Key_Words.json criado em: {keywords_path}")
-    except Exception as Error:
-        print(f"  [ERRO] Falha ao criar Key_Words em {keywords_path}: {Error}")
+    for path in [dist_proj_kw, build_kw]:
+        try:
+            os.makedirs(os.path.dirname(path), exist_ok=True)
+            with open(path, "w", encoding="utf-8") as f:
+                json.dump(keywords, f, indent=4, ensure_ascii=False)
+            print(f"  [OK] Key_Words.json criado em: {path}")
+        except Exception as Error:
+            print(f"  [ERRO] Falha ao criar Key_Words em {path}: {Error}")
 
 
 def criar_config_padrao():
@@ -486,28 +491,30 @@ def alterar_config_build():
 def limpar_temporarios():
     print("\nLimpando arquivos temporários...")
     pastas_temp = [
-        "index.build",
-        "index.dist",
-        "index.onefile-build",
-        "FileORZ.build",
-        "FileORZ.dist",
-        "FileORZ.onefile-build",
-        "setup_temp.iss",
+        os.path.join(BASE_DIR, "index.build"),
+        os.path.join(BASE_DIR, "index.dist"),
+        os.path.join(BASE_DIR, "index.onefile-build"),
+        os.path.join(BASE_DIR, "FileORZ.build"),
+        os.path.join(BASE_DIR, "FileORZ.dist"),
+        os.path.join(BASE_DIR, "FileORZ.onefile-build"),
+        os.path.join(BASE_DIR, OUTPUT_DIR, "index.build"),
+        os.path.join(BASE_DIR, OUTPUT_DIR, "index.dist"),
+        os.path.join(BASE_DIR, OUTPUT_DIR, "dist", "FileORZ.build"),
+        os.path.join(BASE_DIR, OUTPUT_DIR, "dist", "FileORZ.dist"),
     ]
 
-    for pasta in pastas_temp:
-        caminho = os.path.join(BASE_DIR, pasta)
+    for caminho in pastas_temp:
         if os.path.exists(caminho):
             try:
                 if os.path.isdir(caminho):
                     shutil.rmtree(caminho, onerror=handle_remove_readonly)
                 else:
                     os.remove(caminho)
-                print(f"  [OK] {pasta} removida")
+                print(f"  [OK] {caminho} removido")
             except Exception as Error:
-                print(f"  [ERRO] Erro ao limpar {pasta}: {Error}")
+                print(f"  [ERRO] Erro ao limpar {caminho}: {Error}")
         else:
-            print(f"  [OK] {pasta} já não existe")
+            print(f"  [OK] {caminho} já não existe")
 
 
 def locales_build():
@@ -550,14 +557,18 @@ def assinar_binarios():
 
 def setup_compiler():
     try:
+        iscc_path = r"C:\Program Files (x86)\Inno Setup 6\ISCC.exe"
+        if not os.path.exists(iscc_path):
+            iscc_path = r"C:\Program Files\Inno Setup 6\ISCC.exe"
         comando = [
-            r"C:\Program Files (x86)\Inno Setup 6\ISCC.exe",
-            r"Setup_temp.iss",
+            iscc_path,
+            os.path.join(BASE_DIR, "setup_temp.iss"),
         ]
         subprocess.run(comando, check=True)
         print("  [OK] Setup criado com sucesso")
     except subprocess.CalledProcessError as Error:
-        print(f"Erro ao Cria o Setup: {Error}")
+        print(f"Erro ao Criar o Setup: {Error}")
+        raise
 
 
 def git_comands(v):
@@ -574,37 +585,50 @@ def git_comands(v):
         print(f"  [OK] Tag {tag} criada localmente")
 
         # 2. Faz o push da tag para o remoto (origin)
-        subprocess.run(["git", "push", "origin", tag, "--force"], check=True)
-        print(f"  [OK] Tag {tag} enviada com sucesso (origin)")
+        try:
+            subprocess.run(["git", "push", "origin", tag, "--force"], check=True)
+            print(f"  [OK] Tag {tag} enviada com sucesso (origin)")
+        except subprocess.CalledProcessError as e:
+            print(f"  [AVISO] Falha ao enviar tag para origin ({e}), prosseguindo com GitHub CLI...")
 
         # 3. Cria a release ou faz upload do instalador no GitHub
+        if not installer_path.exists():
+            print(f"  [ERRO] Instalador não encontrado no caminho: {installer_path}")
+            return
+
+        github_repo = "ThainanViniciusKatchan/FileORZ"
         try_count = 0
         while try_count < 3:
-            if installer_path.exists():
+            try:
+                subprocess.run(
+                    [
+                        "gh",
+                        "release",
+                        "create",
+                        tag,
+                        str(installer_path),
+                        "--repo",
+                        github_repo,
+                        "--title",
+                        f"Versão {v}",
+                        "--notes",
+                        f"Lançamento da versão {v}",
+                    ],
+                    check=True,
+                )
+                print("  [OK] Release e instalador criados no GitHub com sucesso!")
+                break
+            except subprocess.CalledProcessError:
                 try:
                     subprocess.run(
                         [
-                            "origin",
-                            "release",
-                            "create",
-                            tag,
-                            str(installer_path),
-                            "--title",
-                            f"Versão {v}",
-                            "--notes",
-                            f"Lançamento da versão {v}",
-                        ],
-                        check=True,
-                    )
-                    print("  [OK] Release e instalador criados no GitHub com sucesso!")
-                except subprocess.CalledProcessError:
-                    subprocess.run(
-                        [
-                            "origin",
+                            "gh",
                             "release",
                             "upload",
                             tag,
                             str(installer_path),
+                            "--repo",
+                            github_repo,
                             "--clobber",
                         ],
                         check=True,
@@ -612,10 +636,11 @@ def git_comands(v):
                     print(
                         "  [OK] Instalador atualizado na release existente no GitHub!"
                     )
-            else:
-                print(
-                    f"  [ERRO] Instalador não encontrado no caminho: {installer_path}"
-                )
+                    break
+                except subprocess.CalledProcessError as e:
+                    print(f"  [AVISO] Tentativa {try_count + 1} de upload falhou: {e}")
+                    try_count += 1
+                    sleep(2)
 
     except subprocess.CalledProcessError as Error:
         print(f"Erro ao Criar a tag ou release: {Error}")
