@@ -6,7 +6,7 @@ import sys
 
 SCRIPT_DIR = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(os.path.dirname(SCRIPT_DIR))
-from FileORZ import organize_files, loop_verification
+from FileORZ import loop_verification
 
 
 def check_if_running(taskname):
@@ -15,9 +15,11 @@ def check_if_running(taskname):
             name = proc.info.get("name")
             if name and name.lower() == taskname.lower():
                 return True
-    except Exception:
-        pass
-    return False
+        print(f"Processo {taskname} não encontrado")
+        return False
+    except Exception as Error:
+        print(f"Erro ao verificar processo {taskname}: {Error}")
+        return False
 
 
 def start_task():
@@ -41,16 +43,22 @@ def start_task():
 
 def close_task():
     processos = ["FL_ORZ.exe", "FileORZ.exe"]
+    rtn = bool()
     for proc in processos:
-        if check_if_running(proc):
+        if check_if_running(proc) is True:
             try:
                 subprocess.run(
                     ["taskkill", "/F", "/IM", proc, "/T"],
                     capture_output=True,
                     check=False,
                 )
+                rtn = True
             except Exception as Error:
                 print(f"Erro ao encerrar processo {proc}: {Error}")
+                rtn = False
+        else:
+            rtn = True
+    return rtn
 
 
 # Iniciar a organização
