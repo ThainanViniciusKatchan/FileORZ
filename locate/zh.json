@@ -8,7 +8,17 @@
         "about_btn": "关于",
         "about_title": "关于 - FileORZ",
         "about_pride": "在巴西自豪开发 💚💛",
-        "about_dev_by": "开发者：Thainan Vinicius Katchan"
+        "about_dev_by": "开发者：Thainan Vinicius Katchan",
+        "about_version": "版本：{version}",
+        "btn_check_update": "🔄 检查更新",
+        "btn_download_update": "⬇️ 下载更新",
+        "btn_install_update": "🚀 安装并重启",
+        "status_checking": "正在检查更新...",
+        "status_latest": "您已安装最新版本。",
+        "status_available": "发现新版本 {version}！",
+        "status_downloading": "正在下载更新...",
+        "status_downloaded": "更新已下载！准备安装。",
+        "status_error": "检查或下载更新失败。"
     },
     "index_window": {
         "title": "File ORZ - 整理您的文件",

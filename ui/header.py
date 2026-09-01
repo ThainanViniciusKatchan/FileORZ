@@ -1,24 +1,25 @@
 """
-    Copyright (C) 2026 Thainan Vinicius Katchan
+Copyright (C) 2026 Thainan Vinicius Katchan
 
-    This file is part of FileORZ.
+This file is part of FileORZ.
 
-    FileORZ is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+FileORZ is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
 
-    FileORZ is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+FileORZ is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with FileORZ.  If not, see <https://www.gnu.org/licenses/
+You should have received a copy of the GNU General Public License
+along with FileORZ.  If not, see <https://www.gnu.org/licenses/
 """
 
 import os
 import sys
+import threading
 import customtkinter
 import webbrowser
 
@@ -26,6 +27,8 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from utils.model import toggle_startup as toggle_startup_registry, script_dir
 from utils import StartUp
 from utils.translate import Translate
+from utils.version import __version__
+from utils.update_system import update_check, download_update, install_update
 from ui.Centralizar_Janela import Centralizar_Janela
 
 COLORS = {
@@ -43,6 +46,7 @@ COLORS = {
     "bg_primary": "#0D0D0D",
     "bg_secondary": "#1A1A2E",
 }
+
 
 def get_language_options():
     try:
@@ -64,6 +68,7 @@ def get_language_options():
     except Exception as e:
         print(f"Erro ao listar idiomas: {e}")
     return ["de", "en", "es", "pt-br", "ru", "zh"]
+
 
 def language_button(parent):
     options = get_language_options()
@@ -103,42 +108,54 @@ def language_button(parent):
     )
     return dropdown
 
+
 def changelog_button(parent):
     t = Translate()
     btn = customtkinter.CTkButton(
-        parent, 
+        parent,
         text=t.get_text("header", "changelog_title") or "Changelog",
         font=customtkinter.CTkFont(family="Segoe UI", size=12, weight="bold"),
-        fg_color=COLORS["button_bg"], 
+        fg_color=COLORS["button_bg"],
         border_width=1,
         border_color=COLORS["button_border"],
         corner_radius=8,
         height=32,
         width=90,
         hover_color=COLORS["button_hover"],
-        text_color=COLORS["text_primary"]
+        text_color=COLORS["text_primary"],
     )
-    btn.bind("<Button-1>", lambda event:
-    webbrowser.open("https://thainanviniciuskatchan.github.io/FileORZ/changelog.html"))
+    btn.bind(
+        "<Button-1>",
+        lambda event: webbrowser.open(
+            "https://thainanviniciuskatchan.github.io/FileORZ/changelog.html"
+        ),
+    )
     return btn
+
 
 def git_button(parent):
     t = Translate()
     btn = customtkinter.CTkButton(
-        parent, 
+        parent,
         text=t.get_text("header", "github_title") or "GitHub",
         font=customtkinter.CTkFont(family="Segoe UI", size=12, weight="bold"),
-        fg_color=COLORS["button_bg"], 
+        fg_color=COLORS["button_bg"],
         border_width=1,
         border_color=COLORS["button_border"],
         corner_radius=8,
         height=32,
         width=90,
         hover_color=COLORS["button_hover"],
-        text_color=COLORS["text_primary"]
+        text_color=COLORS["text_primary"],
     )
-    btn.bind("<Button-1>", lambda event: webbrowser.open("https://github.com/ThainanViniciusKatchan/FileORZ"))
+    btn.bind(
+        "<Button-1>",
+        lambda event: webbrowser.open(
+            "https://github.com/ThainanViniciusKatchan/FileORZ"
+        ),
+    )
     return btn
+
 
 def open_about_window(parent=None):
     t = Translate()
@@ -149,11 +166,11 @@ def open_about_window(parent=None):
     if parent:
         window.transient(parent)
     window.title(t.get_text("header", "about_title") or "Sobre - FileORZ")
-    window.geometry("420x260")
+    window.geometry("420x310")
     window.configure(fg_color=COLORS["bg_primary"])
     window.resizable(False, False)
     window.grab_set()
-    Centralizar_Janela(window, 420, 260)
+    Centralizar_Janela(window, 420, 310)
     window.lift()
     window.focus_force()
     window.after(100, lambda: (window.lift(), window.focus_force()))
@@ -205,20 +222,43 @@ def open_about_window(parent=None):
     )
     content_frame.pack(fill="both", expand=True, padx=20, pady=15)
 
-    # Frame para os botões Changelog e GitHub
+    # Frame para os botões Changelog, GitHub e Atualizações
     buttons_frame = customtkinter.CTkFrame(content_frame, fg_color="transparent")
-    buttons_frame.pack(pady=(16, 12))
+    buttons_frame.pack(pady=(14, 10))
 
     changelog = changelog_button(buttons_frame)
-    changelog.pack(side="left", padx=(0, 10))
+    changelog.pack(side="left", padx=(0, 8))
 
     git = git_button(buttons_frame)
-    git.pack(side="left")
+    git.pack(side="left", padx=(0, 8))
 
-    # Frase "Desenvolvido com orgulho no Brasil 💚💛"
+    update_state = {
+        "phase": "check",
+        "latest_version": None,
+        "download_path": None,
+        "is_busy": False,
+    }
+
+    update_btn = customtkinter.CTkButton(
+        buttons_frame,
+        text=t.get_text("header", "btn_check_update") or "Atualizar",
+        font=customtkinter.CTkFont(family="Segoe UI", size=12, weight="bold"),
+        fg_color=COLORS["button_bg"],
+        border_width=1,
+        border_color=COLORS["button_border"],
+        corner_radius=8,
+        height=32,
+        width=110,
+        hover_color=COLORS["button_hover"],
+        text_color=COLORS["text_primary"],
+    )
+    update_btn.pack(side="left")
+
+    # Frase de Orgulho Nacional
     pride_label = customtkinter.CTkLabel(
         content_frame,
-        text=t.get_text("header", "about_pride") or "Desenvolvido com orgulho no Brasil 💚💛",
+        text=t.get_text("header", "about_pride")
+        or "Desenvolvido com orgulho no Brasil 🇧🇷",
         font=customtkinter.CTkFont(family="Segoe UI", size=12, weight="bold"),
         text_color=COLORS["text_primary"],
     )
@@ -227,11 +267,137 @@ def open_about_window(parent=None):
     # "Desenvolvido por: Thainan Vinicius Katchan"
     author_label = customtkinter.CTkLabel(
         content_frame,
-        text=t.get_text("header", "about_dev_by") or "Desenvolvido por: Thainan Vinicius Katchan",
+        text=t.get_text("header", "about_dev_by")
+        or "Desenvolvido por: Thainan Vinicius Katchan",
         font=customtkinter.CTkFont(family="Segoe UI", size=11),
         text_color="#A0A0A0",
     )
-    author_label.pack(pady=(0, 10))
+    author_label.pack(pady=(0, 2))
+
+    # Informação da versão atual instalada logo abaixo do desenvolvedor
+    version_label = customtkinter.CTkLabel(
+        content_frame,
+        text=(t.get_text("header", "about_version") or "Versão: {version}").format(
+            version=__version__
+        ),
+        font=customtkinter.CTkFont(family="Segoe UI", size=11, weight="bold"),
+        text_color="#B0B0C0",
+    )
+    version_label.pack(pady=(0, 6))
+
+    # Label de feedback/status da atualização
+    status_update_label = customtkinter.CTkLabel(
+        content_frame,
+        text="",
+        font=customtkinter.CTkFont(family="Segoe UI", size=11),
+        text_color="#A0A0A0",
+    )
+    status_update_label.pack(pady=(0, 4))
+
+    def on_update_click():
+        if update_state["is_busy"]:
+            return
+
+        tr = Translate()
+        if update_state["phase"] == "check":
+            update_state["is_busy"] = True
+            update_btn.configure(state="disabled")
+            status_update_label.configure(
+                text=tr.get_text("header", "status_checking")
+                or "Buscando atualizações...",
+                text_color="#A0A0A0",
+            )
+
+            def _thread_check():
+                has_update, latest = update_check()
+
+                def _apply_check():
+                    if not window.winfo_exists():
+                        return
+                    update_state["is_busy"] = False
+                    update_btn.configure(state="normal")
+                    if has_update and latest is not None:
+                        update_state["phase"] = "download"
+                        update_state["latest_version"] = latest
+                        status_update_label.configure(
+                            text=(
+                                tr.get_text("header", "status_available")
+                                or "Nova versão {version} disponível!"
+                            ).format(version=latest),
+                            text_color="#4CAF50",
+                        )
+                        update_btn.configure(
+                            text=tr.get_text("header", "btn_download_update")
+                            or "⬇️ Baixar",
+                            fg_color=COLORS["accent"],
+                            hover_color=COLORS["accent_hover"],
+                        )
+                    elif latest is not None:
+                        status_update_label.configure(
+                            text=tr.get_text("header", "status_latest")
+                            or "Você está na versão mais recente.",
+                            text_color="#A0A0A0",
+                        )
+                    else:
+                        status_update_label.configure(
+                            text=tr.get_text("header", "status_error")
+                            or "Não foi possível verificar atualizações.",
+                            text_color="#FF6B6B",
+                        )
+
+                window.after(0, _apply_check)
+
+            threading.Thread(target=_thread_check, daemon=True).start()
+
+        elif update_state["phase"] == "download":
+            update_state["is_busy"] = True
+            update_btn.configure(state="disabled")
+            status_update_label.configure(
+                text=tr.get_text("header", "status_downloading")
+                or "Baixando atualização...",
+                text_color="#A0A0A0",
+            )
+
+            def _thread_download():
+                path = download_update()
+
+                def _apply_download():
+                    if not window.winfo_exists():
+                        return
+                    update_state["is_busy"] = False
+                    update_btn.configure(state="normal")
+                    if path:
+                        update_state["phase"] = "install"
+                        update_state["download_path"] = path
+                        status_update_label.configure(
+                            text=tr.get_text("header", "status_downloaded")
+                            or "Atualização baixada! Pronto para instalar.",
+                            text_color="#4CAF50",
+                        )
+                        update_btn.configure(
+                            text=tr.get_text("header", "btn_install_update")
+                            or "🚀 Instalar",
+                            fg_color="#2E7D32",
+                            hover_color="#1B5E20",
+                        )
+                    else:
+                        status_update_label.configure(
+                            text=tr.get_text("header", "status_error")
+                            or "Erro ao baixar atualização.",
+                            text_color="#FF6B6B",
+                        )
+
+                window.after(0, _apply_download)
+
+            threading.Thread(target=_thread_download, daemon=True).start()
+
+        elif update_state["phase"] == "install":
+            status_update_label.configure(
+                text="Iniciando instalação...", text_color="#A0A0A0"
+            )
+            install_update(update_state["download_path"])
+
+    update_btn.configure(command=on_update_click)
 
     def update_about_texts():
         tr = Translate()
@@ -246,11 +412,30 @@ def open_about_window(parent=None):
             text=tr.get_text("header", "changelog_title") or "Changelog"
         )
         pride_label.configure(
-            text=tr.get_text("header", "about_pride") or "Desenvolvido com orgulho no Brasil 💚💛"
+            text=tr.get_text("header", "about_pride")
+            or "Desenvolvido com orgulho no Brasil 💚💛"
         )
         author_label.configure(
-            text=tr.get_text("header", "about_dev_by") or "Desenvolvido por: Thainan Vinicius Katchan"
+            text=tr.get_text("header", "about_dev_by")
+            or "Desenvolvido por: Thainan Vinicius Katchan"
         )
+        version_label.configure(
+            text=(tr.get_text("header", "about_version") or "Versão: {version}").format(
+                version=__version__
+            )
+        )
+        if update_state["phase"] == "check":
+            update_btn.configure(
+                text=tr.get_text("header", "btn_check_update") or "🔄 Atualizações"
+            )
+        elif update_state["phase"] == "download":
+            update_btn.configure(
+                text=tr.get_text("header", "btn_download_update") or "⬇️ Baixar"
+            )
+        elif update_state["phase"] == "install":
+            update_btn.configure(
+                text=tr.get_text("header", "btn_install_update") or "🚀 Instalar"
+            )
 
     Translate.register_listener(update_about_texts)
 
@@ -262,6 +447,7 @@ def open_about_window(parent=None):
 
     if parent is None:
         window.mainloop()
+
 
 def about_button(parent, root=None):
     t = Translate()
@@ -280,6 +466,7 @@ def about_button(parent, root=None):
         command=lambda: open_about_window(root or parent),
     )
     return btn
+
 
 # Essa Função Controla a Inicialização da Aplicação no Windows, Alterando o Json de Configuração
 # e Criando o Registro de StartUp
@@ -306,19 +493,17 @@ def startup_button(parent):
         fg_color=COLORS["switch_bg"],
         progress_color=COLORS["switch_progress"],
         button_color=COLORS["text_primary"],
-        button_hover_color="#E0E0E0"
+        button_hover_color="#E0E0E0",
     )
     startup_switch.pack(side="left", padx=(0, 15))
     return startup_switch
+
 
 # Função Principal que cria o header na aplicação
 def header(root):
     t = Translate()
     header_frame = customtkinter.CTkFrame(
-        root,
-        fg_color=COLORS["header_bg"],
-        corner_radius=0,
-        height=60
+        root, fg_color=COLORS["header_bg"], corner_radius=0, height=60
     )
     header_frame.pack(fill="x", side="top")
     header_frame.pack_propagate(False)
@@ -330,9 +515,7 @@ def header(root):
     logo_frame.pack(side="left", anchor="center")
 
     icon_label = customtkinter.CTkLabel(
-        logo_frame,
-        text="🗂️",
-        font=customtkinter.CTkFont(size=24)
+        logo_frame, text="🗂️", font=customtkinter.CTkFont(size=24)
     )
     icon_label.pack(side="left", padx=(0, 5))
 
@@ -341,7 +524,7 @@ def header(root):
         logo_frame,
         text="FileORZ",
         font=customtkinter.CTkFont(family="Segoe UI", size=22, weight="bold"),
-        text_color=COLORS["text_primary"]
+        text_color=COLORS["text_primary"],
     )
     title_label.pack(side="left")
 
@@ -350,7 +533,7 @@ def header(root):
         logo_frame,
         text=t.get_text("header", "subtitle") or "Organizador de Arquivos",
         font=customtkinter.CTkFont(family="Segoe UI", size=10),
-        text_color="#A0A0A0"
+        text_color="#A0A0A0",
     )
     subtitle_label.pack(side="left", padx=(10, 0))
 
@@ -369,8 +552,12 @@ def header(root):
 
     def update_header_texts():
         tr = Translate()
-        subtitle_label.configure(text=tr.get_text("header", "subtitle") or "Organizador de Arquivos")
-        switch_widget.configure(text=tr.get_text("header", "startup") or "Iniciar com Windows")
+        subtitle_label.configure(
+            text=tr.get_text("header", "subtitle") or "Organizador de Arquivos"
+        )
+        switch_widget.configure(
+            text=tr.get_text("header", "startup") or "Iniciar com Windows"
+        )
         about_btn.configure(text=tr.get_text("header", "about_btn") or "Sobre")
 
     Translate.register_listener(update_header_texts)

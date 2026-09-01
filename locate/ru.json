@@ -8,7 +8,17 @@
         "about_btn": "О программе",
         "about_title": "О программе - FileORZ",
         "about_pride": "С гордостью разработано в Бразилии 💚💛",
-        "about_dev_by": "Разработчик: Thainan Vinicius Katchan"
+        "about_dev_by": "Разработчик: Thainan Vinicius Katchan",
+        "about_version": "Версия: {version}",
+        "btn_check_update": "🔄 Обновления",
+        "btn_download_update": "⬇️ Скачать обновление",
+        "btn_install_update": "🚀 Установить и перезапустить",
+        "status_checking": "Проверка обновлений...",
+        "status_latest": "У вас установлена последняя версия.",
+        "status_available": "Доступна новая версия {version}!",
+        "status_downloading": "Скачивание обновления...",
+        "status_downloaded": "Обновление скачано! Готово к установке.",
+        "status_error": "Не удалось проверить обновления."
     },
     "index_window": {
         "title": "File ORZ - Организуйте ваши файлы",

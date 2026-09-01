@@ -8,7 +8,17 @@
         "about_btn": "Sobre",
         "about_title": "Sobre - FileORZ",
         "about_pride": "Desenvolvido com orgulho no Brasil 💚💛",
-        "about_dev_by": "Desenvolvido por: Thainan Vinicius Katchan"
+        "about_dev_by": "Desenvolvido por: Thainan Vinicius Katchan",
+        "about_version": "Versão: {version}",
+        "btn_check_update": "🔄 Atualizações",
+        "btn_download_update": "⬇️ Baixar Atualização",
+        "btn_install_update": "🚀 Instalar e Reiniciar",
+        "status_checking": "Buscando atualizações...",
+        "status_latest": "Você está na versão mais recente.",
+        "status_available": "Nova versão {version} disponível!",
+        "status_downloading": "Baixando atualização...",
+        "status_downloaded": "Atualização baixada! Pronto para instalar.",
+        "status_error": "Não foi possível verificar atualizações."
     },
     "index_window": {
         "title": "File ORZ - Organize seus arquivos",
