@@ -20,7 +20,6 @@ along with FileORZ.  If not, see <https://www.gnu.org/licenses/
 import customtkinter
 import os
 import sys
-import subprocess
 import ctypes
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
