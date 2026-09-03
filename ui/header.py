@@ -109,30 +109,6 @@ def language_button(parent):
     return dropdown
 
 
-def changelog_button(parent):
-    t = Translate()
-    btn = customtkinter.CTkButton(
-        parent,
-        text=t.get_text("header", "changelog_title") or "Changelog",
-        font=customtkinter.CTkFont(family="Segoe UI", size=12, weight="bold"),
-        fg_color=COLORS["button_bg"],
-        border_width=1,
-        border_color=COLORS["button_border"],
-        corner_radius=8,
-        height=32,
-        width=90,
-        hover_color=COLORS["button_hover"],
-        text_color=COLORS["text_primary"],
-    )
-    btn.bind(
-        "<Button-1>",
-        lambda event: webbrowser.open(
-            "https://thainanviniciuskatchan.github.io/FileORZ/changelog.html"
-        ),
-    )
-    return btn
-
-
 def git_button(parent):
     t = Translate()
     btn = customtkinter.CTkButton(
@@ -222,12 +198,9 @@ def open_about_window(parent=None):
     )
     content_frame.pack(fill="both", expand=True, padx=20, pady=15)
 
-    # Frame para os botões Changelog, GitHub e Atualizações
+    # Frame para os botões GitHub e Atualizações
     buttons_frame = customtkinter.CTkFrame(content_frame, fg_color="transparent")
     buttons_frame.pack(pady=(14, 10))
-
-    changelog = changelog_button(buttons_frame)
-    changelog.pack(side="left", padx=(0, 8))
 
     git = git_button(buttons_frame)
     git.pack(side="left", padx=(0, 8))
@@ -408,9 +381,6 @@ def open_about_window(parent=None):
             text=tr.get_text("header", "subtitle") or "Organizador de Arquivos"
         )
         git.configure(text=tr.get_text("header", "github_title") or "GitHub")
-        changelog.configure(
-            text=tr.get_text("header", "changelog_title") or "Changelog"
-        )
         pride_label.configure(
             text=tr.get_text("header", "about_pride")
             or "Desenvolvido com orgulho no Brasil 💚💛"
