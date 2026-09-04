@@ -10,10 +10,21 @@ CONFIG = load_config("dist", "category")
 
 
 class Extensions:
-    def __init__(self, category: str = "", name: str = "", value: bool = bool):
+    def __init__(
+        self,
+        category: str = "",
+        name: str = "",
+        value: bool = bool,
+        enable: bool = bool,
+    ):
         self._name = name
         self._value = value
         self._category = category
+        self._enable = enable
+
+    @property
+    def enable(self):
+        return self._enable
 
     @property
     def name(self):
@@ -27,6 +38,18 @@ class Extensions:
     @property
     def category(self):
         return f"Category Json: {self._category}"
+
+    @enable.setter
+    def enable(self, enable: bool):
+        CONFIG = load_config("dist", "config")
+        CONFIG["ORZFiles"] = enable
+        save_config("dist", "config", CONFIG)
+        self._enable = enable
+
+    @enable.getter
+    def get_enable(self):
+        CONFIG = load_config("dist", "config")
+        return CONFIG.get("ORZFiles", False)
 
     @name.setter
     def name(self, name: str):
@@ -70,5 +93,4 @@ class Extensions:
 
 
 if __name__ == "__main__":
-    for i in Extensions("development").select_exts:
-        print(i)
+    ...
