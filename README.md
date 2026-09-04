@@ -20,9 +20,7 @@
 
 </div>
 
-> ⚠️ **Nota:** Atualmente o projeto só tem suporte para o idioma português-br, estou trabalhando internamente na padronização dos textos, para facilitar a tradução, mas no momento não está disponível para tradução. Obrigado pela compreensão!
-
-> ⚠️ **Note:** Currently, the project only supports Brazilian Portuguese. I am working internally on standardizing the text to facilitate translation, but it is not available for translation at the moment. Thank you for your understanding!
+> Projeto multilingual disponível em Português-BR, Inglês, Russo, Alemão, Espanhol e Chinês, caso encontre algum erro de tradução ou queira sugerir um idioma para ser adicionado, por favor, me avise!
 
 # 🇧🇷 Português
 
@@ -42,30 +40,6 @@ pip install -r requirements.txt
 # 3. Execute o aplicativo
 python ui/index.py
 ```
-
-## ✨ Funcionalidades
-
-### 📂 Organização Inteligente
-| Recurso          | Descrição                                              |
-|------------------|--------------------------------------------------------|
-| 🎨 Interface Gráfica | Feita com CustomTkinter, moderna e intuitiva           |
-| 📁 Pasta Customizável | Escolha qualquer pasta para organizar                  |
-| 🗑️ auto deletar | Ative o auto deltar e decida como e quanto irá excluír |
-| 🏷️ Por Extensão | Arquivos organizados automaticamente por tipo          |
-| ⏱️ Tempo Configurável | Defina o intervalo de verificação                      |
-| 🚀 Inicialização Automática | Inicie com o Windows automaticamente                   |
-| 💾 Baixo Consumo | Menos de 10MB de memória RAM                           |
-
-### 📊 Performance
-> Em testes com **200 arquivos** totalizando **200GB**:
-> - 💾 Memória: apenas **15MB**
-> - 🖥️ CPU: menos de **1%**
-> - ⏱️ Tempo: menos de **20 segundos**
-
-### 🔄 Inicialização com o Sistema
-- ✅ Não requer instalação
-- ✅ Copia arquivos para `AppData` automaticamente
-- ✅ Cria uma chave no Registro do Windows
 
 ### 💚 Open Source
 - ✅ Código 100% aberto e auditável
@@ -104,32 +78,6 @@ pip install -r requirements.txt
 # 3. Run the application
 python ui/index.py
 ```
-
----
-
-## ✨ Features
-
-### 📂 Smart Organization
-| Feature          | Description                                              |
-|------------------|----------------------------------------------------------|
-| 🎨 Graphical Interface | Built with CustomTkinter, modern and intuitive           |
-| 📁 Custom Folder | Choose any folder to organize                            |
-| 🗑️ Auto Delete   | Enable auto-delete and decide how and how much to delete |
-| 🏷️ By Extension  | Files automatically organized by type                    |
-| ⏱️ Configurable Time | Set the verification interval                            |
-| 🚀 Auto Start    | Start with Windows automatically                         |
-| 💾 Low Consumption | Less than 10MB of RAM memory                             |
-
-### 📊 Performance
-> In tests with **200 files** totaling **200GB**:
-> - 💾 Memory: only **15MB**
-> - 🖥️ CPU: less than **1%**
-> - ⏱️ Time: less than **20 seconds**
-
-### 🔄 System Startup
-- ✅ No installation required
-- ✅ Automatically copies files to `AppData`
-- ✅ Creates an entry in Windows Registry
 
 ### 💚 Open Source
 - ✅ 100% open and auditable code
