@@ -24,7 +24,8 @@ class Extensions:
 
     @property
     def enable(self):
-        return self._enable
+        CONFIG = load_config("dist", "config")
+        return CONFIG.get("ORZFiles", False)
 
     @property
     def name(self):

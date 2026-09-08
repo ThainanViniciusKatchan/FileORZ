@@ -56,7 +56,11 @@
         "btn_deselect_all_hover": "Desmarcar Todos",
         "btn_save": "💾 Salvar Categorias",
         "btn_save_hover": "Salvar Configurações",
-        "success_label": "Configurações salvas com sucesso!"
+        "success_label": "Configurações salvas com sucesso!",
+        "orz_enabled": "Organização de Arquivos Ativada",
+        "orz_disabled": "Organização de Arquivos Desativada",
+        "btn_expand_all": "▼ Expandir Todos",
+        "btn_collapse_all": "▶ Recolher Todos"
     },
     "auto_delete": {
         "title": "Configurar Auto Deletar",

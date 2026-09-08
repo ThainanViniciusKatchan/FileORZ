@@ -11,6 +11,7 @@ except ImportError:
 
 from utils.model import load_config, save_config
 from utils.translate import Translate
+from utils.exts import Extensions
 
 COLORS = {
     "bg_primary": "#0D0D0D",
@@ -32,6 +33,17 @@ COLORS = {
     "dropdown_bg": "#1A1A2E",
     "button_secondary": "#2D2D44",
     "button_secondary_hover": "#3D3D54",
+}
+
+CATEGORY_ICONS = {
+    "development": "💻",
+    "documents": "📄",
+    "videos": "🎬",
+    "audios": "🎵",
+    "compressed": "📦",
+    "fonts": "🔤",
+    "setups": "⚙️",
+    "images": "🖼️",
 }
 
 
@@ -90,6 +102,48 @@ def ext_config_window(parent=None):
     )
     header_subtitle.pack(side="right")
 
+    # Toolbar com Switch de ativação e ações rápidas
+    toolbar_frame = customtkinter.CTkFrame(
+        window, fg_color="transparent", height=42
+    )
+    toolbar_frame.pack(fill="x", side="top", padx=20, pady=(10, 2))
+    toolbar_frame.pack_propagate(False)
+
+    toolbar_inner = customtkinter.CTkFrame(toolbar_frame, fg_color="transparent")
+    toolbar_inner.pack(fill="both", expand=True)
+
+    exts_obj = Extensions()
+    orz_var = customtkinter.BooleanVar(value=exts_obj.get_enable)
+
+    def get_switch_text(enabled):
+        tr = Translate()
+        if enabled:
+            return tr.get_text("ext_config", "orz_enabled") or "Organização de Arquivos Ativada"
+        else:
+            return tr.get_text("ext_config", "orz_disabled") or "Organização de Arquivos Desativada"
+
+    def toggle_orz():
+        val = orz_var.get()
+        exts_obj.enable = val
+        orz_switch.configure(text=get_switch_text(val))
+
+    orz_switch = customtkinter.CTkSwitch(
+        toolbar_inner,
+        text=get_switch_text(orz_var.get()),
+        command=toggle_orz,
+        variable=orz_var,
+        font=customtkinter.CTkFont(family="Segoe UI", size=12, weight="bold"),
+        text_color=COLORS["text_primary"],
+        progress_color=COLORS["accent_primary"],
+        fg_color=COLORS["button_secondary"],
+        button_color=COLORS["text_primary"],
+        button_hover_color="#E0E0E0",
+    )
+    orz_switch.pack(side="left")
+
+    toolbar_actions = customtkinter.CTkFrame(toolbar_inner, fg_color="transparent")
+    toolbar_actions.pack(side="right")
+
     # Footer (com botão de salvar e feedback)
     footer_frame = customtkinter.CTkFrame(
         window, fg_color=COLORS["bg_secondary"], height=60, corner_radius=10
@@ -111,17 +165,134 @@ def ext_config_window(parent=None):
         scrollbar_button_color=COLORS["accent_primary"],
         scrollbar_button_hover_color=COLORS["accent_hover"],
     )
-    scroll_frame.pack(pady=10, padx=15, fill="both", expand=True)
+    scroll_frame.pack(pady=(6, 10), padx=15, fill="both", expand=True)
 
     config = load_config("dist", "category")
     extension_vars = {}
     category_ui_elements = {}
+    category_states = {}
+
+    def update_cat_count(cat):
+        cnt = sum(1 for v in extension_vars[cat].values() if v.get())
+        tot = category_ui_elements[cat]["total_count"]
+        tr = Translate()
+        fmt = (
+            tr.get_text("ext_config", "enabled_count")
+            or "{enabled_count}/{total_count} selecionadas"
+        )
+        category_ui_elements[cat]["count_label"].configure(
+            text=f"  •  {fmt.format(enabled_count=cnt, total_count=tot)}"
+        )
+
+    def select_all(cat):
+        for ext_var in extension_vars[cat].values():
+            ext_var.set(True)
+        update_cat_count(cat)
+
+    def deselect_all(cat):
+        for ext_var in extension_vars[cat].values():
+            ext_var.set(False)
+        update_cat_count(cat)
+
+    def render_category_checkboxes(cat, ext_frame, extensions):
+        max_cols = 6
+        for c in range(max_cols):
+            ext_frame.grid_columnconfigure(c, weight=1, uniform=f"col_{cat}")
+
+        row_idx = 0
+        col_idx = 0
+        for ext in extensions.keys():
+            var = extension_vars[cat][ext]
+            checkbox = customtkinter.CTkCheckBox(
+                ext_frame,
+                text=ext,
+                variable=var,
+                command=lambda c=cat: update_cat_count(c),
+                font=customtkinter.CTkFont(family="Consolas", size=11),
+                fg_color=COLORS["checkbox_fg"],
+                hover_color=COLORS["checkbox_hover"],
+                border_color=COLORS["border"],
+                checkmark_color=COLORS["text_primary"],
+                text_color=COLORS["text_primary"],
+                width=120,
+                corner_radius=4,
+            )
+            checkbox.grid(row=row_idx, column=col_idx, padx=10, pady=8, sticky="w")
+
+            col_idx += 1
+            if col_idx >= max_cols:
+                col_idx = 0
+                row_idx += 1
+
+    def toggle_category(cat):
+        state = category_states[cat]
+        elems = category_ui_elements[cat]
+        ext_frame = elems["ext_frame"]
+
+        if state["is_expanded"]:
+            # Recolher
+            ext_frame.pack_forget()
+            state["is_expanded"] = False
+            elems["btn_toggle"].configure(text="▶")
+        else:
+            # Expandir
+            if not state["rendered"]:
+                render_category_checkboxes(cat, ext_frame, state["extensions"])
+                state["rendered"] = True
+            ext_frame.pack(fill="x", padx=18, pady=(0, 15))
+            state["is_expanded"] = True
+            elems["btn_toggle"].configure(text="▼")
+
+    def expand_all_categories():
+        for cat in category_states.keys():
+            if not category_states[cat]["is_expanded"]:
+                toggle_category(cat)
+
+    def collapse_all_categories():
+        for cat in category_states.keys():
+            if category_states[cat]["is_expanded"]:
+                toggle_category(cat)
+
+    btn_expand_all = customtkinter.CTkButton(
+        toolbar_actions,
+        text=t.get_text("ext_config", "btn_expand_all") or "▼ Expandir Todos",
+        command=expand_all_categories,
+        fg_color=COLORS["button_secondary"],
+        hover_color=COLORS["button_secondary_hover"],
+        font=customtkinter.CTkFont(family="Segoe UI", size=11, weight="bold"),
+        width=130,
+        height=28,
+        corner_radius=6,
+    )
+    btn_expand_all.pack(side="left", padx=(0, 8))
+
+    btn_collapse_all = customtkinter.CTkButton(
+        toolbar_actions,
+        text=t.get_text("ext_config", "btn_collapse_all") or "▶ Recolher Todos",
+        command=collapse_all_categories,
+        fg_color=COLORS["button_secondary"],
+        hover_color=COLORS["button_secondary_hover"],
+        font=customtkinter.CTkFont(family="Segoe UI", size=11, weight="bold"),
+        width=130,
+        height=28,
+        corner_radius=6,
+    )
+    btn_collapse_all.pack(side="left")
 
     for category, extensions in config.items():
         if not isinstance(extensions, dict):
             continue
 
         extension_vars[category] = {}
+        for ext, enabled in extensions.items():
+            extension_vars[category][ext] = customtkinter.BooleanVar(value=enabled)
+
+        # Todas as categorias começam recolhidas por padrão
+        category_states[category] = {
+            "is_expanded": False,
+            "rendered": False,
+            "extensions": extensions,
+        }
 
         cat_frame = customtkinter.CTkFrame(
             scroll_frame,
@@ -130,16 +301,22 @@ def ext_config_window(parent=None):
             border_width=1,
             border_color=COLORS["border"],
         )
-        cat_frame.pack(pady=8, padx=5, fill="x")
+        cat_frame.pack(pady=6, padx=5, fill="x")
 
-        header_container = customtkinter.CTkFrame(cat_frame, fg_color="transparent")
-        header_container.pack(fill="x", padx=18, pady=(15, 10))
+        # Cabeçalho clicável do card
+        header_container = customtkinter.CTkFrame(
+            cat_frame, fg_color="transparent", cursor="hand2"
+        )
+        header_container.pack(fill="x", padx=18, pady=12)
 
-        cat_left = customtkinter.CTkFrame(header_container, fg_color="transparent")
+        cat_left = customtkinter.CTkFrame(
+            header_container, fg_color="transparent", cursor="hand2"
+        )
         cat_left.pack(side="left")
 
+        cat_icon_char = CATEGORY_ICONS.get(category, "📁")
         cat_icon = customtkinter.CTkLabel(
-            cat_left, text="📁", font=customtkinter.CTkFont(size=16)
+            cat_left, text=cat_icon_char, font=customtkinter.CTkFont(size=16)
         )
         cat_icon.pack(side="left")
 
@@ -168,47 +345,21 @@ def ext_config_window(parent=None):
         )
         count_label.pack(side="left")
 
+        # Clique no cabeçalho ou textos para expandir/recolher
+        for widget in (header_container, cat_left, cat_icon, cat_label, count_label):
+            widget.bind("<Button-1>", lambda e, c=category: toggle_category(c))
+
         cat_right = customtkinter.CTkFrame(header_container, fg_color="transparent")
         cat_right.pack(side="right")
-
-        category_ui_elements[category] = {
-            "label": cat_label,
-            "count_label": count_label,
-            "total_count": total_count,
-            "btn_select_all": None,
-            "btn_deselect_all": None,
-        }
-
-        def update_cat_count(cat=category):
-            cnt = sum(1 for v in extension_vars[cat].values() if v.get())
-            tot = category_ui_elements[cat]["total_count"]
-            tr = Translate()
-            fmt = (
-                tr.get_text("ext_config", "enabled_count")
-                or "{enabled_count}/{total_count} selecionadas"
-            )
-            category_ui_elements[cat]["count_label"].configure(
-                text=f"  •  {fmt.format(enabled_count=cnt, total_count=tot)}"
-            )
-
-        def select_all(cat=category):
-            for ext_var in extension_vars[cat].values():
-                ext_var.set(True)
-            update_cat_count(cat)
-
-        def deselect_all(cat=category):
-            for ext_var in extension_vars[cat].values():
-                ext_var.set(False)
-            update_cat_count(cat)
 
         btn_select_all = customtkinter.CTkButton(
             cat_right,
             text=t.get_text("ext_config", "btn_select_all") or "✓ Todos",
-            command=select_all,
+            command=lambda c=category: select_all(c),
             fg_color=COLORS["accent_success"],
             hover_color=COLORS["accent_success_hover"],
             font=customtkinter.CTkFont(family="Segoe UI", size=11, weight="bold"),
-            width=80,
+            width=75,
             height=28,
             corner_radius=6,
         )
@@ -217,57 +368,44 @@ def ext_config_window(parent=None):
         btn_deselect_all = customtkinter.CTkButton(
             cat_right,
             text=t.get_text("ext_config", "btn_deselect_all") or "✗ Nenhum",
-            command=deselect_all,
+            command=lambda c=category: deselect_all(c),
             fg_color=COLORS["accent_danger"],
             hover_color=COLORS["accent_danger_hover"],
             font=customtkinter.CTkFont(family="Segoe UI", size=11, weight="bold"),
-            width=90,
+            width=85,
             height=28,
             corner_radius=6,
         )
-        btn_deselect_all.pack(side="left")
+        btn_deselect_all.pack(side="left", padx=(0, 8))
 
-        category_ui_elements[category]["btn_select_all"] = btn_select_all
-        category_ui_elements[category]["btn_deselect_all"] = btn_deselect_all
+        # Indicador de expansão
+        btn_toggle = customtkinter.CTkButton(
+            cat_right,
+            text="▶",
+            command=lambda c=category: toggle_category(c),
+            fg_color=COLORS["button_secondary"],
+            hover_color=COLORS["button_secondary_hover"],
+            font=customtkinter.CTkFont(family="Segoe UI", size=12, weight="bold"),
+            width=36,
+            height=28,
+            corner_radius=6,
+        )
+        btn_toggle.pack(side="left")
 
         ext_frame = customtkinter.CTkFrame(
             cat_frame, fg_color=COLORS["bg_card_inner"], corner_radius=8
         )
-        ext_frame.pack(fill="x", padx=18, pady=(5, 18))
+        # ext_frame não é empacotado inicialmente (começa recolhido)
 
-        row_idx = 0
-        col_idx = 0
-        max_cols = 6
-
-        for ext, enabled in extensions.items():
-            var = customtkinter.BooleanVar(value=enabled)
-            extension_vars[category][ext] = var
-
-            checkbox = customtkinter.CTkCheckBox(
-                ext_frame,
-                text=ext,
-                variable=var,
-                command=lambda cat=category: update_cat_count(cat),
-                font=customtkinter.CTkFont(family="Consolas", size=11),
-                fg_color=COLORS["checkbox_fg"],
-                hover_color=COLORS["checkbox_hover"],
-                border_color=COLORS["border"],
-                checkmark_color=COLORS["text_primary"],
-                text_color=COLORS["text_primary"],
-                width=120,
-                corner_radius=4,
-            )
-            checkbox.grid(row=row_idx, column=col_idx, padx=10, pady=8, sticky="w")
-
-            col_idx += 1
-            if col_idx >= max_cols:
-                col_idx = 0
-                row_idx += 1
-
-        if col_idx > 0:
-            for empty_col in range(col_idx, max_cols):
-                spacer = customtkinter.CTkLabel(ext_frame, text="", width=120)
-                spacer.grid(row=row_idx, column=empty_col)
+        category_ui_elements[category] = {
+            "label": cat_label,
+            "count_label": count_label,
+            "total_count": total_count,
+            "btn_select_all": btn_select_all,
+            "btn_deselect_all": btn_deselect_all,
+            "btn_toggle": btn_toggle,
+            "ext_frame": ext_frame,
+        }
 
     def save_changes():
         config_data = load_config("dist", "category")
@@ -313,6 +451,9 @@ def ext_config_window(parent=None):
         header_title.configure(text=tr.get_text("ext_config", "header") or "Categorias e Extensões")
         header_subtitle.configure(text=tr.get_text("ext_config", "header_subtitle") or "Gerencie as extensões por categoria")
         save_button.configure(text=tr.get_text("ext_config", "btn_save") or "💾  Salvar Categorias")
+        orz_switch.configure(text=get_switch_text(orz_var.get()))
+        btn_expand_all.configure(text=tr.get_text("ext_config", "btn_expand_all") or "▼ Expandir Todos")
+        btn_collapse_all.configure(text=tr.get_text("ext_config", "btn_collapse_all") or "▶ Recolher Todos")
 
         for cat, elems in category_ui_elements.items():
             cat_text = (tr.get_text("category", cat) or cat.capitalize()).upper()

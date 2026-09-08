@@ -56,7 +56,11 @@
         "btn_deselect_all_hover": "取消全选",
         "btn_save": "💾 保存类别",
         "btn_save_hover": "保存设置",
-        "success_label": "设置保存成功！"
+        "success_label": "设置保存成功！",
+        "orz_enabled": "文件整理已启用",
+        "orz_disabled": "文件整理已禁用",
+        "btn_expand_all": "▼ 全部展开",
+        "btn_collapse_all": "▶ 全部折叠"
     },
     "auto_delete": {
         "title": "配置自动删除",

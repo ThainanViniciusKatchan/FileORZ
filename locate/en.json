@@ -56,7 +56,11 @@
         "btn_deselect_all_hover": "Deselect All",
         "btn_save": "💾 Save Categories",
         "btn_save_hover": "Save Settings",
-        "success_label": "Settings saved successfully!"
+        "success_label": "Settings saved successfully!",
+        "orz_enabled": "File Organization Enabled",
+        "orz_disabled": "File Organization Disabled",
+        "btn_expand_all": "▼ Expand All",
+        "btn_collapse_all": "▶ Collapse All"
     },
     "auto_delete": {
         "title": "Configure Auto Delete",
