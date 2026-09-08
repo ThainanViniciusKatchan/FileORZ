@@ -294,7 +294,7 @@ def criar_config_padrao():
         "lang": "pt-br",
         "timeverification": "5",
         "Startup": False,
-        "Folder": "pasta de organização",
+        "Folder": "",
         "AutoDelete": False,
         "Enviar Para Lixeira": False,
         "Excluir permanentemente": False,
@@ -589,7 +589,9 @@ def git_comands(v):
             subprocess.run(["git", "push", "origin", tag, "--force"], check=True)
             print(f"  [OK] Tag {tag} enviada com sucesso (origin)")
         except subprocess.CalledProcessError as e:
-            print(f"  [AVISO] Falha ao enviar tag para origin ({e}), prosseguindo com GitHub CLI...")
+            print(
+                f"  [AVISO] Falha ao enviar tag para origin ({e}), prosseguindo com GitHub CLI..."
+            )
 
         # 3. Cria a release ou faz upload do instalador no GitHub
         if not installer_path.exists():

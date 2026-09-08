@@ -35,6 +35,7 @@ from utils.AutoDelete import AutoDelete
 from utils.AdvancedConfig import AdvancedConfig
 from utils.Delete_folder import ORZ_folders, all_folders
 from utils.folder import Delete_Folde
+from utils import exts
 from AdvancedAlg import Alg
 
 CONFIG_PATH = json_path("dist", "config")
@@ -49,9 +50,7 @@ def load_extensions():
 
         for category, exts in data.items():
             if isinstance(exts, dict):
-                extensions[category] = [
-                    ext for ext, enabled in exts.items() if enabled
-                ]
+                extensions[category] = [ext for ext, enabled in exts.items() if enabled]
             elif isinstance(exts, list):
                 extensions[category] = exts
             elif isinstance(exts, str):
@@ -65,7 +64,7 @@ def load_extensions():
 
 # pasta para organizar e extenssão de arquivos
 def organize_files():
-    global f, data
+    global data
     try:
         with open(CONFIG_PATH, "r", encoding="utf-8") as f:
             data = json.load(f)
@@ -74,11 +73,9 @@ def organize_files():
         return
 
     # Definir o caminho original
-    original_path = data.get("Folder", "pasta de organização")
-    print("\n" + "-" * 30)
-    print("Folder of organization: " + original_path)
+    original_path = data.get("Folder", "")
 
-    if not os.path.exists(original_path) or original_path == "pasta de organização":
+    if not os.path.exists(original_path) or original_path == "":
         print(f"Diretório inválido ou não selecionado: {original_path}")
         return
 
@@ -86,33 +83,7 @@ def organize_files():
         print(f"Sem permissão de leitura/escrita em: {original_path}")
         return
 
-    # AutoDelete files
-    autodelete = delete.AutoDelete().GetAutoDelete
-    
-    if autodelete == True:
-        AutoDelete()
-    else:
-        print("[INFO] AutoDelete desabilitado.")
-        pass
-
-    # AutoDelete empty folders
-    del_folder = Delete_Folde()
-    if del_folder.Getativado == True:
-        if del_folder.Getpasta_orz == True:
-            ORZ_folders()
-        elif del_folder.Gettodas == True:
-            all_folders()
-    else:
-        print("[INFO] Auto exclusão de pastas desabilitada.")
-
-
-    # Advanced Organização
-    if AdvancedConfig().get_enabled():
-        Alg.processar_texto()
-    else:
-        print("[INFO] Organização avançada desabilitada.")
-
-    # Organize by extension and translate folders 
+    # Organize by extension and translate folders
     translator = Translate()
     extensions_to_include = load_extensions()
     extension_map = {}
@@ -141,8 +112,7 @@ def organize_files():
                     )
                 else:
                     target_category = (
-                        translator.get_text("category", "other")
-                        or "OUTROS"
+                        translator.get_text("category", "other") or "OUTROS"
                     )
 
                 sub_folder_name = (
@@ -175,9 +145,39 @@ def organize_files():
 def loop_verification():
     print("Iniciando FileORZ Organizer...")
     while True:
-        organize_files()
+        # AutoDelete empty folders
+        del_folder = Delete_Folde()
+        if del_folder.Getativado == True:
+            if del_folder.Getpasta_orz == True:
+                ORZ_folders()
+            elif del_folder.Gettodas == True:
+                all_folders()
+        else:
+            print("[INFO] Auto exclusão de pastas desabilitada.")
 
-        # Ler o tempo de verificação a cada ciclo para permitir atualizações em tempo real
+        # Advanced Organização
+        if AdvancedConfig().get_enabled():
+            Alg.processar_texto()
+        else:
+            print("[INFO] Organização avançada desabilitada.")
+
+        # AutoDelete files
+        autodelete = delete.AutoDelete().GetAutoDelete
+
+        if autodelete == True:
+            AutoDelete()
+        else:
+            print("[INFO] AutoDelete desabilitado.")
+            pass
+
+        # Files Organization
+        if exts.Extensions().get_enable:
+            organize_files()
+        else:
+            print("[INFO] ORZFiles desabilitado.")
+            pass
+
+        # Verification time
         try:
             with open(CONFIG_PATH, "r", encoding="utf-8") as f:
                 data = json.load(f)
