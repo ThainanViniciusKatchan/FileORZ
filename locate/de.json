@@ -56,7 +56,11 @@
         "btn_deselect_all_hover": "Alle abwählen",
         "btn_save": "💾 Kategorien speichern",
         "btn_save_hover": "Einstellungen speichern",
-        "success_label": "Einstellungen erfolgreich gespeichert!"
+        "success_label": "Einstellungen erfolgreich gespeichert!",
+        "orz_enabled": "Dateiorganisation aktiviert",
+        "orz_disabled": "Dateiorganisation deaktiviert",
+        "btn_expand_all": "▼ Alle erweitern",
+        "btn_collapse_all": "▶ Alle einklappen"
     },
     "auto_delete": {
         "title": "Automatisches Löschen konfigurieren",

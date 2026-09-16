@@ -43,6 +43,8 @@ COLORS = {
     "border": "#2D2D44",
     "checkbox_fg": "#9D4EDD",
     "checkbox_hover": "#7B2CBF",
+    "switch_bg": "#2D2D44",
+    "switch_progress": "#9D4EDD",
 }
 
 adv_config = AdvancedConfig()
@@ -96,42 +98,57 @@ def open_advanced_config_window(parent):
     )
     header_title.pack(side="left", padx=(10, 0))
 
-    # Control Frame (Ativar + Adicionar)
-    control_frame = customtkinter.CTkFrame(window, fg_color="transparent")
-    control_frame.pack(fill="x", padx=30, pady=10)
-
-    # Checkbox para ativar/desativar
+    # Switch para ativar/desativar no cabeçalho
     advanced_var = customtkinter.BooleanVar(value=adv_config.get_enabled())
 
     def toggle_advanced():
         tr = Translate()
         adv_config.set_enabled(advanced_var.get())
         if advanced_var.get():
-            checkbox.configure(
+            advanced_switch.configure(
                 text=tr.get_text("Adivanced_config", "mode_adv_enable") or "Modo Avançado Ativado"
             )
         else:
-            checkbox.configure(
+            advanced_switch.configure(
                 text=tr.get_text("Adivanced_config", "mode_adv_disable") or "Modo Avançado Desativado"
             )
 
     texto_ativado = t.get_text("Adivanced_config", "mode_adv_enable") or "Modo Avançado Ativado"
     texto_desativado = t.get_text("Adivanced_config", "mode_adv_disable") or "Modo Avançado Desativado"
-    checkbox_text = (
-        texto_ativado if advanced_var.get() else texto_desativado
-    )
-    checkbox = customtkinter.CTkCheckBox(
-        control_frame,
-        text=checkbox_text,
+    switch_text = texto_ativado if advanced_var.get() else texto_desativado
+
+    advanced_switch = customtkinter.CTkSwitch(
+        header_inner,
+        text=switch_text,
         variable=advanced_var,
         command=toggle_advanced,
-        font=customtkinter.CTkFont(family="Segoe UI", size=14, weight="bold"),
-        fg_color=COLORS["checkbox_fg"],
-        hover_color=COLORS["checkbox_hover"],
-        border_color=COLORS["border"],
+        font=customtkinter.CTkFont(family="Segoe UI", size=12, weight="bold"),
         text_color=COLORS["text_primary"],
+        fg_color=COLORS["switch_bg"],
+        progress_color=COLORS["switch_progress"],
+        button_color=COLORS["text_primary"],
+        button_hover_color="#E0E0E0",
     )
-    checkbox.pack(side="left")
+    advanced_switch.pack(side="right")
+
+    # Control Frame (Adicionar Grupo + Descrição)
+    control_frame = customtkinter.CTkFrame(window, fg_color="transparent")
+    control_frame.pack(fill="x", padx=30, pady=(12, 5))
+
+    # Descrição
+    description_text = (
+        t.get_text("Adivanced_config", "description")
+        or "Defina o nome do grupo e as palavras-chave (separadas por vírgula) para organizar seus PDFs.\n"
+        "Clique no ícone de salvar em cada card para aplicar as alterações."
+    )
+    description = customtkinter.CTkLabel(
+        control_frame,
+        text=description_text,
+        font=customtkinter.CTkFont(family="Segoe UI", size=12),
+        text_color=COLORS["text_secondary"],
+        justify="left",
+    )
+    description.pack(side="left", anchor="w")
 
     # Botão Adicionar Grupo
     def add_group():
@@ -155,21 +172,6 @@ def open_advanced_config_window(parent):
         corner_radius=8,
     )
     btn_add.pack(side="right")
-
-    # Descrição
-    description_text = (
-        t.get_text("Adivanced_config", "description")
-        or "Defina o nome do grupo e as palavras-chave (separadas por vírgula) para organizar seus PDFs.\n"
-        "Clique no ícone de salvar em cada card para aplicar as alterações."
-    )
-    description = customtkinter.CTkLabel(
-        window,
-        text=description_text,
-        font=customtkinter.CTkFont(family="Segoe UI", size=12),
-        text_color=COLORS["text_secondary"],
-        justify="left",
-    )
-    description.pack(padx=30, pady=(0, 10), anchor="w")
 
     # Keywords Container
     keywords_scroll = customtkinter.CTkScrollableFrame(

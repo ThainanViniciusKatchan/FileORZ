@@ -56,7 +56,11 @@
         "btn_deselect_all_hover": "Deseleccionar Todos",
         "btn_save": "💾 Guardar Categorías",
         "btn_save_hover": "Guardar Configuraciones",
-        "success_label": "¡Configuraciones guardadas con éxito!"
+        "success_label": "¡Configuraciones guardadas con éxito!",
+        "orz_enabled": "Organización de Archivos Activada",
+        "orz_disabled": "Organización de Archivos Desactivada",
+        "btn_expand_all": "▼ Expandir Todos",
+        "btn_collapse_all": "▶ Contraer Todos"
     },
     "auto_delete": {
         "title": "Configurar Auto Eliminación",
