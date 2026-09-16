@@ -18,6 +18,7 @@
         "status_available": "Доступна новая версия {version}!",
         "status_downloading": "Скачивание обновления...",
         "status_downloaded": "Обновление скачано! Готово к установке.",
+        "status_installing": "Запуск установки...",
         "status_error": "Не удалось проверить обновления."
     },
     "index_window": {

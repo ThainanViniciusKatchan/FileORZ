@@ -17,11 +17,10 @@ if PROJECT_DIR not in sys.path:
     sys.path.insert(0, PROJECT_DIR)
 
 from utils.version import __version__
-from utils.StartTask import close_task
 
 REPO_USER = "ThainanViniciusKatchan"
 REPO_NAME = "FileORZ"
-DOWNLOADS_DIR = Path("Updates")
+DOWNLOADS_DIR = Path(PROJECT_DIR) / "Updates"
 ASSETS_MASK = re.compile(r".*\.exe")
 
 
@@ -67,24 +66,51 @@ def download_update(current_version=__version__, downloads_dir=DOWNLOADS_DIR):
 
 def install_update(update_path=DOWNLOADS_DIR):
     if update_path is None:
-        return "Não foi possível obter o arquivo de atualização"
+        return False, "Não foi possível obter o arquivo de atualização"
 
     update_path = Path(update_path)
-    if close_task() is True:
-        update_list = list(update_path.glob("*FileORZ_install_*.exe"))
-        if not update_list:
-            update_list = list(update_path.glob("*.exe"))
+    if not update_path.is_absolute():
+        update_path = Path(PROJECT_DIR) / update_path
 
-        try:
-            for update in update_list:
-                print(f"Instalando: {update}")
-                subprocess.run(str(update))
-            return "Atualização instalada com sucesso"
-        except Exception as Error:
-            print(f"Erro ao instalar atualização: {Error}")
-            return "Não foi possível instalar a atualização"
-    else:
-        return "Não foi possível encerrar os processos"
+    if not update_path.exists():
+        return False, f"Pasta de atualização não encontrada: {update_path}"
+
+    update_list = sorted(
+        update_path.glob("*FileORZ_install_*.exe"),
+        key=lambda p: p.stat().st_mtime,
+        reverse=True,
+    )
+    if not update_list:
+        update_list = sorted(
+            update_path.glob("*.exe"),
+            key=lambda p: p.stat().st_mtime,
+            reverse=True,
+        )
+
+    if not update_list:
+        return False, "Nenhum instalador executável encontrado"
+
+    installer = update_list[0]
+
+    try:
+        print(f"Iniciando instalador: {installer}")
+        if hasattr(os, "startfile"):
+            os.startfile(str(installer))
+        else:
+            creationflags = 0
+            if sys.platform == "win32":
+                creationflags = (
+                    subprocess.DETACHED_PROCESS | subprocess.CREATE_NEW_PROCESS_GROUP
+                )
+            subprocess.Popen(
+                [str(installer)],
+                creationflags=creationflags,
+                close_fds=True,
+            )
+        return True, "Instalador iniciado com sucesso"
+    except Exception as Error:
+        print(f"Erro ao iniciar instalador: {Error}")
+        return False, f"Não foi possível iniciar o instalador: {Error}"
 
 
 if __name__ == "__main__":

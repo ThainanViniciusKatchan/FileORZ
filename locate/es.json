@@ -18,6 +18,7 @@
         "status_available": "¡Nueva versión {version} disponible!",
         "status_downloading": "Descargando actualización...",
         "status_downloaded": "¡Actualización descargada! Lista para instalar.",
+        "status_installing": "Iniciando instalación...",
         "status_error": "No se pudo verificar actualizaciones."
     },
     "index_window": {

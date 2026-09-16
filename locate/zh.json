@@ -18,6 +18,7 @@
         "status_available": "发现新版本 {version}！",
         "status_downloading": "正在下载更新...",
         "status_downloaded": "更新已下载！准备安装。",
+        "status_installing": "正在启动安装...",
         "status_error": "检查或下载更新失败。"
     },
     "index_window": {

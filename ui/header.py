@@ -365,10 +365,70 @@ def open_about_window(parent=None):
             threading.Thread(target=_thread_download, daemon=True).start()
 
         elif update_state["phase"] == "install":
+            update_state["is_busy"] = True
+            update_btn.configure(state="disabled")
             status_update_label.configure(
-                text="Iniciando instalação...", text_color="#A0A0A0"
+                text=tr.get_text("header", "status_installing")
+                or "Iniciando instalação...",
+                text_color="#A0A0A0",
             )
-            install_update(update_state["download_path"])
+
+            def _thread_install():
+                success, message = install_update(update_state["download_path"])
+
+                def _apply_install():
+                    if not window.winfo_exists():
+                        return
+                    if success:
+                        status_update_label.configure(
+                            text="Instalador iniciado! Fechando aplicação...",
+                            text_color="#4CAF50",
+                        )
+                        window.after(500, _close_for_update)
+                    else:
+                        update_state["is_busy"] = False
+                        update_btn.configure(state="normal")
+                        status_update_label.configure(
+                            text=message or "Erro ao iniciar instalação.",
+                            text_color="#FF6B6B",
+                        )
+
+                window.after(0, _apply_install)
+
+            threading.Thread(target=_thread_install, daemon=True).start()
+
+    def _close_for_update():
+        try:
+            from utils.system_tray import meu_icone
+
+            meu_icone.stop()
+        except Exception:
+            pass
+
+        try:
+            Translate.unregister_listener(update_about_texts)
+        except Exception:
+            pass
+
+        try:
+            window.destroy()
+        except Exception:
+            pass
+
+        try:
+            if parent and parent.winfo_exists():
+                parent.destroy()
+        except Exception:
+            pass
+
+        try:
+            from utils.StartTask import close_task
+
+            close_task()
+        except Exception:
+            pass
+
+        os._exit(0)
 
     update_btn.configure(command=on_update_click)
 

@@ -18,6 +18,7 @@
         "status_available": "Neue Version {version} verfügbar!",
         "status_downloading": "Update wird heruntergeladen...",
         "status_downloaded": "Update heruntergeladen! Bereit zur Installation.",
+        "status_installing": "Installation wird gestartet...",
         "status_error": "Updates konnten nicht überprüft werden."
     },
     "index_window": {
