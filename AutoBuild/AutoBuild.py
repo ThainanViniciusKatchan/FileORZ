@@ -224,6 +224,43 @@ def reorganizar_estrutura():
             print(f"  [AVISO] Falha ao remover pasta FileORZ.dist: {Error}")
 
 
+def copiar_python3_dll():
+    """Copia o python3.dll (stable ABI) para a build.
+
+    O psutil é compilado com Py_LIMITED_API no Windows e o _psutil_windows.pyd
+    depende de python3.dll, não de python312.dll. O Nuitka não rastreia essa
+    dependência, então sem esse DLL o app morre no 'import psutil' com
+    ImportError no LoadLibraryExW.
+    """
+    print("\nCopiando python3.dll (stable ABI, exigido pelo psutil)...")
+
+    origens = [
+        os.path.join(sys.base_prefix, "python3.dll"),
+        os.path.join(os.path.dirname(os.path.abspath(sys.executable)), "python3.dll"),
+    ]
+    origem = next((caminho for caminho in origens if os.path.isfile(caminho)), None)
+
+    if origem is None:
+        print("  [ERRO] python3.dll não encontrado no Python usado no build")
+        raise RuntimeError(
+            "python3.dll não encontrado: a build geraria um app com falha no 'import psutil'"
+        )
+
+    destinos = [
+        os.path.join(BASE_DIR, OUTPUT_DIR, "python3.dll"),
+        os.path.join(BASE_DIR, OUTPUT_DIR, "dist", "python3.dll"),
+    ]
+
+    for destino in destinos:
+        try:
+            os.makedirs(os.path.dirname(destino), exist_ok=True)
+            shutil.copy2(origem, destino)
+            print(f"  [OK] python3.dll copiado para: {destino}")
+        except Exception as Error:
+            print(f"  [ERRO] Falha ao copiar python3.dll para {destino}: {Error}")
+            raise RuntimeError("Falha ao copiar python3.dll para a build")
+
+
 def criar_keywords_padrao():
     print("\nCriando Key_Words.json padrão...")
     keywords = {
@@ -697,6 +734,7 @@ if __name__ == "__main__":
         ("Compilar UI", compilar_ui),
         ("Compilar Organizador", compilar_organizador),
         ("Reorganizar estrutura", reorganizar_estrutura),
+        ("Copiar python3.dll", copiar_python3_dll),
         ("Criar Key_Words padrão", criar_keywords_padrao),
         ("Criar config padrão", criar_config_padrao),
         ("Criar ext padrão", criar_ext_padrao),
