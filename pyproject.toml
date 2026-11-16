@@ -1,0 +1,91 @@
+[build-system]
+requires = ["setuptools>=77.0.3"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "FileORZ"
+version = "1.6.3"
+description = "Organizador Automático de Arquivos"
+readme = "README.md"
+requires-python = ">=3.12"
+license = "GPL-3.0-or-later"
+license-files = ["LICENSE"]
+authors = [
+    { name = "Thainan Vinicius Katchan", email = "167592380+ThainanViniciusKatchan@users.noreply.github.com" },
+]
+maintainers = [
+    { name = "Thainan Vinicius Katchan", email = "167592380+ThainanViniciusKatchan@users.noreply.github.com" },
+]
+keywords = [
+    "file-organizer",
+    "automation",
+    "customtkinter",
+    "windows",
+    "desktop",
+    "pdf",
+    "fileorz",
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Environment :: Win32 (MS Windows)",
+    "Intended Audience :: End Users/Desktop",
+    "Natural Language :: Chinese (Simplified)",
+    "Natural Language :: English",
+    "Natural Language :: German",
+    "Natural Language :: Portuguese (Brazilian)",
+    "Natural Language :: Russian",
+    "Natural Language :: Spanish",
+    "Operating System :: Microsoft :: Windows",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Desktop Environment :: File Managers",
+    "Topic :: Utilities",
+]
+dependencies = [
+    "cryptography>=50.0.1",
+    "customtkinter>=6.0.0",
+    "darkdetect>=0.8.0",
+    "github-release-downloader>=1.1.0",
+    "pillow>=10.4.0",
+    "psutil>=7.2.1",
+    "pypdf>=6.18.0",
+    "pystray>=0.19.5",
+    "semantic-version>=2.10.0",
+    "Send2Trash>=2.1.0",
+]
+
+[project.optional-dependencies]
+build = [
+    "Nuitka>=4.2.1",
+    "ordered-set>=4.1.0",
+    "zstandard>=0.25.0",
+    "pyinstaller>=6.22.2",
+    "pyinstaller-hooks-contrib>=2026.7",
+    "altgraph>=0.17.5",
+    "pefile>=2024.8.26",
+    "pywin32-ctypes>=0.2.3",
+    "setuptools>=80.9.0",
+]
+legacy = [
+    "CTkMessagebox>=2.7",
+    "tkhtmlview>=0.3.1",
+    "winshell>=0.6",
+]
+
+[project.urls]
+Homepage = "https://thainanviniciuskatchan.github.io/FileORZ/"
+Repository = "https://github.com/ThainanViniciusKatchan/FileORZ"
+Issues = "https://github.com/ThainanViniciusKatchan/FileORZ/issues"
+Download = "https://github.com/ThainanViniciusKatchan/FileORZ/releases"
+
+[project.gui-scripts]
+fileorz = "run:on_app"
+
+[tool.setuptools]
+py-modules = ["FileORZ", "run"]
+packages = ["ui", "utils", "AdvancedAlg"]
+include-package-data = true
+
+[tool.setuptools.package-data]
+ui = ["icon/*"]
+AdvancedAlg = ["*.json"]
